@@ -1,0 +1,293 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"find",
+				"FindDocuments"
+			],
+			[
+				"space",
+				"space-between"
+			],
+			[
+				"row",
+				"row-reverse"
+			],
+			[
+				"local",
+				"localStorage"
+			],
+			[
+				"get",
+				"getItem"
+			],
+			[
+				"fill",
+				"fill-rule"
+			],
+			[
+				"stroke",
+				"strokeStyle"
+			],
+			[
+				"font",
+				"font-weight"
+			],
+			[
+				"margin",
+				"margin-top"
+			],
+			[
+				"check",
+				"checkbox"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/yingzhu/Desktop/UF_CS/web/nodejs/mongodriver/app.js",
+		"/Users/yingzhu/Desktop/UF_CS/web/nodejs/mongodriver/package.json",
+		"/Users/yingzhu/Desktop/UF_CS/web/nodejs/myexpress/views/includes/about.ejs",
+		"/Users/yingzhu/Desktop/UF_CS/web/nodejs/myexpress/views/includes/head.ejs",
+		"/Users/yingzhu/Desktop/UF_CS/web/nodejs/myexpress/views/index.ejs",
+		"/Users/yingzhu/Desktop/UF_CS/web/nodejs/myexpress/views/index.pug",
+		"/Users/yingzhu/Desktop/UF_CS/web/nodejs/myexpress/views/includes/head.pug",
+		"/Users/yingzhu/Desktop/UF_CS/web/nodejs/myexpress/package.json",
+		"/Users/yingzhu/Desktop/UF_CS/web/nodejs/myexpress/public/hello.html",
+		"/Users/yingzhu/Desktop/PRIVATE/Anahei/nodeserver/server.js",
+		"/Users/yingzhu/Desktop/PRIVATE/Anahei/nodeserver/package.json",
+		"/Users/yingzhu/Desktop/PRIVATE/Anahei/nodeserver/index.html",
+		"/Users/yingzhu/Desktop/PRIVATE/Anahei/practice/hello.js",
+		"/Users/yingzhu/Desktop/UF_CS/web/index.html",
+		"/Users/yingzhu/Desktop/UF_CS/web/bootstrap/index.html",
+		"/Users/yingzhu/Desktop/UF_CS/web/drop-down/style.css",
+		"/Users/yingzhu/Desktop/UF_CS/web/drop-down/index.html",
+		"/Users/yingzhu/Desktop/UF_CS/web/columns.html",
+		"/Users/yingzhu/Desktop/UF_CS/web/transitionsAnimation.html",
+		"/Users/yingzhu/Desktop/UF_CS/web/shadows/index.html",
+		"/Users/yingzhu/Desktop/UF_CS/web/ColorsBackgroundsGradients.html",
+		"/Users/yingzhu/Desktop/UF_CS/web/PseudoClass.html",
+		"/Users/yingzhu/Desktop/UF_CS/web/BasicStyling.html",
+		"/Users/yingzhu/Desktop/UF_CS/web/ositioningbackgrounding.html",
+		"/Users/yingzhu/Desktop/UF_CS/web/drag-drop/index.html",
+		"/Users/yingzhu/Desktop/UF_CS/web/WebStorage.html",
+		"/Users/yingzhu/Desktop/UF_CS/web/SVG.html",
+		"/Users/yingzhu/Desktop/UF_CS/web/proj_3/index.html",
+		"/Users/yingzhu/Desktop/UF_CS/web/AudioAndVideo.html",
+		"/Users/yingzhu/Desktop/UF_CS/web/proj_1/style.css",
+		"/Users/yingzhu/Desktop/UF_CS/web/NewElementsAndTags.html",
+		"/Users/yingzhu/Desktop/UF_CS/web/proj_1/index.html",
+		"/Users/yingzhu/Desktop/UF_CS/web/form_input.html",
+		"/Users/yingzhu/Desktop/UF_CS/web/contact.html",
+		"/Users/yingzhu/Desktop/UF_CS/web/services.html",
+		"/Users/yingzhu/Desktop/UF_CS/web/style.html",
+		"/Users/yingzhu/Desktop/UF_CS/web/style.css",
+		"/Users/yingzhu/Documents/workspace/TEST/dbms-test/src/com/runoob/test/HelloServlet.java",
+		"/Users/yingzhu/Documents/workspace/TEST/Servers/Tomcat v9.0 Server at localhost-config/server.xml",
+		"/Users/yingzhu/Documents/workspace/TEST/Servers/Tomcat v9.0 Server at localhost-config/tomcat-users.xml",
+		"/Library/apache-tomcat-9.0.0.M17/conf/server.xml",
+		"/Users/yingzhu/Documents/workspace/TEST/dbms-shopping/src/entity/Cart.java",
+		"/Users/yingzhu/Documents/workspace/TEST/dbms-shopping/WebContent/cart.jsp",
+		"/Users/yingzhu/Desktop/main.jsp",
+		"/Users/yingzhu/Documents/workspace/TEST/P2PFileSharing/Peer.java",
+		"/Users/yingzhu/Documents/workspace/TEST/CN/PeerInfo.cfg",
+		"/Users/yingzhu/Documents/workspace/TEST/CN/Common.cfg",
+		"/Users/yingzhu/Documents/workspace/TEST/P2PFileSharing/PeerInfo.cfg",
+		"/Users/yingzhu/Documents/workspace/TEST/P2PFileSharing/peerProcess.java",
+		"/Users/yingzhu/Documents/workspace/TEST/P2PFileSharing/Common.cfg",
+		"/Users/yingzhu/Documents/workspace/TEST/P2PFileSharing/peer_1003/TheFile.dat",
+		"/Users/yingzhu/Documents/workspace/TEST/P2PFileSharing/FileProcess/FileProcess.java",
+		"/Users/yingzhu/Desktop/UF_CS/CN/project/Sample Server.java",
+		"/Users/yingzhu/Desktop/UF_CS/CN/project/Sample Client.java",
+		"/Users/yingzhu/Library/Containers/com.tencent.xinWeChat/Data/Library/Application Support/com.tencent.xinWeChat/2.0b4.0.9/8ac834c7164d3b4617d4ead22fa90857/Message/MessageTemp/d63c5404ac9f2145755e7cbbd4c8a91a/File/category.jsp",
+		"/Library/apache-tomcat-9.0.0.M17/webapps/ROOT/asf-logo-wide.svg",
+		"/Library/apache-tomcat-9.0.0.M17/webapps/ROOT/dbms/logincheck.jsp",
+		"/Library/apache-tomcat-9.0.0.M17/webapps/ROOT/dbms/login.jsp",
+		"/Library/apache-tomcat-9.0.0.M17/webapps/ROOT/web/onlineshopping/WebRoot/login/myMessage.jsp",
+		"/Library/apache-tomcat-9.0.0.M17/webapps/ROOT/success.jsp",
+		"/Library/apache-tomcat-9.0.0.M17/webapps/ROOT/NewFile1.jsp",
+		"/Library/apache-tomcat-9.0.0.M17/webapps/ROOT/loginexample.jsp",
+		"/Library/apache-tomcat-9.0.0.M17/webapps/ROOT/checklogin.jsp",
+		"/Users/yingzhu/Documents/perl/hello.pl",
+		"/Library/WebServer/Documents/checklogin.jsp",
+		"/Library/WebServer/Documents/checklogin.html",
+		"/Library/WebServer/Documents/login.jsp",
+		"/Library/WebServer/Documents/checklogin.php",
+		"/Users/yingzhu/shopping_proj/log_in/login.php",
+		"/Library/WebServer/Documents/phpinfo.php",
+		"/Library/WebServer/Documents/info.php",
+		"/Users/yingzhu/shopping_proj/log_in/checklogin.php",
+		"/Users/yingzhu/shopping_proj/log_in/login.css",
+		"/Users/yingzhu/test_site/cousera-test/site/index.html"
+	],
+	"find":
+	{
+		"height": 23.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"file",
+			"context",
+			"<Context>",
+			"context",
+			"port",
+			"Port",
+			"idip",
+			"ipid",
+			"hash",
+			"IPID",
+			"peerConfig",
+			"OptimisticUnchokingInterval",
+			"FileName",
+			"flush",
+			"in"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "package.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
