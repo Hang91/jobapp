@@ -7,13 +7,26 @@ var LocalStrategy = require('passport-local').Strategy;
 var bodyParser = require('body-parser');
 var flash = require('connect-flash');
 
+/*using mongoose*/
+// var mongoose = require('mongoose');
+// mongoose.connect('mongodb://localhost/eventapp');
+// var db = mongoose.connection;
+// db.on('error',console.error.bind(console,'connection error:'));
+// db.once('open',function(){
+//   console.log('MongoDB connected');
+// });
 
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/eventapp');
-var db = mongoose.connection;
-db.on('error',console.error.bind(console,'connection error:'));
-db.once('open',function(){
-  console.log('MongoDB connected');
+var mongodb= require('mongodb');
+var MongoClient= mongodb.MongoClient;
+var URL = 'mongodb://localhost/eventapp';
+
+MongoClient.connect(URL,function(err,database){
+  if(!err){
+    db=database;
+  }
+  else{
+    //do something
+  }
 });
 
 

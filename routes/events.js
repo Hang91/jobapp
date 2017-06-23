@@ -5,23 +5,40 @@ var EventDB = require('../models/EventDB');
 
 var api = require('../lib/api');
 
-router.get('/', function(req, res, next){
-	EventDB.find(function(err, events){
-		if(err){
-			res.send(err);
-		}
-		//for(i = 0; i < events.length; i++){
-			res.json(events);
-		//}
-		
-	}).limit(10);
-	// EventDB.getEvents(function(err, events){
-	// 	if(err){
-	// 		res.send(err);
-	// 	}
-	// 	res.json(events);
-	// },10);
+router.get( "/" , function ( req , res , err ) {
+    if (err) {
+    	console.dir( err );
+    }
+
+    var collection = db.collection('users');
+
+    collection.findOne({email:String},function(err,item){
+		if(err) {
+	            console.log("There was a problem finding the events.");
+	    } else {
+	        console.log("events found!");
+	        console.log(item);
+	        res.render('events', { email: item["email"]});    	
+	    } 
+	}); 
 });
+
+
+// router.get('/', function(req, res, next){
+// 	EventDB.find(function(err, events){
+// 		if(err){
+// 			res.send(err);
+// 		}
+		
+// 	}).limit(10);
+// 	res.render('events');
+// 	// EventDB.getEvents(function(err, events){
+// 	// 	if(err){
+// 	// 		res.send(err);
+// 	// 	}
+// 	// 	res.json(events);
+// 	// },10);
+// });
 
 // router.get('/', function(req, res, next) {
 // 	//返回所有
