@@ -1,10 +1,16 @@
 <%- include('includes/header') %>
 <%- messages() %>
 <div>
-    
-    	<td>
-    		<h1>Email is: <%= email %></h1>
-		</td>
+		<ul class="events">
+		  <% console.log(results.length);
+
+		  for(var i=0; i<results.length; i++) {%>
+		    <li class="events">
+		      <span><%= results[i].name %></span>
+		      <span><%= results[i].email %></span>
+		    </li>
+		  <% } %>
+		</ul>
     
 </div> 
     	<script>
