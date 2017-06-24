@@ -1,31 +1,25 @@
 <%- include('includes/header') %>
 <%- messages() %>
-<div>
-		<ul class="events">
 
-		<%  for(var i=0; i<results.length; i++) {%>
-  		    <li class="events">
-  		      <span><%= results[i].name %></span>
- +		      <span><%= results[i].type %></span>
- +		      <span><%= results[i].city %></span>
- +		      <span><%= results[i].state %></span>
- +		      <span><%= results[i].country %></span>
- +		      <span><%= results[i].organization %></span>
- +		      <span><%= results[i].contact %></span>
-  		      <span><%= results[i].email %></span>
- +		      <span><%= results[i].website %></span>
- +		      <span><%= results[i].startDate %></span>
- +		      <span><%= results[i].endDate %></span>
- +		      <span><%= results[i].description %></span>
- +		      <span><%= results[i].keywords %></span>
- +		      <span><%= results[i].approved %></span>
- +		      <span><%= results[i].userName %></span>
- +		      <span><%= results[i].userEmail %></span>
-  		    </li>
-  		  <% } %>
+<h2>Events Display</h2>
+<p>Click on the content to see more details.</p>
+<%  for(var i=0; i<results.length; i++) {%>
+<div class="dropdown">
+	<span>
+		<%=results[i].startDate%>~<%=results[i].endDate%>, <%=results[i].name%>, <%=results[i].city%>,<%=results[i].state%>,<%=results[i].country%>
+	</span>
+	<div class="dropdown-content">
+		<ul>
+		    <li><a href=<%=results[i].website%>><strong>Website:</strong> <%=results[i].website%></a></li>
+		    <li><strong>Organization:</strong> <%=results[i].organization%></li>
+		    <li><strong>Contact:</strong> <%=results[i].contact%></li>
+		    <li><strong>Email:</strong>  <%=results[i].email%></li>
+		    <li><strong>Description:</strong> <%=results[i].description%></li>
 		</ul>
-    
-</div> 
+	</div>
+</div>
+<% } %>
+
       
         
 <%- include('includes/footer') %>

@@ -73,3 +73,35 @@ footer{
   text-align: center;
   padding:10px;
 }
+
+
+.dropdown:hover{
+    font-size: 24px;
+    background: #f9f9f9;
+    color: green;
+}
+.dropdown:hover .dropdown-content{ 
+    color: green;  
+    display: block;    
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+
+.dropdown-content a{
+    text-decoration: none;
+    color: green;
+}
+.dropdown-content ul li{
+    padding: 5px 12px;
+    display: block;
+}
+
