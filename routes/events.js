@@ -11,7 +11,7 @@ router.get( "/" , function ( req , res , err ) {
     	console.dir( err );
     }
 
-    var collection = db.collection('users');
+    var collection = db.collection('events');
 
     collection.find({}).toArray(function(err, results) {
   		console.log(results)
