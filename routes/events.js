@@ -10,13 +10,11 @@ router.get( "/" , function ( req , res , err ) {
     }
 
     var collection = db.collection('events');
-    EventDB.find({}, function(err, events){
-    	if(err){
-			console.dir( err );
-    	}
-    	console.dir( 'success' );
-    	res.render('events', {events:events}); 
-    })
+    collection.find({}).toArray(function(err, results) {
+   		console.log(results)
+   		// send HTML file populated with quotes here
+   		res.render('events', {results:results});  
+ 	})
 });
 
 /*can display only one email*/
