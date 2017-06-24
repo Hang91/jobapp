@@ -3,21 +3,21 @@ var router = express.Router();
 
 var EventDB = require('../models/EventDB');
 
-var api = require('../lib/api');
-
 
 router.get( "/" , function ( req , res , err ) {
     if (err) {
     	console.dir( err );
     }
 
-    var collection = db.collection('users');
+    //var collection = db.collection('users');
 
-    collection.find({}).toArray(function(err, results) {
-  		console.log(results)
-  		// send HTML file populated with quotes here
-  		res.render('events', {results:results});  
-	})
+    EventDB.find({}, function(err, events){
+    	if(err){
+			console.dir( err );
+    	}
+    	console.dir( 'success' );
+    	res.render('events', {events:events}); 
+    })
 });
 
 /*can display only one email*/

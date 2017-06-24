@@ -2,12 +2,17 @@
 <%- messages() %>
 <div>
 		<ul class="events">
-		  <% console.log(results.length);
-
-		  for(var i=0; i<results.length; i++) {%>
+		  <% 
+		  for(index in events) {%>
 		    <li class="events">
-		      <span><%= results[i].name %></span>
-		      <span><%= results[i].email %></span>
+		      <span><%= events[index].name %></span>
+		      <span><%= events[index].email %></span>
+		      <% 
+		      	for(eventsIndex in events[index].events){   %>
+					<h1><%=events[index].events[eventsIndex].name%></h1>
+		      <% } %>
+
+		      %>
 		    </li>
 		  <% } %>
 		</ul>

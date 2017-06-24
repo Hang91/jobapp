@@ -63,7 +63,7 @@ var EventSchema = new mongoose.Schema({
 			endDate: Date,
 			description: String,
 			keywords: String,
-			approved: String,
+			approved: String
 		}],	
 });
 
