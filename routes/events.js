@@ -9,8 +9,7 @@ router.get( "/" , function ( req , res , err ) {
     	console.dir( err );
     }
 
-    //var collection = db.collection('users');
-
+    var collection = db.collection('events');
     EventDB.find({}, function(err, events){
     	if(err){
 			console.dir( err );

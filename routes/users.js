@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var mongojs = require('mongojs');
-var db = mongojs('eventapp', ['users']);
+var db = mongojs('eventapp', ['users','events']);
 var bcrypt = require('bcryptjs');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
@@ -45,7 +45,9 @@ router.post('/addEvent', function(req, res){
 
 	var description	= req.body.description;
 	var keywords	= req.body.keywords;
-	var approved = 0;//0:not check yet; 1:approve; 2:disapprove
+	var approved = 0;//0:not check yet; 1:approve; 2:disapprove\
+	var userName = req.user.name;
+	var userEmail = req.user.email;
 
 
 
@@ -85,13 +87,31 @@ router.post('/addEvent', function(req, res){
 			   endDate: endDate,
 			   description: description,
 			   keywords: keywords,
-			   approved: approved
+			   approved: approved,
+			   userName: userName,
+			   userEmail: userEmail
 		}
 
 		// bcrypt.genSalt(10, function(err, salt){
 		// 	bcrypt.hash(newUser.password, salt, function(err, hash){
 		// 		newUser.password = hash;
 				// Push To Array
+
+				//add to event
+				db.events.insert(newEvent, function(err, doc){
+				if(err){
+					res.send(err);
+				}
+				else{
+					console.log('Event added');
+					//success msg
+					req.flash('success', 'Successfully added an event!');
+					res.location('/');
+					res.redirect('/');
+				}
+				});
+
+				/* add to user
 				console.log(req.body.useremail);
 				db.users.update({email:req.user.email},{
 				  $push: {
@@ -109,7 +129,7 @@ router.post('/addEvent', function(req, res){
 					res.location('/');
 					res.redirect('/');
 				}
-				});
+				});*/
 				
 		// 	});
 		// });		
