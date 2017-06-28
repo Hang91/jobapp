@@ -2,7 +2,9 @@
 <%- messages() %>
 
 <h2>Events Display</h2>
-<p>Click on the content to see more details.</p>
+<p>Click on "[+] More info" to show more details.</p>
+<p>Click on "[-] Less info" to show less details.</p>
+<p>----------------------------------------------------------------</p>
 <%  for(var i=0; i<results.length; i++) {%>
 	<p class="adv-toggle-buttons">
 		<span><%=results[i].startDate%>~<%=results[i].endDate%>, <%=results[i].name%>, <%=results[i].city%>,<%=results[i].state%>,<%=results[i].country%></span><a href="#">[+] More info</a><a href="#" style="display: none;">[-] Less info</a>
@@ -29,6 +31,7 @@
         });   
     });
 </script>
+
 <!-- <%  for(var i=0; i<results.length; i++) {%>
 	<span><%=results[i].startDate%>~<%=results[i].endDate%>, <%=results[i].name%>, <%=results[i].city%>,<%=results[i].state%>,<%=results[i].country%></span><button class="btt">[+] More info</button>
 	<ul class='details'>
