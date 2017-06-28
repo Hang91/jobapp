@@ -75,7 +75,7 @@ footer{
 }
 
 
-.dropdown:hover{
+/*.dropdown:hover{
     font-size: 24px;
     background: #f9f9f9;
     color: green;
@@ -103,5 +103,5 @@ footer{
 .dropdown-content ul li{
     padding: 5px 12px;
     display: block;
-}
+}*/
 
