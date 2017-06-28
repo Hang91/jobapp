@@ -1,129 +1,19 @@
 <%- include('includes/header') %>
-<%- messages() %>
- 
-    <div class="container">
-
-      <div class="starter-template">
-      
-        
-
-        <p class="lead"><h1>Welcome to Search Events!</h1></p>
-        <br>
-        <br>
-
-        <!-- Conferences display -->
-        <div id="topicListContainer" align="center">
-        <!-- Framing table -->    
-        <table id="frameTable">    
-            <tr>    
-                <td id="tableAlignTop" class="mainPageTableSpacing" align="center" colspan="2"><div id="topicHeadingDiv" class="topicHeadingDiv"><h3>Search by type<h3></div></td>
-                <td id="tableAlignTop" class="mainPageTableSpacing" align="center" colspan="2"><div id="topicHeadingDiv" class="topicHeadingDiv"><h3>Search by location</h3></div></td>
-            </tr>
-            <tr>    
-                <td id="tableAlignTop" valign="top" width="33%" style="padding: 0;">
-                    <!-- Topic list column 1 -->
-                    <table width="100%">
-                        
-                        <tr>
-                            <!-- Topic list 1 -->
-                            <td class="mainPageTableSpacing">
-                                <div class="topicTableColumn1Container" align="left">
-                                    <table align="center" id="topicTableColumn1">
-                                                        <tr><td id="spacer10"></td></tr>
-                                                        
-                                                                <tr><td><a onclick="trackTopicClick('Anthropology','topic-listing?topic=Anthropology'); return false;" href="topic-listing?topic=Anthropology">Anthropology</a></td>
-                                                                <td width="4px"></td>
-                                                                
-                                                                <td><a onclick="trackTopicClick('Art History','topic-listing?topic=Art History'); return false;" href="topic-listing?topic=Art History">Art History</a></td></tr>
-                                                                <tr><td id="spacer10"></td></tr>
-                                                                
-                                                                <tr><td><a onclick="trackTopicClick('Arts','topic-listing?topic=Arts'); return false;" href="topic-listing?topic=Arts">Arts</a></td>
-                                                                <td width="4px"></td>
-                                                                
-                                                                <td><a onclick="trackTopicClick('English','topic-listing?topic=English'); return false;" href="topic-listing?topic=English">English</a></td></tr>
-                                                                <tr><td id="spacer10"></td></tr>
-                                                                
-                                                                <tr><td><a onclick="trackTopicClick('History','topic-listing?topic=History'); return false;" href="topic-listing?topic=History">History</a></td>
-                                                                <tr><td id="spacer10"></td></tr>
-                                                                <tr><td id="spacer10"></td></tr> 
-                                                                </div>
-                            </td>
-                        </tr>
-                    </table>
-
-            </table>
-            <td id="tableAlignTop" valign="top" width="33%" style="padding: 0;">
-                    <!-- Topic list column 2 -->
-                    <table width="100%">
-                        <tr>
-                            <!-- Topic scroll 2 -->
-                            <td class="mainPageTableSpacing">
-                                <div class="topicScrollDiv" align="left">
-                                    <table id="topicScrollTable">
-                                    
-                                        
-                                                            <tr><td><a href="#Physical and life sciences"><p id="topicHeading">Physical and life sciences</p></a></td>
-                                                            <td width="4px"></td>
-                                                            
-                                                            <td><a href="#Engineering and Technology"><p id="topicHeading">Engineering and Technology</p></a></td></tr>
-                                                            <tr><td id="spacer10"></td></tr>
-                                                            <tr><td><a href="#Education"><p id="topicHeading">Education</p></a></td>
-                                                            <td width="4px"></td>
-                                                            
-                                                            <td><a href="#Law"><p id="topicHeading">Law</p></a></td></tr>
-                                                            <tr><td id="spacer10"></td></tr>
-                                                            <tr><td><a href="#Health and Medicine"><p id="topicHeading">Health and Medicine</p></a></td>
-                                                            <td width="4px"></td>
-                                                            
-                                                            <td><a href="#Animal Sciences"><p id="topicHeading">Animal Sciences</p></a></td></tr>
-                                                                                                    
-                                    </table>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-                <td id="tableAlignTop" valign="top" width="33%" style="padding: 0;" colspan="2">
-                    <!-- Country list column -->
-                    <table width="100%">
-                        <tr>
-                            <!-- Country list -->
-                            <td class="mainPageTableSpacing">
-                                <div class="countryTableColumnContainer" align="left">
-                                    <table align="center" id="countryTableColumn">
-                                        
-                                                        <tr><td id="spacer10"></td></tr>
-                                                        
-                                                                <tr><td><a onclick="trackCountryClick('Bahamas','country-listing?country=Bahamas'); return false;" href="events?country=UnitedStates">United States</a></td>
-                                                                <td width="4px"></td>
-                                                                
-                                                                
-                                                                <td width="4px"></td>
-                                                                
-                                                                <td><a onclick="trackCountryClick('Canada','country-listing?country=Canada'); return false;" href="country-listing?country=Canada">Canada</a></td></tr>
-                                                                <tr><td id="spacer10"></td></tr>
-                                                                
-                                                                <tr><td><a onclick="trackCountryClick('Costa Rica','country-listing?country=Costa+Rica'); return false;" href="country-listing?country=Costa+Rica">Costa Rica</a></td>
-                                                                <td width="4px"></td>
-                                                                
-                                                                <td><a onclick="trackCountryClick('Cuba','country-listing?country=Cuba'); return false;" href="country-listing?country=Cuba">Cuba</a></td>
-                                                                <td width="4px"></td>
-                                                                </tr><tr><td id="spacer10"></td></tr><tr><td id="spacer10"></td></tr>                                    
-                                    </table>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </td>    
-            </tr>
-        </table>
-
-
-      </div>
 
 
 
-    </div><!-- /.container -->
-
-
-<%- include('includes/footer') %>
+<div id="widget">
+<form id="location">
+Region&raquo; <select onchange="set_country(this,country,city_state)" size="1" name="region">
+<option value="" selected="selected">SELECT REGION</option>
+<option value=""></option>
+<script type="text/javascript">
+setRegions(this);
+</script>
+</select>
+Country&raquo; <select name="country" size="1" disabled="disabled" onchange="set_city_state(this,city_state)"></select>
+City/State&raquo; <select name="city_state" size="1" disabled="disabled" onchange="print_city_state(country,this)"></select>
+</form>
+<div id="txtregion"></div>
+<div id="txtplacename"></div>
+</div>
