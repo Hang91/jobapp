@@ -1,18 +1,27 @@
 <%- include('includes/header') %>
 
 
-
+<%- messages() %>
 <div id="widget">
 <form id="location">
-Region&raquo; <select onchange="set_country(this,country,city_state)" size="1" name="region">
-<option value="" selected="selected">SELECT REGION</option>
-<option value=""></option>
-<script type="text/javascript">
-setRegions(this);
-</script>
-</select>
-Country&raquo; <select name="country" size="1" disabled="disabled" onchange="set_city_state(this,city_state)"></select>
-City/State&raquo; <select name="city_state" size="1" disabled="disabled" onchange="print_city_state(country,this)"></select>
+    Region&raquo; 
+    <select onchange="set_country(this,country,city_state)" size="1" name="region">
+        <option value="" selected="selected">SELECT REGION</option>
+        <option value=""></option>
+        <script type="text/javascript">
+            setRegions(this);
+        </script>
+    </select>
+    <br>
+    <br>
+    <br>
+    Country&raquo; 
+    <select name="country" size="1" disabled="disabled" onchange="set_city_state(this,city_state)"></select>
+    <br>
+    <br>
+    <br>
+    City/State&raquo; 
+    <select name="city_state" size="1" disabled="disabled" onchange="print_city_state(country,this)"></select>
 </form>
 <div id="txtregion"></div>
 <div id="txtplacename"></div>

@@ -178,11 +178,20 @@ router.post('/register',
 			if(err){
 				res.send(err);
 			}
-			if(user){
-				res.location('/users/register');
+			if(user){				
 				console.log('Exist User');
-				res.redirect('/users/register');
+				//error msg
 				req.flash('error', 'This email has been used.');
+				//res.location('/users/register');
+				//res.redirect('/users/register');
+				res.render('register', {
+					errors: errors,
+					name: name,
+					email: email,
+					// username: username,
+					password: password,
+					password2: password2
+				});
 			}
 			if(!user){
 				var newUser = {
@@ -277,7 +286,8 @@ passport.use('local-login', new LocalStrategy({
     passReqToCallback : true
 	},
 	function(req, email, password, done){
-	db.users.findOne({'email': email}, function(err, user){
+		
+		db.users.findOne({'email': email}, function(err, user){
 		if(err){
 			return done(err);
 		}
