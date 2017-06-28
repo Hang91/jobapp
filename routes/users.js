@@ -138,11 +138,15 @@ router.post('/addEvent', function(req, res){
 
 
 //register - POST
-router.post('/register', function(req, res){
+router.post('/register', 
+	// passport.authenticate('local-register', {
+ //                                   failureRedirect: '/users/register',
+ //                                   failureFlash: true }), 
+	function(req, res){
 	//get form values
 	var name 		= req.body.name;
 	var email 		= req.body.email;
-	var username    = req.body.username;
+	// var username    = req.body.username;
 	var password 	= req.body.password;
 	var password2 	= req.body.password2;
 	//var events 		= []
@@ -151,7 +155,7 @@ router.post('/register', function(req, res){
 	req.checkBody('name', 'Name fieled is required').notEmpty();
 	req.checkBody('email', 'Email fieled is required').notEmpty();
 	req.checkBody('email', 'Please use a valid email address').isEmail();
-	req.checkBody('username', 'Username fieled is required').notEmpty();
+	// req.checkBody('username', 'Username fieled is required').notEmpty();
 	req.checkBody('password', 'password filed is required').notEmpty();
 	req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
 
@@ -163,44 +167,81 @@ router.post('/register', function(req, res){
 			errors: errors,
 			name: name,
 			email: email,
-			username: username,
+			// username: username,
 			password: password,
 			password2: password2
 		});
 	}
 	else{
 
-		var newUser = {
-			name: name,
-			email: email,
-			username: username,
-			password: password,
-			//events: events
-		}
-
-		bcrypt.genSalt(10, function(err, salt){
-			bcrypt.hash(newUser.password, salt, function(err, hash){
-				newUser.password = hash;
-
-				db.users.insert(newUser, function(err, doc){
-				if(err){
-					res.send(err);
+		db.users.findOne({'email': email}, function(err, user){
+			if(err){
+				res.send(err);
+			}
+			if(user){
+				res.location('/users/register');
+				console.log('Exist User');
+				res.redirect('/users/register');
+				req.flash('error', 'This email has been used.');
+			}
+			if(!user){
+				var newUser = {
+					name: name,
+					email: email,
+					// username: username,
+					password: password
+					//events: events
 				}
-				else{
-					console.log('User added');
-					//success msg
-					req.flash('success', 'You have registered! You can login now!');
-					res.location('/');
-					res.redirect('/');
-				}
+
+				bcrypt.genSalt(10, function(err, salt){
+					bcrypt.hash(newUser.password, salt, function(err, hash){
+						newUser.password = hash;
+						db.users.insert(newUser, function(err, doc){
+							if(err){
+								res.send(err);
+							}
+							else{
+								console.log('User added');
+								//success msg
+								req.flash('success', 'You have registered! You can login now!');
+								res.location('/');
+								res.redirect('/');
+							}
+						});
+					});
 				});
-			});
+			}
 		});
+	}	
 
-		
-	}
+		// var newUser = {
+		// 	name: name,
+		// 	email: email,
+		// 	// username: username,
+		// 	password: password,
+		// 	//events: events
+		// }
 
-	
+		// bcrypt.genSalt(10, function(err, salt){
+		// 	bcrypt.hash(newUser.password, salt, function(err, hash){
+		// 		newUser.password = hash;
+
+		// 		db.users.insert(newUser, function(err, doc){
+		// 		if(err){
+		// 			res.send(err);
+		// 		}
+		// 		else{
+		// 			console.log('User added');
+		// 			//success msg
+		// 			req.flash('success', 'You have registered! You can login now!');
+		// 			res.location('/');
+		// 			res.redirect('/');
+		// 		}
+		// 		});
+		// 	});
+		// });
+
+			
 });
 
 passport.serializeUser(function(user, done) {
@@ -214,14 +255,34 @@ passport.deserializeUser(function(id, done) {
 });
 
 
-passport.use(new LocalStrategy(
-	function(username, password, done){
-	db.users.findOne({username: username}, function(err, user){
+// passport.use('local-register', new LocalStrategy({
+//     usernameField : 'email',
+//     passReqToCallback : true
+// 	},
+// 	function(req, email, done){
+// 	db.users.findOne({'email': email}, function(err, user){
+// 		if(err){
+// 			return done(err);
+// 		}
+// 		if(user){
+// 			return done(null, false, req.flash('error', 'This email has been used.'));
+// 		}
+// 	});
+// }
+// ));
+
+passport.use('local-login', new LocalStrategy({
+    usernameField : 'email',
+    passwordField : 'password',
+    passReqToCallback : true
+	},
+	function(req, email, password, done){
+	db.users.findOne({'email': email}, function(err, user){
 		if(err){
 			return done(err);
 		}
 		if(!user){
-			return done(null, false, {message:'Incorrect Username'});
+			return done(null, false, req.flash('error', 'User not found.'));
 		}
 
 		bcrypt.compare(password, user.password, function(err, isMatch){
@@ -232,18 +293,20 @@ passport.use(new LocalStrategy(
 				return done(null,user);
 			}
 			else{
-				return done(null, false, {message: 'Incorrect Password'});
+				return done(null, false, req.flash('error','Password incorrect.'));
 			}
 		});
 	});
 }
 ));
 
+
+
 //login - POST
 router.post('/login',
-  passport.authenticate('local', { successRedirect: '/',
+  passport.authenticate('local-login', { successRedirect: '/',
                                    failureRedirect: '/users/login',
-                                   failureFlash: 'Invalid Username or Password' }), 
+                                   failureFlash: true }), 
   function(req, res){
   	console.log('Auth Successful');
   	res.redirect('/');
