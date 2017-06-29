@@ -104,19 +104,12 @@ footer{
     padding: 5px 12px;
     display: block;
 }*/
-#widget {
-    width: 780px;
-    height: 480px;
-    font: normal 10px verdana;
-    text-align: center;
-    margin: 40px auto;
-    border: 5px #aaa;
-    border-style: outset inset inset outset;
-}
+
 
 form #location {
     width: 98%;
     margin: 200px 0 60px 0;
+    position: relative;
 }
 
 select {
