@@ -42,7 +42,7 @@ router.post('/addEvent', function(req, res){
 	var website 	= req.body.website;
 	var startDate 	= req.body.startDate;
 	var endDate	= req.body.endDate;
-
+	var deadline = req.body.deadline;
 	var description	= req.body.description;
 	var keywords	= req.body.keywords;
 	var approved = 0;//0:not check yet; 1:approve; 2:disapprove\
@@ -85,6 +85,7 @@ router.post('/addEvent', function(req, res){
 			   website: website,
 			   startDate: startDate,
 			   endDate: endDate,
+			   deadline: deadline,
 			   description: description,
 			   keywords: keywords,
 			   approved: approved,

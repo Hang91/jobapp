@@ -9,43 +9,46 @@
       <form method="post" action="/users/addEvent" class="form-signin">
         <h2 class="form-signin-heading">Add Event</h2>
         <label>Event Name</label>
-        <input type="text" name="name" class="form-control" placeholder="Name" value="<%= (!!locals.name)?name:'' %>" required autofocus>
+        <input type="text" name="name" class="form-control" value="<%= (!!locals.name)?name:'' %>" required autofocus>
         <br>
         <label>Event Type</label>
-        <input type="text" name="type" class="form-control" placeholder="Type" value="<%= (!!locals.type)?type:'' %>" required autofocus>
+        <input type="text" name="type" class="form-control" value="<%= (!!locals.type)?type:'' %>" required autofocus>
         <br>
         <label>City</label>
-        <input type="text" name="city" class="form-control" placeholder="City" value="<%= (!!locals.city)?city:'' %>" required autofocus>
+        <input type="text" name="city" class="form-control" value="<%= (!!locals.city)?city:'' %>" required autofocus>
         <br>
         <label>State or Province</label>
-        <input type="text" name="state" class="form-control" placeholder="State" value="<%= (!!locals.state)?state:'' %>"  required autofocus>
+        <input type="text" name="state" class="form-control" value="<%= (!!locals.state)?state:'' %>"  required autofocus>
         <br>
         <label>Country</label>
-        <input type="text" name="country" class="form-control" placeholder="Country" value="<%= (!!locals.country)?country:'' %>"  required autofocus>
+        <input type="text" name="country" class="form-control" value="<%= (!!locals.country)?country:'' %>"  required autofocus>
         <br>
         <label>Organizing Society</label>
-        <input type="text" name="organization" class="form-control" placeholder="Organization" value="<%= (!!locals.organization)?organization:'' %>"  required autofocus>
+        <input type="text" name="organization" class="form-control" value="<%= (!!locals.organization)?organization:'' %>">
         <br>
         <label>Contact Person for Event</label>
-        <input type="text" name="contact" class="form-control" placeholder="Contact" value="<%= (!!locals.contact)?contact:'' %>"  required autofocus>
+        <input type="text" name="contact" class="form-control" value="<%= (!!locals.contact)?contact:'' %>"  required autofocus>
         <br>
         <label>Event Enquiries Email Address</label>
-        <input type="email" name="email" class="form-control" placeholder="Email" value="<%= (!!locals.email)?email:'' %>"  required autofocus>
+        <input type="text" name="email" class="form-control" value="<%= (!!locals.email)?email:'' %>">
         <br>
         <label>Website Address</label>
-        <input type="url" name="website" class="form-control" placeholder="Website" value="<%= (!!locals.website)?website:'' %>"  required autofocus>
+        <input type="url" name="website" class="form-control" value="<%= (!!locals.website)?website:'' %>"  required autofocus>
         <br>
         <label>Event Start Date</label>
-        <input type="date" name="startDate" class="form-control" placeholder="StartDate" value="<%= (!!locals.startDate)?startDate:'' %>"  required autofocus>
+        <input type="date" name="startDate" class="form-control" value="<%= (!!locals.startDate)?startDate:'' %>"  required autofocus>
         <br>
         <label>Last Day of Event</label>
-        <input type="date" name="endDate" class="form-control" placeholder="EndDate" value="<%= (!!locals.endDate)?endDate:'' %>"  required autofocus>
+        <input type="date" name="endDate" class="form-control" value="<%= (!!locals.endDate)?endDate:'' %>"  required autofocus>
+        <br>
+        <label>Abstracts/Proposals Deadline</label>
+        <input type="date" name="deadline" class="form-control" value="<%= (!!locals.deadline)?deadline:'' %>">
         <br>
         <label>Description</label>
-        <input type="text" name="description" class="form-control" placeholder="Description" value="<%= (!!locals.description)?description:'' %>"  required autofocus>
+        <input type="text" name="description" class="form-control" value="<%= (!!locals.description)?description:'' %>"  required autofocus>
         <br>
         <label>Event Keywords</label>
-        <input type="text" name="keywrods" class="form-control" placeholder="Keywords" value="<%= (!!locals.keywords)?keywords:'' %>"  required autofocus>
+        <input type="text" name="keywrods" class="form-control" value="<%= (!!locals.keywords)?keywords:'' %>"  required autofocus>
         <br>   
 
 
