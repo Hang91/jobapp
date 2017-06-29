@@ -15,19 +15,20 @@ router.post('/',function(req, res){
 		console.log('find all...');
 		collection.find({}).toArray(function(err, results){
 			//to events.ejs
-			res.render('events', {results:results, user: req.user});
+			res.render('events', {title:'Search Results', results:results, user: req.user});
 		});
 	}
 	else if(!city_state){
 		console.log('find all...');
 		collection.find({'country' : country}).toArray(function(err, results){
 			//to events.ejs
-			res.render('events', {results:results, user: req.user});
+			res.render('events', {title:'Search Results', results:results, user: req.user});
+			//res.redirect('/events?'+'country='+country);
 		});
 	}
 	else{
 		collection.find({$and: [{'country' : country}, {$or: [{'state' : city_state}, {'city' : city_state}]}]}).toArray(function(err, results){
-			res.render('events', {results:results, user: req.user}); 
+			res.render('events', {title:'Search Results', results:results, user: req.user}); 
 		});
 	}
 });
@@ -70,7 +71,7 @@ router.get( "/" , function ( req , res , err ) {
 
 
    		//to events.ejs
-   		res.render('events', {results:results});  
+   		res.render('events', {title:'Search Results', results:results});  
  	})
 
 

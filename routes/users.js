@@ -10,7 +10,7 @@ var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 
 //login page - GET
 router.get('/login', function(req, res){
-	res.render('login', { user: req.user });
+	res.render('login', { title:'Login', user: req.user });
 });
 
 //login - POST
@@ -18,13 +18,13 @@ router.get('/login', function(req, res){
 
 //register page - GET
 router.get('/register', function(req, res){
-	res.render('register', { user: req.user });
+	res.render('register', { title:'Sign up', user: req.user });
 });
 
 //add an event page - GET
 router.get('/addEvent', ensureLoggedIn('login'), 
  function(req, res){
-    res.render('addEvent', { user: req.user });
+    res.render('addEvent', { title:'Add an Event', user: req.user });
  //res.render('addEvent');
 });
 

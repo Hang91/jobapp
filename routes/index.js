@@ -8,7 +8,7 @@ var db = mongojs('eventapp', ['users']);
 var EventDB = require('../models/EventDB');
 
 router.get('/', function(req, res){
-	res.render('index');
+	res.render('index',{title:'Home'});
 });
 
 // router.post('/',function(req, res){
