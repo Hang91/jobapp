@@ -3,7 +3,7 @@
 
 <%- messages() %>
 <div id="widget">
-<form id="location">
+<form method = "post" action="/events" class="form-signin">
     Region&raquo; 
     <select onchange="set_country(this,country,city_state)" size="1" name="region">
         <option value="" selected="selected">SELECT REGION</option>
@@ -22,6 +22,10 @@
     <br>
     City/State&raquo; 
     <select name="city_state" size="1" disabled="disabled" onchange="print_city_state(country,this)"></select>
+    <br>
+    <br>
+    <br>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Search</button>
 </form>
 <div id="txtregion"></div>
 <div id="txtplacename"></div>

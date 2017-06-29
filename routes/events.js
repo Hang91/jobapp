@@ -5,7 +5,17 @@ var EventDB = require('../models/EventDB');
 
 var email 	= require('emailjs/email');
 
-
+router.post('/',function(req, res){
+	console.log('search location...');
+	req.flash('success', 'Searching...');
+	var collection = db.collection('events');
+	var country = req.body.country;
+	var city_state = req.body.city_state;
+	
+	collection.find({$and: [{'country' : country}, {$or: [{'state' : city_state}, {'city' : city_state}]}]}).toArray(function(err, results){
+		res.render('events', {results:results, user: req.user}); 
+	});
+});
 
 router.get( "/" , function ( req , res , err ) {
     if (err) {
@@ -50,26 +60,6 @@ router.get( "/" , function ( req , res , err ) {
 
 
 });
-
-
-/*can display only one email*/
-// router.get( "/" , function ( req , res , err ) {
-//     if (err) {
-//     	console.dir( err );
-//     }
-
-//     var collection = db.collection('users');
-
-//     collection.findOne({email:String},function(err,item){
-// 		if(err) {
-// 	            console.log("There was a problem finding the events.");
-// 	    } else {
-// 	        console.log("events found!");
-// 	        console.log(item);
-// 	        res.render('events', { email: item["email"]});    	
-// 	    } 
-// 	}); 
-// });
 
 
 

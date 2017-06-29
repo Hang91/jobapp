@@ -10,6 +10,15 @@ var EventDB = require('../models/EventDB');
 router.get('/', function(req, res){
 	res.render('index');
 });
+
+// router.post('/',function(req, res){
+// 	console.log('search location...');
+// 	req.flash('success', 'Searching...');
+// 	var collection = db.collection('events');
+// 	collection.find({$and: [{country: country}, {$or:[{city_state : state}, {city_state: city}]}]}).toArray(function(err, results){
+// 		res.render('events', {results:results}); 
+// 	});
+// });
 // test 数据
 // var resData = [];
 // resData.push(

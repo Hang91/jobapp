@@ -10,7 +10,7 @@ var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 
 //login page - GET
 router.get('/login', function(req, res){
-	res.render('login');
+	res.render('login', { user: req.user });
 });
 
 //login - POST
@@ -18,7 +18,7 @@ router.get('/login', function(req, res){
 
 //register page - GET
 router.get('/register', function(req, res){
-	res.render('register');
+	res.render('register', { user: req.user });
 });
 
 //add an event page - GET
@@ -170,7 +170,9 @@ router.post('/register',
 			email: email,
 			// username: username,
 			password: password,
-			password2: password2
+			password2: password2,
+			user: req.user
+
 		});
 	}
 	else{
@@ -191,7 +193,8 @@ router.post('/register',
 					email: email,
 					// username: username,
 					password: password,
-					password2: password2
+					password2: password2,
+					user: req.user
 				});
 			}
 			if(!user){
@@ -214,8 +217,8 @@ router.post('/register',
 								console.log('User added');
 								//success msg
 								req.flash('success', 'You have registered! You can login now!');
-								res.location('/');
-								res.redirect('/');
+								res.location('/users/login');
+								res.redirect('/users/login');
 							}
 						});
 					});
