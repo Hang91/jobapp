@@ -1,13 +1,13 @@
+<%- messages() %>
 <%- include('includes/header') %>
 
 
-<%- messages() %>
-<div id="widget">
+
+<div class="container reg-page">
 <form method = "post" action="/events" class="form-signin">
-    Region&raquo; 
+    <lable>Region</lable><br>
     <select onchange="set_country(this,country,city_state)" size="1" name="region">
-        <option value="" selected="selected">SELECT REGION</option>
-        <option value=""></option>
+        <option value="" selected="selected">ALL</option>
         <script type="text/javascript">
             setRegions(this);
         </script>
@@ -15,13 +15,17 @@
     <br>
     <br>
     <br>
-    Country&raquo; 
-    <select name="country" size="1" disabled="disabled" onchange="set_city_state(this,city_state)"></select>
+    <lable>Country</lable><br>
+    <select name="country" size="1" disabled="disabled" onchange="set_city_state(this,city_state)">
+        <option value="" selected="selected">ALL</option>
+    </select>
     <br>
     <br>
     <br>
-    City/State&raquo; 
-    <select name="city_state" size="1" disabled="disabled" onchange="print_city_state(country,this)"></select>
+    <lable>City/State</lable><br>
+    <select name="city_state" size="1" disabled="disabled" onchange="print_city_state(country,this)">
+        <option value="" selected="selected">ALL</option>
+    </select>
     <br>
     <br>
     <br>

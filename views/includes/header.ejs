@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>EventApp</title>
-	<link rel="stylesheet" href="/css/style.css">
+	<title><%=title%></title>
+	
 	<link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/style.css">
   <script
   src="https://code.jquery.com/jquery-3.2.1.js"
   integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
@@ -25,7 +26,13 @@
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav navbar-right">
             <% if(user){ %>
-              <li class="active"><a href="#">Welcome, <%= user.name%>!</a></li>
+              <li class="active dropdown"><a href="#">Welcome, <%= user.name%>!</a>
+                <ul class="dropdown-content">
+                  <li>My Events</li>
+                  <li>My Subscribes</li>
+                  <li>My Profile</li>
+                </ul>
+              </li>               
               <% if(user.name == 'admin'){ %>
             		<li class="active"><a href="/users/manage">Manage</a></li>
             	<% } %>
