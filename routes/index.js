@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var mongojs = require('mongojs');
-var db = mongojs('eventapp', ['users','events']);
+var db = mongojs('eventapp', ['users','events','subs']);
 
 //引用连接数据库Model
 var EventDB = require('../models/EventDB');
