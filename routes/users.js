@@ -1,7 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var mongojs = require('mongojs');
-var db = mongojs('eventapp', ['users','events','subs']);
+
+var db = mongojs('eventapp', ['users','events','types','subs']);
+
 var bcrypt = require('bcryptjs');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;

@@ -8,31 +8,56 @@ var email 	= require('emailjs/email');
 router.
 
 router.post('/',function(req, res){
-	console.log('search location...');
-	req.flash('success', 'Searching...');
+	console.log('search events...');
 	var collection = db.collection('events');
+	var type = req.body.type;
+	var keywords = req.body.keywords.split(',');
 	var country = req.body.country;
-	var city_state = req.body.city_state;
-	if(!country){
-		console.log('find all...');
-		collection.find({}).toArray(function(err, results){
-			//to events.ejs
-			res.render('events', {title:'Search Results', results:results, user: req.user});
-		});
-	}
-	else if(!city_state){
-		console.log('find all...');
-		collection.find({'country' : country}).toArray(function(err, results){
-			//to events.ejs
-			res.render('events', {title:'Search Results', results:results, user: req.user});
-			//res.redirect('/events?'+'country='+country);
-		});
+	var state = req.body.state;
+	var startDate = req.body.startDate;
+	var endDate = req.body.endDate;
+
+	if(!type){
+		var typeStr = {};
 	}
 	else{
-		collection.find({$and: [{'country' : country}, {$or: [{'state' : city_state}, {'city' : city_state}]}]}).toArray(function(err, results){
-			res.render('events', {title:'Search Results', results:results, user: req.user}); 
-		});
+		var typeStr = {'type' : type};
 	}
+	if(!keywords){
+		var keywordsStr = {};
+	}
+	else{
+		//var keywordsStr = {'keywords': {$in:keywords}};//or
+		var keywordsStr = {'keywords': {$all:keywords}};//and
+	}
+	if(!country){
+		var countryStr = {};
+	}
+	else{
+		var countryStr = {'country' : country};
+	}
+	if(!state){
+		var stateStr = {};
+	}
+	else{
+		var stateStr = {'state' : state};
+	}
+	if(!startDate){
+		var startDateStr = {};
+	}
+	else{
+		var startDateStr = {'startDate': {$gte:startDate}};
+	}
+	if(!endDate){
+		var endDateStr = {};
+	}
+	else{
+		var endDateStr = {'endDate' : {$lte:endDate}};
+	}
+	collection.find({$and: [typeStr, keywordsStr, countryStr, stateStr, startDateStr, endDateStr]}).toArray(function(err, results){
+		res.render('events', {title:'Search Results', results:results, user: req.user}); 
+	});
+	
 });
 
 router.get( "/" , function ( req , res , err ) {
