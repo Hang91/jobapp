@@ -9,7 +9,7 @@ router.post('/',function(req, res){
 	console.log('search events...');
 	var collection = db.collection('events');
 	var type = req.body.type;
-	var keywords = req.body.keywords;
+	var keywords = req.body.keywords.split(',');
 	var country = req.body.country;
 	var state = req.body.state;
 	var startDate = req.body.startDate;
@@ -25,7 +25,8 @@ router.post('/',function(req, res){
 		var keywordsStr = {};
 	}
 	else{
-		var keywordsStr = {'keywords' : keywords};
+		//var keywordsStr = {'keywords': {$in:keywords}};//or
+		var keywordsStr = {'keywords': {$all:keywords}};//and
 	}
 	if(!country){
 		var countryStr = {};

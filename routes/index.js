@@ -17,7 +17,8 @@ router.get('/', function(req, res, err){
 		if (err) {
     		console.dir( err );
     	}
-		res.render('index',{title:'Home',esults:results});
+    	console.log('find types '+results.length);
+		res.render('index',{title:'Home',results:results});
 	});
 });
 

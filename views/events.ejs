@@ -33,51 +33,5 @@
             });
         });   
     });
-</script>
-
-<!-- <%  for(var i=0; i<results.length; i++) {%>
-	<span><%=results[i].startDate%>~<%=results[i].endDate%>, <%=results[i].name%>, <%=results[i].city%>,<%=results[i].state%>,<%=results[i].country%></span><button class="btt">[+] More info</button>
-	<ul class='details'>
-	    <li><a href=<%=results[i].website%>><strong>Website:</strong> <%=results[i].website%></a></li>
-	    <li><strong>Organization:</strong> <%=results[i].organization%></li>
-	    <li><strong>Contact:</strong> <%=results[i].contact%></li>
-	    <li><strong>Email:</strong>  <%=results[i].email%></li>
-	    <li><strong>Description:</strong> <%=results[i].description%></li>
-	</ul>
-	<br>
-<% } %> -->
-
-<!-- <script>
-	$(document).ready(function(){
-		$('.details').each(function(idx) {
-		    $(this).attr('id', 'did-' + idx);
-		});
-		$('.btt').each(function(idx) {
-		    $(this).attr('id', 'bid-' + idx);
-		});
-		$("button[id^='bid']").click(function(){
-			$("ul[id^='did']").toggle();
-		});
-	});
-</script> -->
-<!-- <p>Click on the content to see more details.</p>
-<%  for(var i=0; i<results.length; i++) {%>
-<div class="dropdown">
-	<span>
-		<%=results[i].startDate%>~<%=results[i].endDate%>, <%=results[i].name%>, <%=results[i].city%>,<%=results[i].state%>,<%=results[i].country%>
-	</span>
-	<div class="dropdown-content">
-		<ul>
-		    <li><a href=<%=results[i].website%>><strong>Website:</strong> <%=results[i].website%></a></li>
-		    <li><strong>Organization:</strong> <%=results[i].organization%></li>
-		    <li><strong>Contact:</strong> <%=results[i].contact%></li>
-		    <li><strong>Email:</strong>  <%=results[i].email%></li>
-		    <li><strong>Description:</strong> <%=results[i].description%></li>
-		</ul>
-	</div>
-</div>
-<% } %> -->
-
-      
-        
+</script>        
 <%- include('includes/footer') %>

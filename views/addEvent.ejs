@@ -15,7 +15,7 @@
         <input type="text" name="type" class="form-control" value="<%= (!!locals.type)?type:'' %>" required autofocus>
         <br>
         <lable>Region</lable><br>
-            <select class="form-control" onchange="set_country(this,country,state_province,false)" name="region">
+            <select class="form-control" onchange="set_country(this,country,state,false)" name="region">
             <option value="" selected="selected">PLEASE SELECT A REGION</option>
             <script type="text/javascript">
                 setRegions(this);
@@ -23,13 +23,12 @@
         </select>
         <br>
         <lable>Country</lable><br>
-        <select class="form-control" name="country" disabled="disabled" onchange="set_city_state(this,state_province,false)">
+        <select class="form-control" name="country" disabled="disabled" onchange="set_city_state(this,state,false)">
             <option value="" selected="selected">PLEASE SELECT A COUNTRY</option>
         </select>
-        <!-- <input type="text" name="country" class="form-control" value="<%= (!!locals.country)?country:'' %>"  required autofocus> -->
         <br>
         <lable>State or Province</lable><br>
-    <select class="form-control" name="state_province" disabled="disabled" onchange="print_city_state(country,this)">
+    <select class="form-control" name="state" disabled="disabled" onchange="print_city_state(country,this)">
         <option value="" selected="selected">PLEASE SELECT A STATE OR PROVINCE</option>
     </select>
         <br>
