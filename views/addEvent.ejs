@@ -14,14 +14,27 @@
         <label>Event Type</label>
         <input type="text" name="type" class="form-control" value="<%= (!!locals.type)?type:'' %>" required autofocus>
         <br>
+        <lable>Region</lable><br>
+            <select class="form-control" onchange="set_country(this,country,state_province,false)" name="region">
+            <option value="" selected="selected">PLEASE SELECT A REGION</option>
+            <script type="text/javascript">
+                setRegions(this);
+            </script>
+        </select>
+        <br>
+        <lable>Country</lable><br>
+        <select class="form-control" name="country" disabled="disabled" onchange="set_city_state(this,state_province,false)">
+            <option value="" selected="selected">PLEASE SELECT A COUNTRY</option>
+        </select>
+        <!-- <input type="text" name="country" class="form-control" value="<%= (!!locals.country)?country:'' %>"  required autofocus> -->
+        <br>
+        <lable>State or Province</lable><br>
+    <select class="form-control" name="state_province" disabled="disabled" onchange="print_city_state(country,this)">
+        <option value="" selected="selected">PLEASE SELECT A STATE OR PROVINCE</option>
+    </select>
+        <br>
         <label>City</label>
         <input type="text" name="city" class="form-control" value="<%= (!!locals.city)?city:'' %>" required autofocus>
-        <br>
-        <label>State or Province</label>
-        <input type="text" name="state" class="form-control" value="<%= (!!locals.state)?state:'' %>"  required autofocus>
-        <br>
-        <label>Country</label>
-        <input type="text" name="country" class="form-control" value="<%= (!!locals.country)?country:'' %>"  required autofocus>
         <br>
         <label>Organizing Society</label>
         <input type="text" name="organization" class="form-control" value="<%= (!!locals.organization)?organization:'' %>">
@@ -48,7 +61,7 @@
         <input type="text" name="description" class="form-control" value="<%= (!!locals.description)?description:'' %>"  required autofocus>
         <br>
         <label>Event Keywords</label>
-        <input type="text" name="keywrods" class="form-control" value="<%= (!!locals.keywords)?keywords:'' %>"  required autofocus>
+        <input type="text" name="keywords" class="form-control" value="<%= (!!locals.keywords)?keywords:'' %>"  required autofocus>
         <br>   
 
 

@@ -1,12 +1,46 @@
 <%- messages() %>
 <%- include('includes/header') %>
 
-
+<script>
+    function setTypes(type)
+    {
+        type.length = 0;
+        console.log(results.length);
+        for(var i=0; i<results.length; i++){
+            type.options[i] = new Option(results[i], results[i]);
+        }
+    }
+</script>
 
 <div class="container reg-page">
 <form method = "post" action="/events" class="form-signin">
+    <lable>Type</lable><br>
+    <select class="form-control" name="type">
+        <option value="" selected="selected">ALL</option>
+        <script type="text/javascript">
+            setTypes(this);
+        </script>
+    </select>
+    <br>
+    <br>
+    <br>
+    <lable>Keywords</lable><br>
+    <input type="text" name="keywords" class="form-control" value="<%= (!!locals.keywords)?keywords:'' %>">Please use "," to separate
+    <br>
+    <br>
+    <br>
+    <label>Event Start Date</label><br>
+    <input type="date" name="startDate" class="form-control" value="<%= (!!locals.startDate)?startDate:'' %>">
+    <br>
+    <br>
+    <br>
+    <label>Last Day of Event</label><br>
+    <input type="date" name="endDate" class="form-control" value="<%= (!!locals.endDate)?endDate:'' %>">
+    <br>
+    <br>
+    <br>
     <lable>Region</lable><br>
-    <select onchange="set_country(this,country,city_state)" size="1" name="region">
+    <select class="form-control" onchange="set_country(this,country,state, true)" name="region">
         <option value="" selected="selected">ALL</option>
         <script type="text/javascript">
             setRegions(this);
@@ -16,14 +50,14 @@
     <br>
     <br>
     <lable>Country</lable><br>
-    <select name="country" size="1" disabled="disabled" onchange="set_city_state(this,city_state)">
+    <select class="form-control" name="country" disabled="disabled" onchange="set_city_state(this,state, true)">
         <option value="" selected="selected">ALL</option>
     </select>
     <br>
     <br>
     <br>
-    <lable>City/State</lable><br>
-    <select name="city_state" size="1" disabled="disabled" onchange="print_city_state(country,this)">
+    <lable>State/Province</lable><br>
+    <select class="form-control" name="state" disabled="disabled" onchange="print_city_state(country,this)">
         <option value="" selected="selected">ALL</option>
     </select>
     <br>
