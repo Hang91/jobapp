@@ -1,7 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var mongojs = require('mongojs');
-var db = mongojs('eventapp', ['users','events','types']);
+
+var db = mongojs('eventapp', ['users','events','types','subs']);
+
 var bcrypt = require('bcryptjs');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
@@ -28,31 +30,71 @@ router.get('/addEvent', ensureLoggedIn('login'),
  //res.render('addEvent');
 });
 
-// router.get('/addSub', ensureLoggedIn('login'),
-// function(req, res){
-// 	res.render('addSub', {title: 'Add a subscription', user: req.user});
-// });
+router.get('/addSub', ensureLoggedIn('login'),
+function(req, res){
+	res.render('addSub', {title: 'Add a subscription', user: req.user});
+});
 
-// router.post('/addSub', function(req, res){
-// 	//get form values
-// 	var name 		= req.body.name;
-// 	var type 		= req.body.type;
-// 	var city    = req.body.city;
-// 	var state 	= req.body.state;
-// 	var country 	= req.body.country;
-// 	var organization 	= req.body.organization;
-// 	//var contact 	= req.body.contact;
-// 	//var email 	= req.body.email;
-// 	//var website 	= req.body.website;
-// 	var startDate 	= req.body.startDate;
-// 	var endDate	= req.body.endDate;
-// 	//var deadline = req.body.deadline;
-// 	//var description	= req.body.description;
-// 	var keywords	= req.body.keywords;
-// 	var approved = 0;//0:not check yet; 1:approve; 2:disapprove\
-// 	var userName = req.user.name;
-// 	var userEmail = req.user.email;
-// });
+
+router.post('/addSub', function(req, res){
+	//get form values
+	var name 		= req.body.name;
+	var type 		= req.body.type;
+	var city    = req.body.city;
+	var state 	= req.body.state;
+	var country 	= req.body.country;
+	var organization 	= req.body.organization;
+	//var contact 	= req.body.contact;
+	//var email 	= req.body.email;
+	//var website 	= req.body.website;
+	var startDate 	= req.body.startDate;
+	var endDate	= req.body.endDate;
+	//var deadline = req.body.deadline;
+	//var description	= req.body.description;
+	if(typeof req.body.keywords == 'string') {
+		var keywords	= req.body.keywords.split(",");
+	} else {
+		var keywords = null;
+		console.log('keywords is not a string');
+	}
+	//var approved = 0;//0:not check yet; 1:approve; 2:disapprove\
+	var userName = req.user.name;
+	var userEmail = req.user.email;
+
+	var newSub = {
+		   name: name,
+		   type: type,
+		   city: city,
+		   state: state,
+		   country: country,
+		   organization: organization,
+		   //contact: contact,
+		   //email: email,
+		   //website: website,
+		   startDate: startDate,
+		   endDate: endDate,
+		   //deadline: deadline,
+		   //description: description,
+		   keywords: keywords,
+		   //approved: approved,
+		   userName: userName,
+		   userEmail: userEmail
+	}
+
+	db.subs.insert(newSub, function(err, doc){
+		if(err){
+			res.send(err);
+		}
+		else{
+			console.log('subscription added');
+			//success msg
+
+			req.flash('success', 'Successfully added an subscription!');
+			res.location('/');
+			res.redirect('/');
+		}
+	});
+});
 
 //add an event page - POST
 router.post('/addEvent', function(req, res){
@@ -104,45 +146,45 @@ router.post('/addEvent', function(req, res){
 	// 	});
 	// }
 	// else{
-		var newEvent = {
-			   name: name,
-			   type: type,
-			   city: city,
-			   state: state,
-			   country: country,
-			   organization: organization,
-			   contact: contact,
-			   email: email,
-			   website: website,
-			   startDate: startDate,
-			   endDate: endDate,
-			   deadline: deadline,
-			   description: description,
-			   keywords: keywords,
-			   approved: approved,
-			   userName: userName,
-			   userEmail: userEmail
-		}
+	var newEvent = {
+		   name: name,
+		   type: type,
+		   city: city,
+		   state: state,
+		   country: country,
+		   organization: organization,
+		   contact: contact,
+		   email: email,
+		   website: website,
+		   startDate: startDate,
+		   endDate: endDate,
+		   deadline: deadline,
+		   description: description,
+		   keywords: keywords,
+		   approved: approved,
+		   userName: userName,
+		   userEmail: userEmail
+	}
 
 		// bcrypt.genSalt(10, function(err, salt){
 		// 	bcrypt.hash(newUser.password, salt, function(err, hash){
 		// 		newUser.password = hash;
 				// Push To Array
 
-				//add to event
-				db.events.insert(newEvent, function(err, doc){
-				if(err){
-					res.send(err);
-				}
-				else{
-					console.log('Event added');
-					//success msg
+			//add to event
+		db.events.insert(newEvent, function(err, doc){
+		if(err){
+			res.send(err);
+		}
+		else{
+			console.log('Event added');
+			//success msg
 
-					req.flash('success', 'Successfully added an event!');
-					res.location('/');
-					res.redirect('/');
-				}
-				});
+			req.flash('success', 'Successfully added an event!');
+			res.location('/');
+			res.redirect('/');
+		}
+		});
 
 				/* add to user
 				console.log(req.body.useremail);

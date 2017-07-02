@@ -1,0 +1,48 @@
+<% if (locals.errors) { %>
+    <% errors.forEach(function(error){ %>
+        <div class="alert alert-danger"><%= error.msg %></div>
+    <% }) %>
+<% } %>
+<%= messages()%>
+<%- include('includes/header') %>
+<div class="container">
+      <form method="post" action="/users/addSub" class="form-signin">
+        <h2 class="form-signin-heading">Add Subscribe</h2>
+        <label>Event Name</label>
+        <input type="text" name="name" class="form-control" value="<%= (!!locals.name)?name:'' %>" required autofocus>
+        <br>
+        <label>Event Type</label>
+        <input type="text" name="type" class="form-control" value="<%= (!!locals.type)?type:'' %>" required autofocus>
+        <br>
+        <label>City</label>
+        <input type="text" name="city" class="form-control" value="<%= (!!locals.city)?city:'' %>" required autofocus>
+        <br>
+        <label>State or Province</label>
+        <input type="text" name="state" class="form-control" value="<%= (!!locals.state)?state:'' %>"  required autofocus>
+        <br>
+        <label>Country</label>
+        <input type="text" name="country" class="form-control" value="<%= (!!locals.country)?country:'' %>"  required autofocus>
+        <br>
+        <label>Organizing Society</label>
+        <input type="text" name="organization" class="form-control" value="<%= (!!locals.organization)?organization:'' %>">
+        <br>
+        <label>Start Date</label>
+        <input type="date" name="startDate" class="form-control" value="<%= (!!locals.startDate)?startDate:'' %>"  required autofocus>
+        <br>
+        <label>End Date</label>
+        <input type="date" name="endDate" class="form-control" value="<%= (!!locals.endDate)?endDate:'' %>"  required autofocus>
+        <br>
+        <label>Event Keywords</label>
+        <input type="text" name="keywords" class="form-control" value="<%= (!!locals.keywords)?keywords:'' %>"  required autofocus>
+        <br> 
+
+
+
+        <!-- <p>Have Account? <a href="/users/login">Login</a></p> -->
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Subscribe</button>
+      </form>
+
+    </div> <!-- /container -->
+
+
+<%- include('includes/footer') %>

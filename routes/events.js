@@ -5,6 +5,8 @@ var EventDB = require('../models/EventDB');
 
 var email 	= require('emailjs/email');
 
+router.
+
 router.post('/',function(req, res){
 	console.log('search events...');
 	var collection = db.collection('events');
