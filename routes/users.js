@@ -26,8 +26,14 @@ router.get('/register', function(req, res){
 //add an event page - GET
 router.get('/addEvent', ensureLoggedIn('login'), 
  function(req, res){
-    res.render('addEvent', { title:'Add an Event', user: req.user });
- //res.render('addEvent');
+ 	var collection = db.collection('types');
+	collection.find({}).toArray(function(err, results){
+		if (err) {
+    		console.dir( err );
+    	}
+    	console.log('find types '+results.length);
+		res.render('addEvent', { title:'Add an Event', user: req.user, results:results});
+	});
 });
 
 router.get('/addSub', ensureLoggedIn('login'),

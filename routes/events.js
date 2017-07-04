@@ -5,8 +5,6 @@ var EventDB = require('../models/EventDB');
 
 var email 	= require('emailjs/email');
 
-router.
-
 router.post('/',function(req, res){
 	console.log('search events...');
 	var collection = db.collection('events');
@@ -17,13 +15,31 @@ router.post('/',function(req, res){
 	var startDate = req.body.startDate;
 	var endDate = req.body.endDate;
 
+	//delete out-of-date events
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1; //January is 0!
+	var yyyy = today.getFullYear();
+
+	if(dd<10) {
+	    dd = '0'+dd
+	} 
+
+	if(mm<10) {
+	    mm = '0'+mm
+	} 
+
+	today =  yyyy + '-' + mm + '-' + dd;
+	console.log(today);
+	collection.remove({'startDate': {$lt:today}})
+
 	if(!type){
 		var typeStr = {};
 	}
 	else{
 		var typeStr = {'type' : type};
 	}
-	if(!keywords){
+	if(keywords.length == 1 && !keywords[0]){
 		var keywordsStr = {};
 	}
 	else{

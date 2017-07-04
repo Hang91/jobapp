@@ -6,8 +6,7 @@
     <lable>Type</lable><br>
     <select class="form-control" name="type">
         <option value="" selected="selected">-----ALL-----</option>
-        <% for (var i=0; i<results.length; i++){ 
-                console.log(results.length); %>
+        <% for (var i=0; i<results.length; i++){ %>
         <option value= <%=results[i].type%> ><%=results[i].type%></option>
         <% } %>
     </select>

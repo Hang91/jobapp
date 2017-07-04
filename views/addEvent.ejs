@@ -11,8 +11,14 @@
         <label>Event Name</label>
         <input type="text" name="name" class="form-control" value="<%= (!!locals.name)?name:'' %>" required autofocus>
         <br>
-        <label>Event Type</label>
-        <input type="text" name="type" class="form-control" value="<%= (!!locals.type)?type:'' %>" required autofocus>
+        <lable>Event Type</lable><br>
+        <select class="form-control" name="type" value="<%= (!!locals.type)?type:'' %>" required autofocus>
+            <option value="" selected="selected">-----ALL-----</option>
+            <% for (var i=0; i<results.length; i++){ 
+                    console.log(results.length); %>
+            <option value= <%=results[i].type%> ><%=results[i].type%></option>
+            <% } %>
+        </select>
         <br>
         <lable>Region</lable><br>
             <select class="form-control" onchange="set_country(this,country,state,false)" name="region">
