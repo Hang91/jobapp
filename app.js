@@ -33,7 +33,7 @@ MongoClient.connect(URL,function(err,database){
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var events = require('./routes/events');
-
+var search = require('./routes/search');
 
 var app = express();
 
@@ -96,7 +96,7 @@ app.get('*', function(req, res, next){
 app.use('/', routes);
 app.use('/users', users);
 app.use('/events', events);
-
+app.use('/search', search);
 
 app.listen(3000);
 console.log('server started on port 3000');

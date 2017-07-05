@@ -76,7 +76,7 @@ footer{
 
 
 .dropdown:hover{
-    background: #f9f9f9;
+    background: black;
 }
 .dropdown:hover .dropdown-content{ 
     display: block;    

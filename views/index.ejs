@@ -1,59 +1,47 @@
 <%- include('includes/header') %>
+<nav class="navbar navbar-inverse">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Home</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+              <li><a href="/search">Search</a></li>
+              <li><a href="/users/addEvent">Add Event</a></li>
+              <li><a href="/users/addSub">Subscribe</a></li>
+            </ul>
+            <% if(user){ %>
+            <ul class="nav navbar-nav navbar-right">
+                <% if(user.name == 'admin'){ %>
+                  <li><a href="/users/manage">Manage</a></li>
+                <% } %>
+                  <li class="dropdown"><a href="#">Welcome, <%= user.name%>!</a>
+                  <ul class="dropdown-content">
+                    <li><a href="#">My Events</a></li>
+                    <li><a href="#">My Subscribes</a></li>
+                    <li><a href="#">My Profile</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="/users/logout">Log out</a></li>
+                  </ul>
+                </li>
+            </ul>
+          <% }else{ %>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/users/register">Sign up</a></li>               
+                <li><a href="/users/login">sign in</a></li>
+            </ul>
+          <% } %>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
 <%- messages() %>
 
 <div class="container reg-page">
-<form method = "post" action="/events" class="form-signin">
-    <lable>Type</lable><br>
-    <select class="form-control" name="type">
-        <option value="" selected="selected">-----ALL-----</option>
-        <% for (var i=0; i<results.length; i++){ %>
-        <option value= <%=results[i].type%> ><%=results[i].type%></option>
-        <% } %>
-    </select>
-    <br>
-    <br>
-    <br>
-    <lable>Keywords</lable><br>
-    <input type="text" name="keywords" class="form-control" value="<%= (!!locals.keywords)?keywords:'' %>">Please use "," to separate keywords without space
-    <br>
-    <br>
-    <br>
-    <label>Event Start Date</label><br>
-    <input type="date" name="startDate" class="form-control" value="<%= (!!locals.startDate)?startDate:'' %>">
-    <br>
-    <br>
-    <br>
-    <label>Last Day of Event</label><br>
-    <input type="date" name="endDate" class="form-control" value="<%= (!!locals.endDate)?endDate:'' %>">
-    <br>
-    <br>
-    <br>
-    <lable>Region</lable><br>
-    <select class="form-control" onchange="set_country(this,country,state, true)" name="region">
-        <option value="" selected="selected">ALL</option>
-        <script type="text/javascript">
-            setRegions(this);
-        </script>
-    </select>
-    <br>
-    <br>
-    <br>
-    <lable>Country</lable><br>
-    <select class="form-control" name="country" disabled="disabled" onchange="set_city_state(this,state, true)">
-        <option value="" selected="selected">ALL</option>
-    </select>
-    <br>
-    <br>
-    <br>
-    <lable>State/Province</lable><br>
-    <select class="form-control" name="state" disabled="disabled" onchange="print_city_state(country,this)">
-        <option value="" selected="selected">ALL</option>
-    </select>
-    <br>
-    <br>
-    <br>
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Search</button>
-</form>
-<div id="txtregion"></div>
-<div id="txtplacename"></div>
+<h1>Welcome to Events App!</h1>
 </div>

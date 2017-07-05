@@ -1,4 +1,28 @@
 <%- include('includes/header') %>
+<nav class="navbar navbar-inverse">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Home</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+              <li><a href="/search">Search</a></li>
+              <li><a href="/users/login">Add Event</a></li>
+              <li><a href="/users/login">Subscribe</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+              <li class="active"><a href="/users/register">Sign up</a></li>               
+              <li><a href="/users/login">sign in</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
 <%- messages() %>
 <div class="container reg-page">
     <% if (locals.errors) { %>
@@ -8,7 +32,7 @@
     <% } %>
   <%- messages() %>
       <form method="post" action="/users/register" class="form-signin">
-        <h2 class="form-signin-heading text-center">User Registration</h2>
+        <h2 class="form-signin-heading text-center">Sign up</h2>
         <label>Name</label>
         <input type="text" name="name" class="form-control" placeholder="Name"  value="<%= (!!locals.name)?name:''%>" required autofocus>
         <br>
@@ -21,7 +45,7 @@
         <label>Confirm Password</label>
         <input type="password" name="password2" class="form-control" placeholder="Password Confirm" value="<%= (!!locals.password2)?password2:''%>" required>
 
-        <p>Have Account? <a href="/users/login">Login</a></p>
+        <p>Have Account? <a href="/users/login">Sign in</a></p>
 
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
       </form>
