@@ -47,6 +47,30 @@
     </nav>
 <%- messages() %>
 
-<div class="container reg-page">
-<h1>Welcome to Events App!</h1>
+<h2>Manage Categories: <%=results.length%></h2>
+<p>----------------------------------------------------------------</p>
+<div class="panel panel-default">
+  <div class="panel-heading">Categories</div>  
+    <table class="table table-striped table-bordered" style="width:100%">
+    <%  for(var i=0; i<results.length; i++) {%>
+    <tr>
+      <th><%=results[i].type%></th>
+      <th><a href="">Edit</a></th> 
+      <th>Delete</th>
+    </tr>
+    <% } %>
+    </table>
 </div>
+
+<script>
+	$('.adv-toggle-buttons a').each(function() { 
+        $(this).on('click', function(){
+            $(this).parent().next().slideToggle();
+            $(this).parent().find('a').each(function(){
+                $(this).toggle();
+                
+            });
+        });   
+    });
+</script>        
+<%- include('includes/footer') %>

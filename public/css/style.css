@@ -92,13 +92,24 @@ footer{
     z-index: 1;
 }
 
-
-.dropdown-content a{
-    text-decoration: none;
+.dropdown-content hr{
+  border: none;
+  border-top: 1px dotted #a0a0a0;
+  margin: 5px 0;
+  width: 95%;
 }
-.dropdown-content ul li{
-    padding: 5px 12px;
+.dropdown-content a{
+    color: black;
+    text-decoration: none;
     display: block;
+    display: inline;
+}
+.dropdown-content a:hover{
+  text-decoration: underline;
+}
+
+.dropdown-content{
+    padding: 5px 20px;
 }
 
 

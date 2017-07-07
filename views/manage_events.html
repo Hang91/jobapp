@@ -47,6 +47,42 @@
     </nav>
 <%- messages() %>
 
-<div class="container reg-page">
-<h1>Welcome to Events App!</h1>
+<h2>Manage Events: <%=results1.length%></h2>
+<p>Click on "[+] More info" to show more details.</p>
+<p>Click on "[-] Less info" to show less details.</p>
+<p>----------------------------------------------------------------</p>
+<div class="panel panel-default">
+  <div class="panel-heading">To Be Approved</div>
+  <table class="table table-striped table-bordered">
+<%  for(var i=0; i<results1.length; i++) {%>
+  <p class="adv-toggle-buttons">
+    <span><%=results1[i].startDate%>~<%=results1[i].endDate%>, <%=results1[i].name%>, <%=results1[i].city%>,<%=results1[i].state%>,<%=results1[i].country%>. </span><a href="#">[+] More info</a><a href="#" style="display: none;">[-] Less info</a>
+  </p>
+  <div class="adv-unit-options" style="display: none;">
+    <ul>
+        <li><a href=<%=results1[i].website%>><strong>Website:</strong> <%=results1[i].website%></a></li>
+        <li><strong>Type:</strong> <%=results1[i].type%></a></li>
+        <li><strong>Organization:</strong> <%=results1[i].organization%></li>
+        <li><strong>Contact:</strong> <%=results1[i].contact%></li>
+        <li><strong>Email:</strong>  <%=results1[i].email%></li>
+        <li><strong>Description:</strong> <%=results1[i].description%></li>
+        <li><strong>Abstracts or Proposals Deadline:</strong> <%=results1[i].deadline%></li>
+        <li><strong>Keywords:</strong> <%=results1[i].keywords%></li>
+    </ul>
+  </div>
+  <% } %>
+  </table>
 </div>
+  <br>
+<script>
+  $('.adv-toggle-buttons a').each(function() { 
+        $(this).on('click', function(){
+            $(this).parent().next().slideToggle();
+            $(this).parent().find('a').each(function(){
+                $(this).toggle();
+                
+            });
+        });   
+    });
+</script>        
+<%- include('includes/footer') %>

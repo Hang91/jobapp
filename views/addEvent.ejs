@@ -26,16 +26,21 @@
           <ul class="nav navbar-nav navbar-right">
             <% if(user){ %>
                 <% if(user.name == 'admin'){ %>
-                  <li><a href="/users/manage">Manage</a></li>
+                  <li class="dropdown"><a href="#">Manage</a>
+                      <div class="dropdown-content">
+                        <hr><a href="/manage/events">Manage Events</a><br>
+                        <a href="/manage/categories">Manage categories</a><br>
+                        <a href="/manage/users">Manage users</a><br>
+                      </div>
+                  </li>
                 <% } %>
               <li class="dropdown"><a href="#">Welcome, <%= user.name%>!</a>
-                  <ul class="dropdown-content">
-                    <li><a href="#">My Events</a></li>
-                    <li><a href="#">My Subscribes</a></li>
-                    <li><a href="#">My Profile</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="/users/logout">Log out</a></li>
-                  </ul>
+                  <div class="dropdown-content">
+                    <hr><a href="#">My Events</a><br>
+                    <a href="#">My Subscribes</a><br>
+                    <a href="#">My Profile</a><br>
+                    <hr><a href="/users/logout">Log out</a><br>
+                  </div>
                 </li>
               <% } %>
           </ul>

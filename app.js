@@ -34,6 +34,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var events = require('./routes/events');
 var search = require('./routes/search');
+var manage = require('./routes/manage');
 
 var app = express();
 
@@ -97,6 +98,7 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/events', events);
 app.use('/search', search);
+app.use('/manage',manage);
 
 app.listen(3000);
 console.log('server started on port 3000');
