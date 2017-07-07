@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var mongojs = require('mongojs');
+var email 	= require('emailjs/email');
 
 var db = mongojs('eventapp', ['users','events','types','subs']);
 
@@ -38,7 +39,14 @@ router.get('/addEvent', ensureLoggedIn('login'),
 
 router.get('/addSub', ensureLoggedIn('login'),
 function(req, res){
-	res.render('addSub', {title: 'Add a subscription', user: req.user});
+ 	var collection = db.collection('types');
+	collection.find({}).toArray(function(err, results){
+		if (err) {
+    		console.dir( err );
+    	}
+    	console.log('find types '+results.length);
+		res.render('addSub', { title:'Add an subscription', user: req.user, results:results});
+	});
 });
 
 
@@ -178,19 +186,19 @@ router.post('/addEvent', function(req, res){
 				// Push To Array
 
 			//add to event
-		db.events.insert(newEvent, function(err, doc){
-		if(err){
-			res.send(err);
-		}
-		else{
-			console.log('Event added');
-			//success msg
-
-			req.flash('success', 'Successfully added an event!');
-			res.location('/');
-			res.redirect('/');
-		}
-		});
+	db.events.insert(newEvent, function(err, doc){
+	if(err){
+		res.send(err);
+	}
+	else{
+		console.log('Event added');
+		//success msg
+		alertUser(newEvent);
+		req.flash('success', 'Successfully added an event!');
+		res.location('/');
+		res.redirect('/');
+	}
+	});
 
 				/* add to user
 				console.log(req.body.useremail);
@@ -216,6 +224,120 @@ router.post('/addEvent', function(req, res){
 		// });		
 	// }	
 });
+
+function alertUser(newEvent) {
+	var collection = db.collection('subs');
+	var name = newEvent.name;
+	var type = newEvent.type;
+	var keywords = newEvent.keywords;
+	var country = newEvent.country;
+	var state = newEvent.state;
+	var city = newEvent.city;
+	var startDate = newEvent.startDate;
+	var endDate = newEvent.endDate;
+
+	//delete out-of-date subs
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1; //January is 0!
+	var yyyy = today.getFullYear();
+
+	if(dd<10) {
+	    dd = '0'+dd
+	} 
+
+	if(mm<10) {
+	    mm = '0'+mm
+	} 
+
+	today =  yyyy + '-' + mm + '-' + dd;
+	console.log(today);
+	collection.remove({'startDate': {$lt:today}})
+
+	if(!name) {
+		var nameStr = {};
+	}
+	else {
+		nameStr = {'name' : name};
+	}
+	if(!type){
+		var typeStr = {};
+	}
+	else{
+		var typeStr = {'type' : type};
+	}
+	if(keywords.length == 1 && !keywords[0]){
+		var keywordsStr = {};
+	}
+	else{
+		//var keywordsStr = {'keywords': {$in:keywords}};//or
+		var keywordsStr = {'keywords': {$all:keywords}};//and
+	}
+	if(!country){
+		var countryStr = {};
+	}
+	else{
+		var countryStr = {'country' : country};
+	}
+	if(!state){
+		var stateStr = {};
+	}
+	else{
+		var stateStr = {'state' : state};
+	}
+	if(!city){
+		var cityStr = {};
+	}
+	else{
+		var cityStr = {'city' : city};
+	}
+	if(!startDate){
+		var startDateStr = {};
+	}
+	else{
+		var startDateStr = {'startDate': {$gte:startDate}};
+	}
+	if(!endDate){
+		var endDateStr = {};
+	}
+	else{
+		var endDateStr = {'endDate' : {$lte:endDate}};
+	}
+	collection.find({$or: [nameStr, typeStr, keywordsStr, countryStr, stateStr, cityStr, startDateStr, endDateStr]}).toArray(function(err, results){
+		console.log('user number' + results.length);
+		for(var i = 0; i < results.length; i++){
+			console.log('userEmail: ' + results[i].userEmail);
+			var server 	= email.server.connect({
+			   user:    "jinhang91@hotmail.com", 
+			   password:"Jin3528708317Hang", 
+			   host:	"smtp-mail.outlook.com", 
+			   tls: {ciphers: "SSLv3"}
+			});
+
+			var message	= {
+			   text:	"Hello " + results[i].userName + ", \n There is a new event match your subscription. Below is the detailed information. \n" + 
+			   "Event name: " + name + "\n" + "Event type: " + type + "\n",
+			   from:	"you <jinhang91@hotmail.com>", 
+			   to:		"zhuyingcau <" + results[i].userEmail + ">",
+			   cc:		"",
+			   subject:	"testing email js"
+			   /*
+			   attachment: 
+			   [
+			      {data:"<html>i <i>hope</i> this works!</html>", alternative:true},
+			      {path:"path/to/file.zip", type:"application/zip", name:"renamed.zip"}
+			   ]
+			   */
+			};
+
+			// send the message and get a callback with an error or details of the message that was sent
+			server.send(message, function(err, message) { 
+					console.log(err || message); 
+			});
+		}
+
+	});
+}
 
 
 //register - POST

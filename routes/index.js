@@ -12,14 +12,7 @@ router.get('/', function(req, res, err){
 	if (err) {
     	console.dir( err );
     }
-	var collection = db.collection('types');
-	collection.find({}).toArray(function(err, results){
-		if (err) {
-    		console.dir( err );
-    	}
-    	console.log('find types '+results.length);
-		res.render('index',{title:'Home',results:results});
-	});
+    res.render('index',{title:'Home'});
 });
 
 module.exports = router;
