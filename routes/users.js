@@ -309,7 +309,7 @@ function alertUser(newEvent) {
 			console.log('userEmail: ' + results[i].userEmail);
 			var server 	= email.server.connect({
 			   user:    "jinhang91@hotmail.com", 
-			   password:"Jin3528708317Hang", 
+			   password:"", 
 			   host:	"smtp-mail.outlook.com", 
 			   tls: {ciphers: "SSLv3"}
 			});
