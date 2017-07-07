@@ -52,31 +52,37 @@
       <form method="post" action="/users/addSub" class="form-signin">
         <h2 class="form-signin-heading">Add Subscribe</h2>
         <label>Event Name</label>
-        <input type="text" name="name" class="form-control" value="<%= (!!locals.name)?name:'' %>" required autofocus>
+        <input type="text" name="name" class="form-control" value="<%= (!!locals.name)?name:'' %>">
         <br>
-        <label>Event Type</label>
-        <input type="text" name="type" class="form-control" value="<%= (!!locals.type)?type:'' %>" required autofocus>
+        <lable>Event Type</lable><br>
+        <select class="form-control" name="type" value="<%= (!!locals.type)?type:'' %>">
+            <option value="" selected="selected">-----ALL-----</option>
+            <% for (var i=0; i<results.length; i++){ 
+                    console.log(results.length); %>
+            <option value= <%=results[i].type%> ><%=results[i].type%></option>
+            <% } %>
+        </select>
         <br>
         <label>City</label>
-        <input type="text" name="city" class="form-control" value="<%= (!!locals.city)?city:'' %>" required autofocus>
+        <input type="text" name="city" class="form-control" value="<%= (!!locals.city)?city:'' %>">
         <br>
         <label>State or Province</label>
-        <input type="text" name="state" class="form-control" value="<%= (!!locals.state)?state:'' %>"  required autofocus>
+        <input type="text" name="state" class="form-control" value="<%= (!!locals.state)?state:'' %>">
         <br>
         <label>Country</label>
-        <input type="text" name="country" class="form-control" value="<%= (!!locals.country)?country:'' %>"  required autofocus>
+        <input type="text" name="country" class="form-control" value="<%= (!!locals.country)?country:'' %>">
         <br>
         <label>Organizing Society</label>
         <input type="text" name="organization" class="form-control" value="<%= (!!locals.organization)?organization:'' %>">
         <br>
         <label>Start Date</label>
-        <input type="date" name="startDate" class="form-control" value="<%= (!!locals.startDate)?startDate:'' %>"  required autofocus>
+        <input type="date" name="startDate" class="form-control" value="<%= (!!locals.startDate)?startDate:'' %>">
         <br>
         <label>End Date</label>
-        <input type="date" name="endDate" class="form-control" value="<%= (!!locals.endDate)?endDate:'' %>"  required autofocus>
+        <input type="date" name="endDate" class="form-control" value="<%= (!!locals.endDate)?endDate:'' %>">
         <br>
         <label>Event Keywords</label>
-        <input type="text" name="keywords" class="form-control" value="<%= (!!locals.keywords)?keywords:'' %>"  required autofocus>
+        <input type="text" name="keywords" class="form-control" value="<%= (!!locals.keywords)?keywords:'' %>">
         <br> 
 
 
