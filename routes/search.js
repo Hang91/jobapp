@@ -17,8 +17,8 @@ router.get('/', function(req, res, err){
 		if (err) {
     		console.dir( err );
     	}
-    	console.log('find types '+results.length);
-		res.render('search',{title:'Search',results:results});
+    	//console.log('find types '+results.length);
+		res.render('search',{title:'Search',results:results});//results are events types
 	});
 });
 

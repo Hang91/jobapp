@@ -47,11 +47,12 @@
     </nav>
 <%- messages() %>
 
-<h2>Searching Results: <%=results.length%></h2>
+<h2>Searching Results: <%=totallength%></h2>
 <p>Click on "[+] More info" to show more details.</p>
 <p>Click on "[-] Less info" to show less details.</p>
 <p>----------------------------------------------------------------</p>
-<%  for(var i=0; i<results.length; i++) {%>
+
+<%  for(var i=0; i< results.length; i++) {%>
 	<p class="adv-toggle-buttons">
 		<span><%=results[i].startDate%>~<%=results[i].endDate%>, <%=results[i].name%>, <%=results[i].city%>,<%=results[i].state%>,<%=results[i].country%>. </span><a href="#">[+] More info</a><a href="#" style="display: none;">[-] Less info</a>
 	</p>
@@ -67,8 +68,42 @@
 		    <li><strong>Keywords:</strong> <%=results[i].keywords%></li>
 		</ul>
 	</div>
-	<br>
+  <br>
 <% } %>
+  <ul class="pagination">
+  <li><a href="#">&laquo;</a></li>
+  <% if(totalPage == 0){ %>
+    <li class="active"><a href="?type=<%=type%>
+        &&keywords=<%=keywords%>
+        &&country=<%=country%>
+        &&state=<%=state%>
+        &&startDate=<%=startDate%>
+        &&endDate=<%=endDate%>
+        &&currentPage=1">1</a></li>
+  <% } %>
+  <% for(var j = 1; j <= totalPage; j ++){ %>
+    <% if(j == currentPage){  %>
+        <li class="active"><a href="?type=<%=type%>
+        &&keywords=<%=keywords%>
+        &&country=<%=country%>
+        &&state=<%=state%>
+        &&startDate=<%=startDate%>
+        &&endDate=<%=endDate%>
+        &&currentPage=<%=j%>"><%=j%></a></li>
+    <%  }
+      else{ %>
+        <li><a href="?type=<%=type%>
+        &&keywords=<%=keywords%>
+        &&country=<%=country%>
+        &&state=<%=state%>
+        &&startDate=<%=startDate%>
+        &&endDate=<%=endDate%>
+        &&currentPage=<%=j%>"><%=j%></a></li>
+    <%  } 
+  } %>
+  <li><a href="#">&laquo;</a></li> 
+  </ul>
+	
 <script>
 	$('.adv-toggle-buttons a').each(function() { 
         $(this).on('click', function(){
