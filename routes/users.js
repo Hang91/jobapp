@@ -549,6 +549,18 @@ router.get('/logout', function(req, res){
 	res.redirect('/users/login');
 });
 
+router.get('/mySub', ensureLoggedIn('login'), 
+ function(req, res){
+ 	var collection = db.collection('subs');
+	collection.find({userEmail: req.user.email}).toArray(function(err, results){
+		if (err) {
+    		console.dir( err );
+    	}
+    	console.log('number of subcriptions: '+results.length);
+		res.render('mySub',{title:'My subcriptions',results:results});
+	}); 	
+});
+
 module.exports = router;
 
 

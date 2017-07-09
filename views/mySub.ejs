@@ -47,6 +47,32 @@
     </nav>
 <%- messages() %>
 
-<div class="container reg-page">
-<h1>Welcome to Events App!</h1>
-</div>
+<h2>My Subscriptions: <%=results.length%></h2>
+<p>Click on "[+] More info" to show more details.</p>
+<p>Click on "[-] Less info" to show less details.</p>
+<p>----------------------------------------------------------------</p>
+<%  for(var i=0; i<results.length; i++) {%>
+  <p class="adv-toggle-buttons">
+    <span><%=results[i].startDate%>~<%=results[i].endDate%>, <%=results[i].name%>, <%=results[i].city%>,<%=results[i].state%>,<%=results[i].country%>. </span><a href="#">[+] More info</a><a href="#" style="display: none;">[-] Less info</a>
+  </p>
+  <div class="adv-unit-options" style="display: none;">
+    <ul>
+        <li><strong>Type:</strong> <%=results[i].type%></a></li>
+        <li><strong>Organization:</strong> <%=results[i].organization%></li>
+        <li><strong>Keywords:</strong> <%=results[i].keywords%></li>
+    </ul>
+  </div>
+  <br>
+<% } %>
+<script>
+  $('.adv-toggle-buttons a').each(function() { 
+        $(this).on('click', function(){
+            $(this).parent().next().slideToggle();
+            $(this).parent().find('a').each(function(){
+                $(this).toggle();
+                
+            });
+        });   
+    });
+</script>        
+<%- include('includes/footer') %>
