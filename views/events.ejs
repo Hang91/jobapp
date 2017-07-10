@@ -71,7 +71,13 @@
   <br>
 <% } %>
   <ul class="pagination">
-  <li><a href="#">&laquo;</a></li>
+  <li><a href="?type=<%=type%>
+        &&keywords=<%=keywords%>
+        &&country=<%=country%>
+        &&state=<%=state%>
+        &&startDate=<%=startDate%>
+        &&endDate=<%=endDate%>
+        &&currentPage=1">&laquo;</a></li>
   <% if(totalPage == 0){ %>
     <li class="active"><a href="?type=<%=type%>
         &&keywords=<%=keywords%>
@@ -83,25 +89,26 @@
   <% } %>
   <% for(var j = 1; j <= totalPage; j ++){ %>
     <% if(j == currentPage){  %>
-        <li class="active"><a href="?type=<%=type%>
-        &&keywords=<%=keywords%>
-        &&country=<%=country%>
-        &&state=<%=state%>
-        &&startDate=<%=startDate%>
-        &&endDate=<%=endDate%>
-        &&currentPage=<%=j%>"><%=j%></a></li>
+        <li class="active">
     <%  }
       else{ %>
-        <li><a href="?type=<%=type%>
+        <li>
+    <%  } %>
+        <a href="?type=<%=type%>
         &&keywords=<%=keywords%>
         &&country=<%=country%>
         &&state=<%=state%>
         &&startDate=<%=startDate%>
         &&endDate=<%=endDate%>
-        &&currentPage=<%=j%>"><%=j%></a></li>
-    <%  } 
-  } %>
-  <li><a href="#">&laquo;</a></li> 
+        &&currentPage=<%=j%>"><%=j%></a></li>     
+  <% } %>
+  <li><a href="?type=<%=type%>
+        &&keywords=<%=keywords%>
+        &&country=<%=country%>
+        &&state=<%=state%>
+        &&startDate=<%=startDate%>
+        &&endDate=<%=endDate%>
+        &&currentPage=<%=totalPage%>">&raquo;</a></li> 
   </ul>
 	
 <script>

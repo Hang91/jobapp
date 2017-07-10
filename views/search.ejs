@@ -58,44 +58,37 @@
     </select>
     <br>
     <br>
-    <br>
     <lable>Keywords</lable><br>
     <input type="text" name="keywords" class="form-control" value="<%= (!!locals.keywords)?keywords:'' %>">Please use "," to separate keywords without space
-    <br>
     <br>
     <br>
     <label>Event Start Date</label><br>
     <input type="date" name="startDate" class="form-control" value="<%= (!!locals.startDate)?startDate:'' %>">
     <br>
     <br>
-    <br>
     <label>Last Day of Event</label><br>
     <input type="date" name="endDate" class="form-control" value="<%= (!!locals.endDate)?endDate:'' %>">
     <br>
     <br>
-    <br>
     <lable>Region</lable><br>
     <select class="form-control" onchange="set_country(this,country,state, true)" name="region">
-        <option value="" selected="selected">ALL</option>
+        <option value="" selected="selected">-----ALL-----</option>
         <script type="text/javascript">
             setRegions(this);
         </script>
     </select>
     <br>
     <br>
-    <br>
     <lable>Country</lable><br>
     <select class="form-control" name="country" disabled="disabled" onchange="set_city_state(this,state, true)">
-        <option value="" selected="selected">ALL</option>
+        <option value="" selected="selected">-----ALL-----</option>
     </select>
-    <br>
     <br>
     <br>
     <lable>State/Province</lable><br>
     <select class="form-control" name="state" disabled="disabled" onchange="print_city_state(country,this)">
-        <option value="" selected="selected">ALL</option>
+        <option value="" selected="selected">-----ALL-----</option>
     </select>
-    <br>
     <br>
     <br>
     <button class="btn btn-lg btn-primary btn-block" type="submit">Search</button>
