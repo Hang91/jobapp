@@ -63,14 +63,29 @@
             <% } %>
         </select>
         <br>
+        <lable>Region</lable><br>
+        <select class="form-control" onchange="set_country(this,country,state, true)" name="region">
+            <option value="" selected="selected">-----ALL-----</option>
+            <script type="text/javascript">
+                setRegions(this);
+            </script>
+        </select>
+        <br>
+        <br>
+        <lable>Country</lable><br>
+        <select class="form-control" name="country" disabled="disabled" onchange="set_city_state(this,state, true)">
+            <option value="" selected="selected">-----ALL-----</option>
+        </select>
+        <br>
+        <br>
+        <lable>State/Province</lable><br>
+        <select class="form-control" name="state" disabled="disabled" onchange="print_city_state(country,this)">
+            <option value="" selected="selected">-----ALL-----</option>
+        </select>
+        <br>
+        <br>
         <label>City</label>
         <input type="text" name="city" class="form-control" value="<%= (!!locals.city)?city:'' %>">
-        <br>
-        <label>State or Province</label>
-        <input type="text" name="state" class="form-control" value="<%= (!!locals.state)?state:'' %>">
-        <br>
-        <label>Country</label>
-        <input type="text" name="country" class="form-control" value="<%= (!!locals.country)?country:'' %>">
         <br>
         <label>Organizing Society</label>
         <input type="text" name="organization" class="form-control" value="<%= (!!locals.organization)?organization:'' %>">
