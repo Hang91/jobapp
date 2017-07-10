@@ -1,4 +1,5 @@
 <%- include('includes/header') %>
+
 <nav class="navbar navbar-inverse">
       <div class="container">
         <div class="navbar-header">
@@ -47,23 +48,29 @@
     </nav>
 <%- messages() %>
 
-<h2>My Subscriptions: <%=results.length%></h2>
-<p>Click on "[+] More info" to show more details.</p>
-<p>Click on "[-] Less info" to show less details.</p>
-<p>----------------------------------------------------------------</p>
 <%  for(var i=0; i<results.length; i++) {%>
-  <p class="adv-toggle-buttons">
-    <span><%=results[i].startDate%>~<%=results[i].endDate%>, <%=results[i].name%>, <%=results[i].city%>,<%=results[i].state%>,<%=results[i].country%>. </span><a href="#">[+] More info</a><a href="#" style="display: none;">[-] Less info</a>
-  </p>
-  <div class="adv-unit-options" style="display: none;">
-    <ul>
-        <li><strong>Type:</strong> <%=results[i].type%></a></li>
-        <li><strong>Organization:</strong> <%=results[i].organization%></li>
-        <li><strong>Keywords:</strong> <%=results[i].keywords%></li>
-    </ul>
+
+  <div class="container" role="main">
+    <div class="well">
+      <h3>Subscription <%i%></h3>
+      <li><strong>Name:</strong> <%=results[i].name%></a></li>
+      <li><strong>Type:</strong> <%=results[i].type%></a></li>
+      <li><strong>Organization:</strong> <%=results[i].organization%></li>
+      <li><strong>City:</strong> <%=results[i].city%></a></li>
+      <li><strong>State:</strong> <%=results[i].state%></a></li>
+      <li><strong>Country:</strong> <%=results[i].country%></a></li>
+      <li><strong>Date:</strong> <%=results[i].startDate%>~<%=results[i].endDate%></li>
+      <li><strong>Keywords:</strong> <%=results[i].keywords%></li>
+      <li><strong>Keywords:</strong> <%=results[i].keywords%></li>
+      <a href=""><button type="button" class="btn btn-warning" >Edit</button></a>
+      <a href=""><button type="button" class="btn btn-danger">Delete</button></a>
+    </div>
   </div>
   <br>
 <% } %>
+
+
+
 <script>
   $('.adv-toggle-buttons a').each(function() { 
         $(this).on('click', function(){

@@ -138,3 +138,13 @@ select {
     font: normal 10px verdana;
     margin: auto;
 }
+
+.subscription {
+  width: 90%;
+  height: 200px;
+  border-color: black;
+}
+
+.container.button{
+  float: right;
+}
