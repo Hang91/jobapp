@@ -9,12 +9,16 @@ var bcrypt = require('bcryptjs');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
+var ObjectId = require('mongodb').ObjectID;
 
 
 //login page - GET
 router.get('/login', function(req, res){
 	res.render('login', { title:'Login', user: req.user });
 });
+
+
+
 
 //login - POST
 
@@ -560,6 +564,23 @@ router.get('/mySub', ensureLoggedIn('login'),
 		res.render('mySub',{title:'My subcriptions',results:results});
 	}); 	
 });
+
+router.get('/editSub', ensureLoggedIn('login') function(req, res){
+	var 
+});
+
+router.get('/deleteSub', ensureLoggedIn('login'), function(req, res){
+	var collection = db.collection('subs');
+	db.subs.remove({_id: ObjectId(req.query.id)});
+	collection.find({userEmail: req.user.email}).toArray(function(err, results){
+		if (err) {
+    		console.dir( err );
+    	}
+    	console.log('number of subcriptions: '+results.length);
+		res.render('mySub',{title:'My subcriptions',results:results});
+	}); 	
+});
+
 
 module.exports = router;
 
