@@ -560,13 +560,91 @@ router.get('/mySub', ensureLoggedIn('login'),
 		if (err) {
     		console.dir( err );
     	}
-    	console.log('number of subcriptions: '+results.length);
+    	//console.log('number of subcriptions: '+results.length);
 		res.render('mySub',{title:'My subcriptions',results:results});
 	}); 	
 });
 
-router.get('/editSub', ensureLoggedIn('login') function(req, res){
-	var 
+router.get('/editSub', ensureLoggedIn('login'), function(req, res){
+	console.log('in get editSub');
+	var types;
+	db.types.find({}).toArray(function(err, typeresults){
+		if (err) {
+    		console.dir( err );
+    	}
+    	console.log('find types '+typeresults.length);
+    	types = typeresults;
+    	db.subs.find({_id: ObjectId(req.query.id)}).toArray(function(err, results){
+		if(err) {
+			console.dir(err);
+		}
+		// console.log('find subscription ' + results.length);
+		// console.log('results.name: ' + results[0].name);
+		//console.log('find types '+types.length);
+		res.render('editSub', { title:'Edit subscription', user: req.user, types: types, sub: results});
+	});
+	});
+	
+});
+
+router.post('/editSub', function(req, res){
+	//get form values
+	var name 		= req.body.name;
+	var type 		= req.body.type;
+	var city    = req.body.city;
+	var state 	= req.body.state;
+	var country 	= req.body.country;
+	var organization 	= req.body.organization;
+	//var contact 	= req.body.contact;
+	//var email 	= req.body.email;
+	//var website 	= req.body.website;
+	var startDate 	= req.body.startDate;
+	var endDate	= req.body.endDate;
+	//var deadline = req.body.deadline;
+	//var description	= req.body.description;
+	if(typeof req.body.keywords == 'string') {
+		var keywords	= req.body.keywords.split(",");
+	} else {
+		var keywords = null;
+		console.log('keywords is not a string');
+	}
+	//var approved = 0;//0:not check yet; 1:approve; 2:disapprove\
+	var userName = req.user.name;
+	var userEmail = req.user.email;
+	var id = req.body.id;
+	var newSub = {
+		   name: name,
+		   type: type,
+		   city: city,
+		   state: state,
+		   country: country,
+		   organization: organization,
+		   //contact: contact,
+		   //email: email,
+		   //website: website,
+		   startDate: startDate,
+		   endDate: endDate,
+		   //deadline: deadline,
+		   //description: description,
+		   keywords: keywords,
+		   //approved: approved,
+		   userName: userName,
+		   userEmail: userEmail
+	}
+	console.log('id = '+id);
+	db.subs.update({_id:ObjectId(id)}, newSub, function(err, doc){
+		if(err){
+			res.send(err);
+		}
+		else{
+			console.log('subscription updated');
+			//success msg
+
+			req.flash('success', 'Successfully edited an subscription!');
+			res.location('/');
+			res.redirect('/');
+		}
+	});
 });
 
 router.get('/deleteSub', ensureLoggedIn('login'), function(req, res){

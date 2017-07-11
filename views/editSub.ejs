@@ -1,0 +1,115 @@
+<% if (locals.errors) { %>
+    <% errors.forEach(function(error){ %>
+        <div class="alert alert-danger"><%= error.msg %></div>
+    <% }) %>
+<% } %>
+<%= messages()%>
+<%- include('includes/header') %>
+<nav class="navbar navbar-inverse">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Home</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+          <li><a href="/search">Search</a></li>
+          <li><a href="/users/addEvent">Add Event</a></li>
+          <li class="active"><a href="/users/addSub">Subscribe</a></li>
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right">
+            <% if(user){ %>
+                <% if(user.name == 'admin'){ %>
+                  <li class="dropdown"><a href="#">Manage</a>
+                      <div class="dropdown-content">
+                        <hr><a href="/manage/events">Manage Events</a><br>
+                        <a href="/manage/categories">Manage categories</a><br>
+                        <a href="/manage/users">Manage users</a><br>
+                      </div>
+                  </li>
+                <% } %>
+              <li class="dropdown"><a href="#">Welcome, <%= user.name%>!</a>
+                  <div class="dropdown-content">
+                    <hr><a href="#">My Events</a><br>
+                    <a href="/users/mySub">My Subscribes</a><br>
+                    <a href="#">My Profile</a><br>
+                    <hr><a href="/users/logout">Log out</a><br>
+                  </div>
+                </li>
+              <% } %>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    
+<div class="container">
+    <h1>id: <%=sub[0]._id%></h1>
+      <form method="post" action="/users/editSub" class="form-signin">
+        <h2 class="form-signin-heading">Edit Subscription</h2>
+        <!-- <label>ID</label> -->
+        <input class="hid" type="text" name="id" class="form-control" value="<%= (!!sub[0]._id)?sub[0]._id:'' %>">
+        <label>Event Name</label>
+        <input type="text" name="name" class="form-control" value="<%= (!!sub[0].name)?sub[0].name:'' %>">
+        <br>
+        <lable>Event Type</lable><br>
+        <select class="form-control" name="type" value="<%= (!!sub[0].type)?sub[0].type:'' %>">
+            <option value="" selected="selected">-----ALL-----</option>
+            <% for (var i=0; i<types.length; i++){ 
+                    console.log(types.length); %>
+            <option value= <%=types[i].type%> ><%=types[i].type%></option>
+            <% } %>
+        </select>
+        <br>
+        <lable>Region</lable><br>
+        <select class="form-control" onchange="set_country(this,country,state, true)" name="region" >
+            <option value="" selected="selected">-----ALL-----</option>
+            <script type="text/javascript">
+                setRegions(this);
+            </script>
+        </select>
+        <br>
+        <br>
+        <lable>Country</lable><br>
+        <select class="form-control" name="country" value="<%= (!!sub[0].country)?sub[0].country:'' %>" disabled="disabled" onchange="set_city_state(this,state, true)">
+            <option value="" selected="selected">-----ALL-----</option>
+        </select>
+        <br>
+        <br>
+        <lable>State/Province</lable><br>
+        <select class="form-control" name="state" value="<%= (!!sub[0].state)?sub[0].state:'' %>" disabled="disabled" onchange="print_city_state(country,this)">
+            <option value="" selected="selected">-----ALL-----</option>
+        </select>
+        <br>
+        <br>
+        <label>City</label>
+        <input type="text" name="city" class="form-control" value="<%= (!!sub[0].city)?sub[0].city:'' %>">
+        <br>
+        <label>Organizing Society</label>
+        <input type="text" name="organization" class="form-control" value="<%= (!!sub[0].organization)?sub[0].organization:'' %>">
+        <br>
+        <label>Start Date</label>
+        <input type="date" name="startDate" class="form-control" value="<%= (!!sub[0].startDate)?sub[0].startDate:'' %>">
+        <br>
+        <label>End Date</label>
+        <input type="date" name="endDate" class="form-control" value="<%= (!!sub[0].endDate)?sub[0].endDate:'' %>">
+        <br>
+        <label>Event Keywords</label>
+        <input type="text" name="keywords" class="form-control" value="<%= (!!sub[0].keywords)?sub[0].keywords:'' %>">
+        <br> 
+
+
+
+        <!-- <p>Have Account? <a href="/users/login">Login</a></p> -->
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Subscribe</button>
+      </form>
+
+    </div> <!-- /container -->
+
+
+<%- include('includes/footer') %>

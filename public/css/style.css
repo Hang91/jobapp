@@ -148,3 +148,7 @@ select {
 .container.button{
   float: right;
 }
+
+.hid {
+  display: none;
+}

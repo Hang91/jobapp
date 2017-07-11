@@ -62,8 +62,8 @@
       <li><strong>Country:</strong> <%=results[i].country%></a></li>
       <li><strong>Date:</strong> <%=results[i].startDate%>~<%=results[i].endDate%></li>
       <li><strong>Keywords:</strong> <%=results[i].keywords%></li>
-      <a href="#"><button type="button" class="btn btn-warning" >Edit</button></a>
-      <a href="/users/deleteSub?id=<%=results[i]._id%>" id="<%=results[i]._id%>"><button type="button" class="btn btn-danger">Delete</button></a>
+      <a href="/users/editSub?id=<%=results[i]._id%>"><button type="button" class="btn btn-warning" >Edit</button></a>
+      <a href="/users/deleteSub?id=<%=results[i]._id%>"><button type="button" class="btn btn-danger">Delete</button></a>
     </div>
   </div>
   <br>
