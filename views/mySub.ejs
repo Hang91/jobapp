@@ -53,6 +53,7 @@
   <div class="container" role="main">
     <div class="well">
       <h3>Subscription <%i%></h3>
+      <li><strong>ID:</strong> <%=results[i]._id%></a></li>      
       <li><strong>Name:</strong> <%=results[i].name%></a></li>
       <li><strong>Type:</strong> <%=results[i].type%></a></li>
       <li><strong>Organization:</strong> <%=results[i].organization%></li>
@@ -61,9 +62,8 @@
       <li><strong>Country:</strong> <%=results[i].country%></a></li>
       <li><strong>Date:</strong> <%=results[i].startDate%>~<%=results[i].endDate%></li>
       <li><strong>Keywords:</strong> <%=results[i].keywords%></li>
-      <li><strong>Keywords:</strong> <%=results[i].keywords%></li>
-      <a href=""><button type="button" class="btn btn-warning" >Edit</button></a>
-      <a href=""><button type="button" class="btn btn-danger">Delete</button></a>
+      <a href="#"><button type="button" class="btn btn-warning" >Edit</button></a>
+      <a href="/users/deleteSub?id=<%=results[i]._id%>" id="<%=results[i]._id%>"><button type="button" class="btn btn-danger">Delete</button></a>
     </div>
   </div>
   <br>
