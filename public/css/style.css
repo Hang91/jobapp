@@ -138,3 +138,14 @@ select {
     font: normal 10px verdana;
     margin: auto;
 }
+
+tr{
+  height: 20px;
+  width: 300px;
+}
+td{
+  width: 150px;
+}
+.hid{
+  display: none;
+}

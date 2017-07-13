@@ -1,10 +1,11 @@
 var express = require('express');
 var router = express.Router();
 
-var EventDB = require('../models/EventDB');
+//var EventDB = require('../models/EventDB');
 
 var email 	= require('emailjs/email');
-
+var mongojs = require('mongojs');
+var db = mongojs('eventapp', ['users','events','types','subs']);
 //Events - POST
 //pagination
 router.post('/', function (req, res, next) {

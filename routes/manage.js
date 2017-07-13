@@ -1,19 +1,62 @@
 var express = require('express');
 var router = express.Router();
 var mongojs = require('mongojs');
-
 var db = mongojs('eventapp', ['users','events','types','subs']);
-
+var TypesModel = require('../models/TypeDB');
 var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 //manage categories page - GET
 router.get('/categories', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
-	var collection = db.collection('types');
-	collection.find({}).toArray(function(err, results){
-		res.render('manage_categories', { title:'Manage Categories', user: req.user, results : results}); 
-	});	
+	TypesModel.find({}, function(err, results){
+		if(err){
+			return next(err);
+		}
+		res.render('manage_categories', {title:'Manage Categories', user: req.user, results : results});
+	});
+	// var collection = db.collection('types');
+	// collection.find({}).toArray(function(err, results){
+	// 	res.render('manage_categories', { title:'Manage Categories', user: req.user, results : results}); 
+	// });	
 });
 
+router.get('/categories/add', function(req, res){
+	var params = req.body;
+   //MogoDB中可以用Create方法添加数据
+    TypesModel.create(params, function (err) {
+        if (err) res.send({result:-1});
+        else {
+            TypesModel.find({}, function (error, data) {
+                if (error) res.send({result:-1});
+                else {
+                    res.send({result:1});
+                }
+            });
+        }
+    });
+});
 
+router.get('/categories/delete', function(req, res){
+	var type = req.query.type;
+    console.log(type);
+   //MogoDB use remove function to remove data
+    TypesModel.remove({type:type}, function (err) {
+        if (err){ 
+            console.log("delete err!");
+            res.send({result:-1});
+        }
+        else {
+            TypesModel.find({}, function (error, results) {
+                if (error){ 
+                    console.log("delete error!");
+                    res.send({result:-1});
+                }
+                else {
+                    console.log("delete success!");
+                    res.render('manage_categories', {title:'Manage Categories', user: req.user, results : results});
+                }
+            });
+        }
+    });
+});
 
 //manage categories page - GET
 router.get('/events', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
