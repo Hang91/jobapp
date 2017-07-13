@@ -139,7 +139,6 @@ select {
     margin: auto;
 }
 
-<<<<<<< HEAD
 tr{
   height: 20px;
   width: 300px;
@@ -159,5 +158,10 @@ td{
 }
 
 .hid {
+  display: none;
+}
+
+
+.hidID {
   display: none;
 }

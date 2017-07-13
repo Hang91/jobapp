@@ -6,7 +6,7 @@ var TypesModel = {
 };
 
 function resetIndex(){
-//计算序号
+//calculate No.
       $("tr>td:first-child").each(function(index,element){
           $(this).html(index+1)
       })
@@ -19,12 +19,12 @@ function resetIndex(){
 $(function (){
     //click to add, change it to editable style and change 'edit' button to 'save'
   $(".add").on("click", function () {
-        //01 克隆
+        //01 copy
           var $tr = $(".hid").clone(true);
           //disply=block
           $tr.removeClass("hid");
-          //把修改按钮的值为保存
-          $tr.find("button:contains(Edit)").html("Save");
+          //change edit to save
+          //$tr.find("button:contains(Edit)").html("Save");
           //02 after()
           $(this).closest("tr").after($tr);
           resetIndex();
@@ -36,28 +36,32 @@ $(function (){
     //click to add, change it to editable style and change 'edit' button to 'save'
   $(".addsave").on("click", function () {
         alert("Confirm to add this type?");
-        //构造数据类
-        TypesModel.type = $(this).parent().parent().children().find("input").val();
-        console.log(TypesModel.type);
-        $(".addsave").removeClass("addsave");
+        var type = $(this).parent().parent().parent().children().find("input").val();
+        //alert(type);
+        //$(".addsave").removeClass("addsave");
+        var addurl = document.getElementById('addurl'); 
+        //or grab it by tagname etc
+        addurl.href = "/manage/categories/add?type="+type;
+        
         //use Ajax to update data
-        $.ajax({
-            type: 'get',
-            url: "/manage/categories/add",
-            dataType: "json",
-            data: TypesModel,
-            success: function (resData) {
-                if (resData.result == 1) {
-                    //refresh table
-                    alert('Add success!');
+        // $.ajax({
+        //     type: 'post',
+        //     url: "/manage/categories/add",
+        //     dataType: "json",
+        //     data: TypesModel,
+        //     success: function (resData) {
+        //         if (resData.result == 1) {
+        //             //refresh table
+        //             alert('Add success!');
 
-                    $(this).html("Edit")
-                }
-            },
-            error: function (error) {
-                alert('Add error!');
-            }
-        });
+        //             $(this).html("Edit")
+        //         }
+        //     },
+        //     error: function (error) {
+        //         alert('Add error!');
+        //     }
+        // });
+        //?Manage Categories: <%=results.length%> should +1
   });
 });
 
@@ -67,25 +71,40 @@ $(function (){
 
 $(function (){
   $(".edit").on("click", function(){
-      //可操作的全部区域
       var $tds = $(this).parents("tr").children("td").not(":first,:last");
-      //点击修改按钮的时候，先判定是修改还是保存
+      //check button is edit or save
       var $content = $(this).html();
       if ($content=="Edit") {
-      //如果是修改,给每个操作的td添加一个input标签        
+        //if button is edit, add input tag to every corresponding td        
           $tds.each(function(){
               $(this).html("<input type='text' value='"+$(this).html()+"'>");
           });
           $(this).html("Save")
       }else{
-      //如果是保存,将修改的内容保存下来
+          alert("Confirm to change this type?");
+          var $tds = $(this).parents("tr").children("td").not(":first,:last");
           $tds.each(function(){
-              var newtype= $(this).children("input").val()
-              $(this).html(newtype);
-              //update mongoDB database
-              
+                var idOrType= $($tds).children("input").val();
+                $(this).html(idOrType);
+              //update mongoDB database              
           });
+          id = document.getElementById('id').innerHTML;
+          type = document.getElementById('type').innerHTML;
+          //alert(id);
           $(this).html("Edit")
+          //var type = $(this).parent().parent().parent().children().find("input").val();
+            
+          var editurl = document.getElementById('editurl'); 
+          editurl.href = "/manage/categories/edit?_id="+id+"&&type="+type.toString();
+          //alert(editurl.href);
       }
+  })
+})
+
+
+$(function (){
+    //click to add, change it to editable style and change 'edit' button to 'save'
+  $(".delete").on("click", function () {
+        alert("Confirm to delete this type?");
   })
 })

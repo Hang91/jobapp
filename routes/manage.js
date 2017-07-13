@@ -18,27 +18,61 @@ router.get('/categories', ensureLoggedIn('/users/login'), isAdmin, function(req,
 	// });	
 });
 
+//add type
+//use ajax post (use get cannot work)
 router.get('/categories/add', function(req, res){
-	var params = req.body;
+	var type = req.query.type;
+    console.log(type);
    //MogoDB中可以用Create方法添加数据
-    TypesModel.create(params, function (err) {
+    TypesModel.create({type:type}, function (err) {
         if (err) res.send({result:-1});
         else {
-            TypesModel.find({}, function (error, data) {
+            TypesModel.find({}, function (error, results) {
                 if (error) res.send({result:-1});
                 else {
-                    res.send({result:1});
+                    // res.send({result:1});
+                    console.log("add success!");
+                    res.location('/manage/categories');
+                    res.redirect("/manage/categories");
+                    //res.render('manage_categories', {title:'Manage Categories', user: req.user, results : results});
+
                 }
             });
         }
     });
 });
 
+//edit type
+router.get('/categories/edit',function(req, res){
+    var id = req.query._id;
+    var type = req.query.type;
+    TypesModel.update({_id:id}, {$set:{type:type}},{}, function(err, movie){
+        if(err){
+            res.send(err);
+        }
+        else {
+            TypesModel.find({}, function (error, results) {
+                if (error){ 
+                    console.log("edit error!");
+                    res.send({result:-1});
+                }
+                else {
+                    console.log("edit success!");
+                    res.location('/manage/categories');
+                    res.redirect("/manage/categories");
+                    //res.render('manage_categories', {title:'Manage Categories', user: req.user, results : results});
+                }
+            });
+        }    
+    });
+});
+
+//delete type according to _id
 router.get('/categories/delete', function(req, res){
-	var type = req.query.type;
-    console.log(type);
+	var id = req.query._id;
+    console.log(id);
    //MogoDB use remove function to remove data
-    TypesModel.remove({type:type}, function (err) {
+    TypesModel.remove({_id:id}, function (err) {
         if (err){ 
             console.log("delete err!");
             res.send({result:-1});
@@ -51,6 +85,7 @@ router.get('/categories/delete', function(req, res){
                 }
                 else {
                     console.log("delete success!");
+                    res.redirect("/manage/categories");
                     res.render('manage_categories', {title:'Manage Categories', user: req.user, results : results});
                 }
             });

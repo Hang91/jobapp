@@ -47,7 +47,7 @@
     </nav>
 <%- messages() %>
 
-<h2>Manage Categories: <%=results.length%></h2>
+<h2 id="numOfType">Manage Categories: <%=results.length%></h2>
 <p>----------------------------------------------------------------</p>
 <div class="panel panel-default">
   <div class="panel-heading">Categories</div>  
@@ -72,22 +72,23 @@
     </tr>
     <% } %> -->
     <% var index = 1; results.forEach(function(rs) {%>
-    <tr>
-      <td><%= index++ %><!-- <%=i+1%> --></td>
+    <tr>      
+      <td><%=index++%></td>      
+      <td id="id" class="hidID"><%=rs._id%></td>
       <td id="type"><%=rs.type%></td>
       <td>
         <button class="add btn btn-success">Add</button>
-        <button class="edit btn btn-warning">Edit</button>
-        <a href="/manage/categories/delete?type=<%=rs.type%>" id="<%=rs.type%>"><button class="delete btn btn-danger"><span id="type">Delete</span></button></a>
+        <a id="editurl"><button class="edit btn btn-warning">Edit</button></a>
+        <a href="/manage/categories/delete?_id=<%=rs._id%>"><button class="delete btn btn-danger">Delete</button></a>
       </td>
     </tr>
     <% }) %>
     <tr class="hid">
         <td></td>
-        <td><input type="text" placeholder="type" /></td>
+        <td><input type="text"/></td>
         <td>
           <button class="add btn btn-success">Add</button>
-          <button class="addsave edit btn btn-warning">Edit</button>
+          <a id="addurl"><button class="addsave btn btn-warning">Save</button></a>
           <button class="delete btn btn-danger">Delete</button>
         </td>
     </tr>
