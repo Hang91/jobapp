@@ -139,6 +139,7 @@ select {
     margin: auto;
 }
 
+<<<<<<< HEAD
 tr{
   height: 20px;
   width: 300px;
@@ -146,6 +147,17 @@ tr{
 td{
   width: 150px;
 }
-.hid{
+
+.subscription {
+  width: 90%;
+  height: 200px;
+  border-color: black;
+}
+
+.container.button{
+  float: right;
+}
+
+.hid {
   display: none;
 }
