@@ -65,6 +65,7 @@ router.post('/addSub', function(req, res){
 	//var contact 	= req.body.contact;
 	//var email 	= req.body.email;
 	//var website 	= req.body.website;
+	var region = req.body.region;
 	var startDate 	= req.body.startDate;
 	var endDate	= req.body.endDate;
 	//var deadline = req.body.deadline;
@@ -80,11 +81,13 @@ router.post('/addSub', function(req, res){
 	var userEmail = req.user.email;
 
 	var newSub = {
+
 		   name: name,
 		   type: type,
-		   city: city,
-		   state: state,
+		   region: region,
 		   country: country,
+		   state: state,
+		   city: city,
 		   organization: organization,
 		   //contact: contact,
 		   //email: email,
@@ -122,6 +125,7 @@ router.post('/addEvent', function(req, res){
 	var city    = req.body.city;
 	var state 	= req.body.state;
 	var country 	= req.body.country;
+	var region		= req.body.region;
 	var organization 	= req.body.organization;
 	var contact 	= req.body.contact;
 	var email 	= req.body.email;
@@ -167,9 +171,10 @@ router.post('/addEvent', function(req, res){
 	var newEvent = {
 		   name: name,
 		   type: type,
-		   city: city,
-		   state: state,
+		   region: region,
 		   country: country,
+		   state: state,
+		   city: city,
 		   organization: organization,
 		   contact: contact,
 		   email: email,
@@ -234,6 +239,7 @@ function alertUser(newEvent) {
 	var name = newEvent.name;
 	var type = newEvent.type;
 	var keywords = newEvent.keywords;
+	var region = newEvent.region;
 	var country = newEvent.country;
 	var state = newEvent.state;
 	var city = newEvent.city;
@@ -241,28 +247,28 @@ function alertUser(newEvent) {
 	var endDate = newEvent.endDate;
 
 	//delete out-of-date subs
-	var today = new Date();
-	var dd = today.getDate();
-	var mm = today.getMonth()+1; //January is 0!
-	var yyyy = today.getFullYear();
+	// var today = new Date();
+	// var dd = today.getDate();
+	// var mm = today.getMonth()+1; //January is 0!
+	// var yyyy = today.getFullYear();
 
-	if(dd<10) {
-	    dd = '0'+dd
-	} 
+	// if(dd<10) {
+	//     dd = '0'+dd
+	// } 
 
-	if(mm<10) {
-	    mm = '0'+mm
-	} 
+	// if(mm<10) {
+	//     mm = '0'+mm
+	// } 
 
-	today =  yyyy + '-' + mm + '-' + dd;
-	console.log(today);
-	collection.remove({'startDate': {$lt:today}})
+	// today =  yyyy + '-' + mm + '-' + dd;
+	// console.log(today);
+	// collection.remove({'startDate': {$lt:today}})
 
 	if(!name) {
 		var nameStr = {};
 	}
 	else {
-		nameStr = {'name' : name};
+		nameStr = {$or: [{'name': name}, {'name': ""}]};
 	}
 	if(!type){
 		var typeStr = {};
@@ -277,6 +283,12 @@ function alertUser(newEvent) {
 		//var keywordsStr = {'keywords': {$in:keywords}};//or
 		var keywordsStr = {'keywords': {$all:keywords}};//and
 	}
+	if(!region){
+		var regionStr = {};
+	}
+	else{
+		var regionStr = {'region' : region};
+	}		
 	if(!country){
 		var countryStr = {};
 	}
@@ -307,13 +319,13 @@ function alertUser(newEvent) {
 	else{
 		var endDateStr = {'endDate' : {$lte:endDate}};
 	}
-	collection.find({$or: [nameStr, typeStr, keywordsStr, countryStr, stateStr, cityStr, startDateStr, endDateStr]}).toArray(function(err, results){
+	collection.find({$and: [nameStr, typeStr, keywordsStr, regionStr, countryStr, stateStr, cityStr, startDateStr, endDateStr]}).toArray(function(err, results){
 		console.log('user number' + results.length);
 		for(var i = 0; i < results.length; i++){
 			console.log('userEmail: ' + results[i].userEmail);
 			var server 	= email.server.connect({
 			   user:    "jinhang91@hotmail.com", 
-			   password:"", 
+			   password:"891110Hotmail", 
 			   host:	"smtp-mail.outlook.com", 
 			   tls: {ciphers: "SSLv3"}
 			});
@@ -565,6 +577,18 @@ router.get('/mySub', ensureLoggedIn('login'),
 	}); 	
 });
 
+router.get('/myEvent', ensureLoggedIn('login'), 
+ function(req, res){
+ 	var collection = db.collection('events');
+	collection.find({userEmail: req.user.email}).toArray(function(err, results){
+		if (err) {
+    		console.dir( err );
+    	}
+    	//console.log('number of subcriptions: '+results.length);
+		res.render('myEvent',{title:'My events',results:results});
+	}); 	
+});
+
 router.get('/editSub', ensureLoggedIn('login'), function(req, res){
 	console.log('in get editSub');
 	var types;
@@ -575,25 +599,26 @@ router.get('/editSub', ensureLoggedIn('login'), function(req, res){
     	console.log('find types '+typeresults.length);
     	types = typeresults;
     	db.subs.find({_id: ObjectId(req.query.id)}).toArray(function(err, results){
-		if(err) {
-			console.dir(err);
-		}
+			if(err) {
+				console.dir(err);
+			}
 		// console.log('find subscription ' + results.length);
 		// console.log('results.name: ' + results[0].name);
 		//console.log('find types '+types.length);
-		res.render('editSub', { title:'Edit subscription', user: req.user, types: types, sub: results});
-	});
+			res.render('editSub', { title:'Edit subscription', user: req.user, types: types, sub: results});
+		});
 	});
 	
 });
 
-router.post('/editSub', function(req, res){
+router.post('/editSub', ensureLoggedIn('login'), function(req, res){
 	//get form values
 	var name 		= req.body.name;
 	var type 		= req.body.type;
 	var city    = req.body.city;
 	var state 	= req.body.state;
 	var country 	= req.body.country;
+	var region 	= req.body.region;
 	var organization 	= req.body.organization;
 	//var contact 	= req.body.contact;
 	//var email 	= req.body.email;
@@ -618,6 +643,7 @@ router.post('/editSub', function(req, res){
 		   city: city,
 		   state: state,
 		   country: country,
+		   region: region,
 		   organization: organization,
 		   //contact: contact,
 		   //email: email,
@@ -641,8 +667,13 @@ router.post('/editSub', function(req, res){
 			//success msg
 
 			req.flash('success', 'Successfully edited an subscription!');
-			res.location('/');
-			res.redirect('/');
+			db.subs.find({userEmail: req.user.email}).toArray(function(err, results){
+				if (err) {
+		    		console.dir( err );
+		    	}
+		    	//console.log('number of subcriptions: '+results.length);
+				res.render('mySub',{title:'My subcriptions', user:req.user, results:results});
+			}); 
 		}
 	});
 });

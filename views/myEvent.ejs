@@ -1,4 +1,5 @@
 <%- include('includes/header') %>
+
 <nav class="navbar navbar-inverse">
       <div class="container">
         <div class="navbar-header">
@@ -47,53 +48,43 @@
     </nav>
 <%- messages() %>
 
-<h2 id="numOfType">Manage Categories: <%=results.length%></h2>
-<p>----------------------------------------------------------------</p>
-<div class="panel panel-default">
-  <div class="panel-heading">Categories</div>  
-    <table class="table table-striped table-bordered"  border="1px" cellspacing="0">
-    <thead>
-      <tr>
-        <th>No.</th>
-        <th>Type</th>
-        <th>Operations</th>
-      </tr>
-    </thead>
-    <tbody>
-    <!-- <%  for(var i=0; i<results.length; i++) {%>
-    <tr>
-      <td><%=i+1%></td>
-      <td id="type"><span><%=results[i].type%></span></td>
-      <td>
-        <button class="add btn btn-success">Add</button>
-        <button class="edit btn btn-warning">Edit</button>
-        <button class="del btn btn-danger">Delete</button>
-      </td>
-    </tr>
-    <% } %> -->
-    <% var index = 1; results.forEach(function(rs) {%>
-    <tr>      
-      <td><%=index++%></td>      
-      <td id="id" class="hidID"><%=rs._id%></td>
-      <td id="type"><%=rs.type%></td>
-      <td>
-        <button class="add btn btn-success">Add</button>
-        <a id="editurl"><button class="edit btn btn-warning">Edit</button></a>
-        <a href="/manage/categories/delete?_id=<%=rs._id%>"><button class="delete btn btn-danger">Delete</button></a>
-      </td>
-    </tr>
-    <% }) %>
-    <tr class="hid">
-        <td></td>
-        <td><input type="text"/></td>
-        <td>
-          <button class="add btn btn-success">Add</button>
-          <a id="addurl"><button class="addsave btn btn-warning">Save</button></a>
-          <button class="delete btn btn-danger">Delete</button>
-        </td>
-    </tr>
-    </tbody>
-    </table>
-</div>
-</div>      
+<%  for(var i=0; i<results.length; i++) {%>
+
+  <div class="container" role="main">
+    <div class="well">
+      <h3>Event <%i%></h3>
+      <li><strong>ID:</strong> <%=results[i]._id%></a></li>      
+      <li><strong>Name:</strong> <%=results[i].name%></a></li>
+      <li><strong>Type:</strong> <%=results[i].type%></a></li>
+      <li><strong>Region:</strong> <%=results[i].region%></a></li>
+      <li><strong>Country:</strong> <%=results[i].country%></a></li>
+      <li><strong>State:</strong> <%=results[i].state%></a></li>
+      <li><strong>City:</strong> <%=results[i].city%></a></li>
+      <li><strong>Organization:</strong> <%=results[i].organization%></li>
+      <li><strong>Date:</strong> <%=results[i].startDate%>~<%=results[i].endDate%></li>
+      <li><strong>Contact:</strong> <%=results[i].contact%></li>
+      <li><strong>Email:</strong>  <%=results[i].email%></li>
+      <li><strong>Description:</strong> <%=results[i].description%></li>
+      <li><strong>Abstracts or Proposals Deadline:</strong> <%=results[i].deadline%></li>
+      <li><strong>Keywords:</strong> <%=results[i].keywords%></li>
+      <a href="#>"><button type="button" class="btn btn-warning" >Edit</button></a>
+      <a href="#>"><button type="button" class="btn btn-danger">Delete</button></a>
+    </div>
+  </div>
+  <br>
+<% } %>
+
+
+
+<script>
+  $('.adv-toggle-buttons a').each(function() { 
+        $(this).on('click', function(){
+            $(this).parent().next().slideToggle();
+            $(this).parent().find('a').each(function(){
+                $(this).toggle();
+                
+            });
+        });   
+    });
+</script>        
 <%- include('includes/footer') %>
