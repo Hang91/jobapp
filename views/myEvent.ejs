@@ -52,7 +52,7 @@
 
   <div class="container" role="main">
     <div class="well">
-      <h3>Event <%i%></h3>
+      <h3>Event <%=i%></h3>
       <li><strong>ID:</strong> <%=results[i]._id%></a></li>      
       <li><strong>Name:</strong> <%=results[i].name%></a></li>
       <li><strong>Type:</strong> <%=results[i].type%></a></li>
@@ -67,8 +67,8 @@
       <li><strong>Description:</strong> <%=results[i].description%></li>
       <li><strong>Abstracts or Proposals Deadline:</strong> <%=results[i].deadline%></li>
       <li><strong>Keywords:</strong> <%=results[i].keywords%></li>
-      <a href="#>"><button type="button" class="btn btn-warning" >Edit</button></a>
-      <a href="#>"><button type="button" class="btn btn-danger">Delete</button></a>
+      <a href="#"><button type="button" class="btn btn-warning" >Edit</button></a>
+      <a href="/users/deleteEvent?id=<%=results[i]._id%>"><button type="button" class="btn btn-danger">Delete</button></a>
     </div>
   </div>
   <br>

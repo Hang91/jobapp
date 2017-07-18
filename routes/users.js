@@ -274,14 +274,14 @@ function alertUser(newEvent) {
 		var typeStr = {};
 	}
 	else{
-		var typeStr = {'type' : type};
+		var typeStr = {$or: [{'type': name}, {'type': ""}]};
 	}
 	if(keywords.length == 1 && !keywords[0]){
 		var keywordsStr = {};
 	}
 	else{
-		//var keywordsStr = {'keywords': {$in:keywords}};//or
-		var keywordsStr = {'keywords': {$all:keywords}};//and
+		var keywordsStr = {'keywords': {$in:keywords}};//or
+		//var keywordsStr = {'keywords': {$all:keywords}};//and
 	}
 	if(!region){
 		var regionStr = {};
@@ -311,15 +311,15 @@ function alertUser(newEvent) {
 		var startDateStr = {};
 	}
 	else{
-		var startDateStr = {'startDate': {$gte:startDate}};
+		var startDateStr = {'startDate': {$lte:startDate}};
 	}
 	if(!endDate){
 		var endDateStr = {};
 	}
 	else{
-		var endDateStr = {'endDate' : {$lte:endDate}};
+		var endDateStr = {'endDate' : {$gte:endDate}};
 	}
-	collection.find({$and: [nameStr, typeStr, keywordsStr, regionStr, countryStr, stateStr, cityStr, startDateStr, endDateStr]}).toArray(function(err, results){
+	collection.find({$and: [nameStr, regionStr, countryStr, stateStr, cityStr, startDateStr, endDateStr]}).toArray(function(err, results){
 		console.log('user number' + results.length);
 		for(var i = 0; i < results.length; i++){
 			console.log('userEmail: ' + results[i].userEmail);
@@ -584,7 +584,7 @@ router.get('/myEvent', ensureLoggedIn('login'),
 		if (err) {
     		console.dir( err );
     	}
-    	//console.log('number of subcriptions: '+results.length);
+    	console.log('number of events: '+results.length);
 		res.render('myEvent',{title:'My events',results:results});
 	}); 	
 });
@@ -666,7 +666,7 @@ router.post('/editSub', ensureLoggedIn('login'), function(req, res){
 			console.log('subscription updated');
 			//success msg
 
-			req.flash('success', 'Successfully edited an subscription!');
+			req.flash('success', 'Successfully edited a subscription!');
 			db.subs.find({userEmail: req.user.email}).toArray(function(err, results){
 				if (err) {
 		    		console.dir( err );
@@ -690,6 +690,17 @@ router.get('/deleteSub', ensureLoggedIn('login'), function(req, res){
 	}); 	
 });
 
+router.get('/deleteEvent', ensureLoggedIn('login'), function(req, res){
+	var collection = db.collection('events');
+	db.events.remove({_id: ObjectId(req.query.id)});
+	collection.find({userEmail: req.user.email}).toArray(function(err, results){
+		if (err) {
+    		console.dir( err );
+    	}
+    	console.log('number of events: '+results.length);
+		res.render('myEvent',{title:'My events',results:results});
+	}); 	
+});
 
 module.exports = router;
 
