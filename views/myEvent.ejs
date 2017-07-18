@@ -1,4 +1,5 @@
 <%- include('includes/header') %>
+
 <nav class="navbar navbar-inverse">
       <div class="container">
         <div class="navbar-header">
@@ -12,7 +13,7 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-              <li class="active"><a href="/search">Search</a></li>
+              <li><a href="/search">Search</a></li>
               <li><a href="/users/addEvent">Add Event</a></li>
               <li><a href="/users/addSub">Subscribe</a></li>
             </ul>
@@ -47,52 +48,43 @@
     </nav>
 <%- messages() %>
 
-<div class="container reg-page">
-<form method = "post" action="/events" class="form-signin">
-    <lable>Type</lable><br>
-    <select class="form-control" name="type">
-        <option value="" selected="selected">-----ALL-----</option>
-        <% for (var i=0; i<results.length; i++){ %>
-        <option value= <%=results[i].type%> ><%=results[i].type%></option>
-        <% } %>
-    </select>
-    <br>
-    <br>
-    <lable>Keywords</lable><br>
-    <input type="text" name="keywords" class="form-control" value="<%= (!!locals.keywords)?keywords:'' %>">Please use "," to separate keywords without space
-    <br>
-    <br>
-    <label>Event Start Date</label><br>
-    <input type="date" name="startDate" class="form-control" value="<%= (!!locals.startDate)?startDate:'' %>">
-    <br>
-    <br>
-    <label>Last Day of Event</label><br>
-    <input type="date" name="endDate" class="form-control" value="<%= (!!locals.endDate)?endDate:'' %>">
-    <br>
-    <br>
-    <lable>Region</lable><br>
-    <select class="form-control" onchange="set_country(this,country,state, true)" name="region">
-        <option value="" selected="selected">-----ALL-----</option>
-        <script type="text/javascript">
-            setRegions(this);
-        </script>
-    </select>
-    <br>
-    <br>
-    <lable>Country</lable><br>
-    <select class="form-control" name="country" disabled="disabled" onchange="set_city_state(this,state, true)">
-        <option value="" selected="selected">-----ALL-----</option>
-    </select>
-    <br>
-    <br>
-    <lable>State/Province</lable><br>
-    <select class="form-control" name="state" disabled="disabled" onchange="print_city_state(country,this)">
-        <option value="" selected="selected">-----ALL-----</option>
-    </select>
-    <br>
-    <br>
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Search</button>
-</form>
-<div id="txtregion"></div>
-<div id="txtplacename"></div>
-</div>
+<%  for(var i=0; i<results.length; i++) {%>
+
+  <div class="container" role="main">
+    <div class="well">
+      <h3>Event <%i%></h3>
+      <li><strong>ID:</strong> <%=results[i]._id%></a></li>      
+      <li><strong>Name:</strong> <%=results[i].name%></a></li>
+      <li><strong>Type:</strong> <%=results[i].type%></a></li>
+      <li><strong>Region:</strong> <%=results[i].region%></a></li>
+      <li><strong>Country:</strong> <%=results[i].country%></a></li>
+      <li><strong>State:</strong> <%=results[i].state%></a></li>
+      <li><strong>City:</strong> <%=results[i].city%></a></li>
+      <li><strong>Organization:</strong> <%=results[i].organization%></li>
+      <li><strong>Date:</strong> <%=results[i].startDate%>~<%=results[i].endDate%></li>
+      <li><strong>Contact:</strong> <%=results[i].contact%></li>
+      <li><strong>Email:</strong>  <%=results[i].email%></li>
+      <li><strong>Description:</strong> <%=results[i].description%></li>
+      <li><strong>Abstracts or Proposals Deadline:</strong> <%=results[i].deadline%></li>
+      <li><strong>Keywords:</strong> <%=results[i].keywords%></li>
+      <a href="#>"><button type="button" class="btn btn-warning" >Edit</button></a>
+      <a href="#>"><button type="button" class="btn btn-danger">Delete</button></a>
+    </div>
+  </div>
+  <br>
+<% } %>
+
+
+
+<script>
+  $('.adv-toggle-buttons a').each(function() { 
+        $(this).on('click', function(){
+            $(this).parent().next().slideToggle();
+            $(this).parent().find('a').each(function(){
+                $(this).toggle();
+                
+            });
+        });   
+    });
+</script>        
+<%- include('includes/footer') %>

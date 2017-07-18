@@ -36,8 +36,8 @@
                 <% } %>
               <li class="dropdown"><a href="#">Welcome, <%= user.name%>!</a>
                   <div class="dropdown-content">
-                    <hr><a href="#">My Events</a><br>
-                    <a href="/users/mySub">My Subscribes</a><br>
+                    <hr><a href="/users/myEvent">My Events</a><br>
+                    <a href="/users/mySub">My Subscriptions</a><br>
                     <a href="#">My Profile</a><br>
                     <hr><a href="/users/logout">Log out</a><br>
                   </div>
@@ -58,17 +58,23 @@
         <input type="text" name="name" class="form-control" value="<%= (!!sub[0].name)?sub[0].name:'' %>">
         <br>
         <lable>Event Type</lable><br>
-        <select class="form-control" name="type" value="<%= (!!sub[0].type)?sub[0].type:'' %>">
-            <option value="" selected="selected">-----ALL-----</option>
+        <select class="form-control" name="type">
+            <option value="">-----ALL-----</option>
             <% for (var i=0; i<types.length; i++){ 
                     console.log(types.length); %>
-            <option value= <%=types[i].type%> ><%=types[i].type%></option>
+                  <%  if(sub[0].type == types[i].type){ %>
+                      <option value="<%=types[i].type%>" selected="selected"><%=types[i].type%></option>
+                  <%  }
+                    else{ %>
+                      <option value="<%=types[i].type%>"><%=types[i].type%></option>
+                  <%  } %>
             <% } %>
         </select>
         <br>
         <lable>Region</lable><br>
         <select class="form-control" onchange="set_country(this,country,state, true)" name="region" >
-            <option value="" selected="selected">-----ALL-----</option>
+            <option value="">-----ALL-----</option>
+            <option value="<%=sub[0].region%>" selected="selected"><%=sub[0].region%></option>
             <script type="text/javascript">
                 setRegions(this);
             </script>
@@ -76,14 +82,16 @@
         <br>
         <br>
         <lable>Country</lable><br>
-        <select class="form-control" name="country" value="<%= (!!sub[0].country)?sub[0].country:'' %>" disabled="disabled" onchange="set_city_state(this,state, true)">
-            <option value="" selected="selected">-----ALL-----</option>
+        <select class="form-control" name="country" onchange="set_city_state(this,state, true)">
+            <option value="">-----ALL-----</option>
+            <option value="<%=sub[0].country%>" selected="selected"><%=sub[0].country%></option>
         </select>
         <br>
         <br>
         <lable>State/Province</lable><br>
-        <select class="form-control" name="state" value="<%= (!!sub[0].state)?sub[0].state:'' %>" disabled="disabled" onchange="print_city_state(country,this)">
-            <option value="" selected="selected">-----ALL-----</option>
+        <select class="form-control" name="state">
+            <option value="">-----ALL-----</option>
+            <option value="<%=sub[0].state%>" selected="selected"><%=sub[0].state%></option>
         </select>
         <br>
         <br>
