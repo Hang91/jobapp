@@ -10,7 +10,7 @@ var db = mongojs('eventapp', ['users','events','types','subs']);
 //pagination
 router.post('/', function (req, res, next) {
 	console.log("events post");
-	var limit = 10;
+	var limit = 5;
 	var currentPage = 1;
     if(req.params.currentPage){
     	console.log("events post currentPage is not null");
@@ -39,7 +39,7 @@ router.post('/', function (req, res, next) {
 //pagination
 router.get( "/" , function ( req , res , err ) {
 	console.log("events get");
-    var limit = 10;
+    var limit = 5;
     var currentPage = 1;
     if(req.query.currentPage){
     	currentPage = req.query.currentPage;

@@ -3,7 +3,11 @@ var router = express.Router();
 var mongojs = require('mongojs');
 var db = mongojs('eventapp', ['users','events','types','subs']);
 var TypesModel = require('../models/TypeDB');
+var EventsModel = require('../models/EventDB');
 var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
+
+var ObjectId = require('mongodb').ObjectID;
+
 //manage categories page - GET
 router.get('/categories', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
 	TypesModel.find({}, function(err, results){
@@ -20,9 +24,8 @@ router.get('/categories', ensureLoggedIn('/users/login'), isAdmin, function(req,
 
 //add type
 //use ajax post (use get cannot work)
-router.get('/categories/add', function(req, res){
+router.get('/categories/add', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
 	var type = req.query.type;
-    console.log(type);
    //MogoDB中可以用Create方法添加数据
     TypesModel.create({type:type}, function (err) {
         if (err) res.send({result:-1});
@@ -43,10 +46,10 @@ router.get('/categories/add', function(req, res){
 });
 
 //edit type
-router.get('/categories/edit',function(req, res){
+router.get('/categories/edit', ensureLoggedIn('/users/login'), isAdmin,function(req, res){
     var id = req.query._id;
     var type = req.query.type;
-    TypesModel.update({_id:id}, {$set:{type:type}},{}, function(err, movie){
+    TypesModel.update({_id:ObjectId(id)}, {$set:{type:type}},{}, function(err, movie){
         if(err){
             res.send(err);
         }
@@ -68,11 +71,10 @@ router.get('/categories/edit',function(req, res){
 });
 
 //delete type according to _id
-router.get('/categories/delete', function(req, res){
+router.get('/categories/delete', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
 	var id = req.query._id;
-    console.log(id);
    //MogoDB use remove function to remove data
-    TypesModel.remove({_id:id}, function (err) {
+    TypesModel.findByIdAndRemove(ObjectId(id), function (err) {
         if (err){ 
             console.log("delete err!");
             res.send({result:-1});
@@ -85,22 +87,98 @@ router.get('/categories/delete', function(req, res){
                 }
                 else {
                     console.log("delete success!");
+                    res.location('/manage/categories');
                     res.redirect("/manage/categories");
-                    res.render('manage_categories', {title:'Manage Categories', user: req.user, results : results});
                 }
             });
         }
     });
 });
 
-//manage categories page - GET
+//manage events page - GET
 router.get('/events', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
-	var collection = db.collection('events');
-	collection.find({approved : 0}).toArray(function(err, results1){
-		res.render('manage_events', { title:'Manage Events', user: req.user, results1 : results1}); 
+	EventsModel.find({approved : 0},function(err, results1){//to be approve
+        //console.log(results1.length);
+        EventsModel.find({approved : 1},function(err, results2){//approve
+            //console.log(results2.length);
+            EventsModel.find({approved : 2},function(err, results3){//revise
+                //console.log(results3.length);
+                res.render('manage_events', { title:'Manage Events', user: req.user, 
+                    results1 : results1, results2 : results2, results3 : results3}); 
+            }); 
+        }); 
 	});	
 });
 
+
+
+//approve an event
+router.get('/events/approve', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
+    var id = req.query.id;
+    //console.log(id);
+    EventsModel.update({_id:ObjectId(id)}, {$set:{approved:1}}, function(err, movie){
+        if(err){
+            res.send(err);
+        }
+        else {
+            EventsModel.find({approved : 0},function(err, results1){//to be approve
+                if (err){ 
+                    console.log("edit error!");
+                    res.send({result:-1});
+                }
+                EventsModel.find({approved : 1},function(err, results2){//approve
+                    if (err){ 
+                        console.log("edit error!");
+                        res.send({result:-1});
+                    }
+                    EventsModel.find({approved : 2},function(err, results3){//revise
+                        if (err){ 
+                            console.log("edit error!");
+                            res.send({result:-1});
+                        }
+                        console.log("disapprove success!");
+                        res.location('/manage/events');
+                        res.redirect('/manage/events');
+                    }); 
+                }); 
+            });
+        }    
+    });
+});
+
+//disapprove an event - delete
+router.get('/events/disapprove', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
+    var id = req.query.id;
+    //console.log(id);
+    EventsModel.findByIdAndRemove(ObjectId(id), function(err, movie){
+        if(err){
+            res.send(err);
+        }
+        else {
+            EventsModel.find({approved : 0},function(err, results1){//to be approve
+                if (err){ 
+                    console.log("edit error!");
+                    res.send({result:-1});
+                }
+                EventsModel.find({approved : 1},function(err, results2){//approve
+                    if (err){ 
+                        console.log("edit error!");
+                        res.send({result:-1});
+                    }
+                    EventsModel.find({approved : 2},function(err, results3){//revise
+                        if (err){ 
+                            console.log("edit error!");
+                            res.send({result:-1});
+                        }
+                        console.log("approve success!");
+                        res.location('/manage/events');
+                        res.redirect('/manage/events');
+                    }); 
+                }); 
+            });
+        }    
+    });
+});
 
 function isAdmin(req, res, next) {
 
