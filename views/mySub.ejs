@@ -30,8 +30,8 @@
                 <% } %>
                   <li class="dropdown"><a href="#">Welcome, <%= user.name%>!</a>
                   <div class="dropdown-content">
-                    <hr><a href="#">My Events</a><br>
-                    <a href="/users/mySub">My Subscribes</a><br>
+                    <hr><a href="/users/myEvent">My Events</a><br>
+                    <a href="/users/mySub">My Subscriptions</a><br>
                     <a href="#">My Profile</a><br>
                     <hr><a href="/users/logout">Log out</a><br>
                   </div>
@@ -56,10 +56,11 @@
       <li><strong>ID:</strong> <%=results[i]._id%></a></li>      
       <li><strong>Name:</strong> <%=results[i].name%></a></li>
       <li><strong>Type:</strong> <%=results[i].type%></a></li>
-      <li><strong>Organization:</strong> <%=results[i].organization%></li>
-      <li><strong>City:</strong> <%=results[i].city%></a></li>
-      <li><strong>State:</strong> <%=results[i].state%></a></li>
+      <li><strong>Region:</strong> <%=results[i].region%></a></li>
       <li><strong>Country:</strong> <%=results[i].country%></a></li>
+      <li><strong>State:</strong> <%=results[i].state%></a></li>
+      <li><strong>City:</strong> <%=results[i].city%></a></li>
+      <li><strong>Organization:</strong> <%=results[i].organization%></li>
       <li><strong>Date:</strong> <%=results[i].startDate%>~<%=results[i].endDate%></li>
       <li><strong>Keywords:</strong> <%=results[i].keywords%></li>
       <a href="/users/editSub?id=<%=results[i]._id%>"><button type="button" class="btn btn-warning" >Edit</button></a>
