@@ -274,52 +274,52 @@ function alertUser(newEvent) {
 		var typeStr = {};
 	}
 	else{
-		var typeStr = {$or: [{'type': name}, {'type': ""}]};
+		var typeStr = {$or: [{'type': type}, {'type': ""}]};
 	}
 	if(keywords.length == 1 && !keywords[0]){
 		var keywordsStr = {};
 	}
 	else{
-		var keywordsStr = {'keywords': {$in:keywords}};//or
+		var keywordsStr = {$or: [{'keywords': {$in:keywords}}, {'keywords' : ""} ]};//or
 		//var keywordsStr = {'keywords': {$all:keywords}};//and
 	}
 	if(!region){
 		var regionStr = {};
 	}
 	else{
-		var regionStr = {'region' : region};
+		var regionStr = {$or: [{'region' : region}, {'region': ""}, {'region': null}]};
 	}		
 	if(!country){
 		var countryStr = {};
 	}
 	else{
-		var countryStr = {'country' : country};
+		var countryStr = {$or: [{'country' : country}, {'country': ""}, {'country': null}]};
 	}
 	if(!state){
 		var stateStr = {};
 	}
 	else{
-		var stateStr = {'state' : state};
+		var stateStr = {$or: [{'state' : state}, {'state': ""}, {'state': null}]};
 	}
 	if(!city){
 		var cityStr = {};
 	}
 	else{
-		var cityStr = {'city' : city};
+		var cityStr = {$or: [{'city' : city}, {'city': ""}]};
 	}
 	if(!startDate){
 		var startDateStr = {};
 	}
 	else{
-		var startDateStr = {'startDate': {$lte:startDate}};
+		var startDateStr = {$or: [{'startDate': {$lte:startDate}}, {'startDate': ""}]};
 	}
 	if(!endDate){
 		var endDateStr = {};
 	}
 	else{
-		var endDateStr = {'endDate' : {$gte:endDate}};
+		var endDateStr = {$or: [{'endDate' : {$gte:endDate}}, {'endDate': ""}]};
 	}
-	collection.find({$and: [nameStr, regionStr, countryStr, stateStr, cityStr, startDateStr, endDateStr]}).toArray(function(err, results){
+	collection.find({$and: [nameStr, typeStr, regionStr, countryStr, stateStr, cityStr, startDateStr, endDateStr, keywordsStr]}).toArray(function(err, results){
 		console.log('user number' + results.length);
 		for(var i = 0; i < results.length; i++){
 			console.log('userEmail: ' + results[i].userEmail);
