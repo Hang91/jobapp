@@ -171,7 +171,7 @@ router.post('/addEvent', function(req, res){
 	var newEvent = {
 		   name: name,
 		   type: type,
-		   region: region,
+		   region: region,//continent
 		   country: country,
 		   state: state,
 		   city: city,

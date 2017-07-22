@@ -74,12 +74,12 @@
     <% var index = 1; results.forEach(function(rs) {%>
     <tr>      
       <td><%=index++%></td>      
-      <td id="id" class="hidID"><%=rs._id%></td>
-      <td id="type"><%=rs.type%></td>
+      <td id="id_<%=index%>" class="hidID"><%=rs._id%></td>
+      <td id="type_<%=index%>"><%=rs.type%></td>
       <td>
         <button class="add btn btn-success">Add</button>
-        <a id="editurl"><button class="edit btn btn-warning">Edit</button></a>
-        <a href="/manage/categories/delete?_id=<%=rs._id%>"><button class="delete btn btn-danger">Delete</button></a>
+        <a id="editurl_<%=index%>"><button class="edit_<%=index%> btn btn-warning" onclick="editType(<%=index%>)">Edit</button></a>
+        <a id="deleteurl_<%=index%>"><button class="delete btn btn-danger" onclick="deleteType(<%=index%>)">Delete</button></a>
       </td>
     </tr>
     <% }) %>

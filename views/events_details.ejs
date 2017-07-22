@@ -64,7 +64,7 @@
             <% }) %>
         </select>
         <br>
-        <lable>Region</lable><br>
+        <lable><%=event.region%></lable><br>
         <select class="form-control" onchange="set_country(this,country,state, true)" name="region" >
             <option value="">-----ALL-----</option>
             <option value="<%=event.region%>" selected="selected"><%=event.region%></option>
@@ -107,8 +107,7 @@
         <input type="text" name="Comments" class="form-control" value="<%= (!!event.Comments)?event.Comments:'' %>">
         <br> 
 
-        <!-- <p>Have Account? <a href="/users/login">Login</a></p> -->
-        <button class="btn btn-lg btn-primary btn-block btn-warning" type="submit">Ask for revise</button>
+        <button class="btn btn-lg btn-primary btn-block btn-warning" type="submit">Ask for revision</button>
         <button class="btn btn-lg btn-primary btn-block btn-success" type="submit">Approve</button>
       </form>
 </div> <!-- /container -->
