@@ -5,7 +5,7 @@
 
 var mongoose = require('mongoose');
 var DB = mongoose.connect('mongodb://localhost/eventapp');//红色为数据库名
-
+mongoose.Promise = global.Promise;
 mongoose.connection.on("open", function () {
     console.log("connection succeed");
 });
@@ -21,6 +21,9 @@ var eventsSchema = new mongoose.Schema({
 		type: String
 	},
 	type: {
+		type: String
+	},
+	region : {
 		type: String
 	},
 	city : {

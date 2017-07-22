@@ -52,9 +52,9 @@
     <lable>Type</lable><br>
     <select class="form-control" name="type">
         <option value="" selected="selected">-----ALL-----</option>
-        <% for (var i=0; i<results.length; i++){ %>
-        <option value= <%=results[i].type%> ><%=results[i].type%></option>
-        <% } %>
+        <% results.forEach(function(result) { %>
+        <option value="<%=result.type%>"><%=result.type%></option>
+        <% }) %>
     </select>
     <br>
     <br>
