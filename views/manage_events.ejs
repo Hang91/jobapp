@@ -81,7 +81,7 @@
             <td><%=rs.startDate%>~<%=rs.endDate%></td>
             <td><%=rs.city%>,<%=rs.state%>,<%=rs.country%></td>
             <td>
-              <button class="btn btn-warning">Detail</button>
+              <a href="/manage/events/details?id=<%=rs._id%>"><button class="btn btn-warning">Detail</button></a>
               <a href="/manage/events/approve?id=<%=rs._id%>"><button class="btn btn-success">Approve</button></a>
               <a href="/manage/events/disapprove?id=<%=rs._id%>"><button class="btn btn-danger">Disapprove</button></a>
             </td>
@@ -115,7 +115,7 @@
             <td><%=rs.startDate%>~<%=rs.endDate%></td>
             <td><%=rs.city%>,<%=rs.state%>,<%=rs.country%></td>
             <td>
-              <button class="btn btn-warning">Detail</button>
+              <a href="/manage/events/details?id=<%=rs._id%>"><button class="btn btn-warning">Details</button></a>
               <a href="/manage/events/disapprove?id=<%=rs._id%>"><button class="btn btn-danger">Disapprove</button></a>
             </td>
           </tr>
@@ -148,7 +148,7 @@
             <td><%=rs.startDate%>~<%=rs.endDate%></td>
             <td><%=rs.city%>,<%=rs.state%>,<%=rs.country%></td>
             <td>
-              <button class="btn btn-warning">Detail</button>
+              <a href="/manage/events/details?id=<%=rs._id%>"><button class="btn btn-warning">Details</button></a>
               <a href="/manage/events/approve?id=<%=rs._id%>"><button class="btn btn-success">Approve</button></a>
               <a href="/manage/events/disapprove?id=<%=rs._id%>"><button class="btn btn-danger">Disapprove</button></a>
             </td>

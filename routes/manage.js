@@ -49,7 +49,7 @@ router.get('/categories/add', ensureLoggedIn('/users/login'), isAdmin, function(
 router.get('/categories/edit', ensureLoggedIn('/users/login'), isAdmin,function(req, res){
     var id = req.query._id;
     var type = req.query.type;
-    TypesModel.update({_id:ObjectId(id)}, {$set:{type:type}},{}, function(err, movie){
+    TypesModel.update({_id:ObjectId(id)}, {$set:{type:type}},{}, function(err, next){
         if(err){
             res.send(err);
         }
@@ -110,6 +110,24 @@ router.get('/events', ensureLoggedIn('/users/login'), isAdmin, function(req, res
 	});	
 });
 
+
+//check detail of an event
+router.get('/events/details', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
+    var id = req.query.id;
+    //console.log(id);
+    TypesModel.find({}, function(err, types){
+        if(err){
+            return next(err);
+        }
+        EventsModel.findById(id, function(err, event){
+            if(err){
+                res.send(err);
+            }
+            res.render('events_details', {title: 'Event Details', 
+                user: req.user, types:types, event:event});
+        });
+    });
+});
 
 
 //approve an event

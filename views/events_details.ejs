@@ -1,0 +1,117 @@
+<%- include('includes/header') %>
+<nav class="navbar navbar-inverse">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Home</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+          <li><a href="/search">Search</a></li>
+          <li><a href="/users/addEvent">Add Event</a></li>
+          <li><a href="/users/addSub">Subscribe</a></li>
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right">
+            <% if(user){ %>
+                <% if(user.name == 'admin'){ %>
+                  <li class="dropdown"><a href="#">Manage</a>
+                      <div class="dropdown-content">
+                        <hr><a href="/manage/events">Manage Events</a><br>
+                        <a href="/manage/categories">Manage categories</a><br>
+                        <a href="/manage/users">Manage users</a><br>
+                      </div>
+                  </li>
+                <% } %>
+              <li class="dropdown"><a href="#">Welcome, <%= user.name%>!</a>
+                  <div class="dropdown-content">
+                    <hr><a href="/users/myEvent">My Events</a><br>
+                    <a href="/users/mySub">My Subscriptions</a><br>
+                    <a href="#">My Profile</a><br>
+                    <hr><a href="/users/logout">Log out</a><br>
+                  </div>
+                </li>
+              <% } %>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    
+<div class="container">
+    <h1>id: <%=event.id%></h1>
+      <form method="post" action="/manage/events/edit" class="form-signin">
+        <h2 class="form-signin-heading">Edit Events</h2>
+        <!-- <label>ID</label> -->
+        <input class="hid" type="text" name="id" class="form-control" value="<%= (!!event.id)?event.id:'' %>">
+        <label>Event Name</label>
+        <input type="text" name="name" class="form-control" value="<%= (!!event.name)?event.name:'' %>">
+        <br>
+        <lable>Event Type</lable><br>
+        <select class="form-control" name="type">
+            <option value="">-----ALL-----</option>
+            <% types.forEach(function(onetype) { %>
+              <%  if(event.type == onetype.type){ %>
+                      <option value="<%=onetype.type%>" selected="selected"><%=onetype.type%></option>
+                  <%  }
+                    else{ %>
+                      <option value="<%=onetype.type%>"><%=onetype.type%></option>
+                  <%  } %>                  
+            <% }) %>
+        </select>
+        <br>
+        <lable>Region</lable><br>
+        <select class="form-control" onchange="set_country(this,country,state, true)" name="region" >
+            <option value="">-----ALL-----</option>
+            <option value="<%=event.region%>" selected="selected"><%=event.region%></option>
+            <script type="text/javascript">
+                setRegions(this);
+            </script>
+        </select>
+        <br>
+        <br>
+        <lable>Country</lable><br>
+        <select class="form-control" name="country" onchange="set_city_state(this,state, true)">
+            <option value="">-----ALL-----</option>
+            <option value="<%=event.country%>" selected="selected"><%=event.country%></option>
+        </select>
+        <br>
+        <br>
+        <lable>State/Province</lable><br>
+        <select class="form-control" name="state">
+            <option value="">-----ALL-----</option>
+            <option value="<%=event.state%>" selected="selected"><%=event.state%></option>
+        </select>
+        <br>
+        <br>
+        <label>City</label>
+        <input type="text" name="city" class="form-control" value="<%= (!!event.city)?event.city:'' %>">
+        <br>
+        <label>Organizing Society</label>
+        <input type="text" name="organization" class="form-control" value="<%= (!!event.organization)?event.organization:'' %>">
+        <br>
+        <label>Start Date</label>
+        <input type="date" name="startDate" class="form-control" value="<%= (!!event.startDate)?event.startDate:'' %>">
+        <br>
+        <label>End Date</label>
+        <input type="date" name="endDate" class="form-control" value="<%= (!!event.endDate)?event.endDate:'' %>">
+        <br>
+        <label>Event Keywords</label>
+        <input type="text" name="keywords" class="form-control" value="<%= (!!event.keywords)?event.keywords:'' %>">
+        <br>
+        <label>Comments</label>
+        <input type="text" name="Comments" class="form-control" value="<%= (!!event.Comments)?event.Comments:'' %>">
+        <br> 
+
+        <!-- <p>Have Account? <a href="/users/login">Login</a></p> -->
+        <button class="btn btn-lg btn-primary btn-block btn-warning" type="submit">Ask for revise</button>
+        <button class="btn btn-lg btn-primary btn-block btn-success" type="submit">Approve</button>
+      </form>
+</div> <!-- /container -->
+
+
+<%- include('includes/footer') %>
