@@ -276,52 +276,52 @@ function alertUser(newEvent) {
 		var typeStr = {};
 	}
 	else{
-		var typeStr = {'type' : type};
+		var typeStr = {$or: [{'type': type}, {'type': ""}]};
 	}
 	if(keywords.length == 1 && !keywords[0]){
 		var keywordsStr = {};
 	}
 	else{
-		//var keywordsStr = {'keywords': {$in:keywords}};//or
-		var keywordsStr = {'keywords': {$all:keywords}};//and
+		var keywordsStr = {$or: [{'keywords': {$in:keywords}}, {'keywords' : ""} ]};//or
+		//var keywordsStr = {'keywords': {$all:keywords}};//and
 	}
 	if(!region){
 		var regionStr = {};
 	}
 	else{
-		var regionStr = {'region' : region};
+		var regionStr = {$or: [{'region' : region}, {'region': ""}, {'region': null}]};
 	}		
 	if(!country){
 		var countryStr = {};
 	}
 	else{
-		var countryStr = {'country' : country};
+		var countryStr = {$or: [{'country' : country}, {'country': ""}, {'country': null}]};
 	}
 	if(!state){
 		var stateStr = {};
 	}
 	else{
-		var stateStr = {'state' : state};
+		var stateStr = {$or: [{'state' : state}, {'state': ""}, {'state': null}]};
 	}
 	if(!city){
 		var cityStr = {};
 	}
 	else{
-		var cityStr = {'city' : city};
+		var cityStr = {$or: [{'city' : city}, {'city': ""}]};
 	}
 	if(!startDate){
 		var startDateStr = {};
 	}
 	else{
-		var startDateStr = {'startDate': {$gte:startDate}};
+		var startDateStr = {$or: [{'startDate': {$lte:startDate}}, {'startDate': ""}]};
 	}
 	if(!endDate){
 		var endDateStr = {};
 	}
 	else{
-		var endDateStr = {'endDate' : {$lte:endDate}};
+		var endDateStr = {$or: [{'endDate' : {$gte:endDate}}, {'endDate': ""}]};
 	}
-	collection.find({$and: [nameStr, typeStr, keywordsStr, regionStr, countryStr, stateStr, cityStr, startDateStr, endDateStr]}).toArray(function(err, results){
+	collection.find({$and: [nameStr, typeStr, regionStr, countryStr, stateStr, cityStr, startDateStr, endDateStr, keywordsStr]}).toArray(function(err, results){
 		console.log('user number' + results.length);
 		for(var i = 0; i < results.length; i++){
 			console.log('userEmail: ' + results[i].userEmail);
@@ -586,7 +586,7 @@ router.get('/myEvent', ensureLoggedIn('login'),
 		if (err) {
     		console.dir( err );
     	}
-    	//console.log('number of subcriptions: '+results.length);
+    	console.log('number of events: '+results.length);
 		res.render('myEvent',{title:'My events',results:results});
 	}); 	
 });
@@ -608,6 +608,28 @@ router.get('/editSub', ensureLoggedIn('login'), function(req, res){
 		// console.log('results.name: ' + results[0].name);
 		//console.log('find types '+types.length);
 			res.render('editSub', { title:'Edit subscription', user: req.user, types: types, sub: results});
+		});
+	});
+	
+});
+
+router.get('/editEvent', ensureLoggedIn('login'), function(req, res){
+	console.log('in get editEvent');
+	var types;
+	db.types.find({}).toArray(function(err, typeresults){
+		if (err) {
+    		console.dir( err );
+    	}
+    	//console.log('find types '+typeresults.length);
+    	types = typeresults;
+    	db.events.find({_id: ObjectId(req.query.id)}).toArray(function(err, results){
+			if(err) {
+				console.dir(err);
+			}
+		// console.log('find subscription ' + results.length);
+		// console.log('results.name: ' + results[0].name);
+		//console.log('find types '+types.length);
+			res.render('editEvent', { title:'Edit event', user: req.user, types: types, event: results});
 		});
 	});
 	
@@ -668,13 +690,80 @@ router.post('/editSub', ensureLoggedIn('login'), function(req, res){
 			console.log('subscription updated');
 			//success msg
 
-			req.flash('success', 'Successfully edited an subscription!');
+			req.flash('success', 'Successfully edited a subscription!');
 			db.subs.find({userEmail: req.user.email}).toArray(function(err, results){
 				if (err) {
 		    		console.dir( err );
 		    	}
 		    	//console.log('number of subcriptions: '+results.length);
 				res.render('mySub',{title:'My subcriptions', user:req.user, results:results});
+			}); 
+		}
+	});
+});
+
+router.post('/editEvent', ensureLoggedIn('login'), function(req, res){
+	//get form values
+	var name 		= req.body.name;
+	var type 		= req.body.type;
+	var city    = req.body.city;
+	var state 	= req.body.state;
+	var country 	= req.body.country;
+	var region 	= req.body.region;
+	var organization 	= req.body.organization;
+	var contact 	= req.body.contact;
+	var email 	= req.body.email;
+	var website 	= req.body.website;
+	var startDate 	= req.body.startDate;
+	var endDate	= req.body.endDate;
+	var deadline = req.body.deadline;
+	var description	= req.body.description;
+	if(typeof req.body.keywords == 'string') {
+		var keywords	= req.body.keywords.split(",");
+	} else {
+		var keywords = null;
+		console.log('keywords is not a string');
+	}
+	var approved = 0;//0:not check yet; 1:approve; 2:disapprove\
+	var userName = req.user.name;
+	var userEmail = req.user.email;
+	var id = req.body.id;
+	var newEvent = {
+		   name: name,
+		   type: type,
+		   city: city,
+		   state: state,
+		   country: country,
+		   region: region,
+		   organization: organization,
+		   contact: contact,
+		   email: email,
+			website: website,
+		   startDate: startDate,
+		   endDate: endDate,
+		   deadline: deadline,
+		   description: description,
+		   keywords: keywords,
+		   approved: approved,
+		   userName: userName,
+		   userEmail: userEmail
+	}
+	console.log('id = '+id);
+	db.events.update({_id:ObjectId(id)}, newEvent, function(err, doc){
+		if(err){
+			res.send(err);
+		}
+		else{
+			console.log('event updated');
+			//success msg
+
+			req.flash('success', 'Successfully edited an event!');
+			db.events.find({userEmail: req.user.email}).toArray(function(err, results){
+				if (err) {
+		    		console.dir( err );
+		    	}
+		    	//console.log('number of subcriptions: '+results.length);
+				res.render('myEvent',{title:'My events', user:req.user, results:results});
 			}); 
 		}
 	});
@@ -692,6 +781,17 @@ router.get('/deleteSub', ensureLoggedIn('login'), function(req, res){
 	}); 	
 });
 
+router.get('/deleteEvent', ensureLoggedIn('login'), function(req, res){
+	var collection = db.collection('events');
+	db.events.remove({_id: ObjectId(req.query.id)});
+	collection.find({userEmail: req.user.email}).toArray(function(err, results){
+		if (err) {
+    		console.dir( err );
+    	}
+    	console.log('number of events: '+results.length);
+		res.render('myEvent',{title:'My events',results:results});
+	}); 	
+});
 
 module.exports = router;
 
