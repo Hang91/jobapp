@@ -11,6 +11,8 @@ var LocalStrategy = require('passport-local').Strategy;
 var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 var ObjectId = require('mongodb').ObjectID;
 
+var TypesModel = require('../models/TypeDB');
+var EventsModel = require('../models/EventDB');
 
 //login page - GET
 router.get('/login', function(req, res){
@@ -171,7 +173,7 @@ router.post('/addEvent', function(req, res){
 	var newEvent = {
 		   name: name,
 		   type: type,
-		   region: region,
+		   region: region,//continent
 		   country: country,
 		   state: state,
 		   city: city,
@@ -195,7 +197,7 @@ router.post('/addEvent', function(req, res){
 				// Push To Array
 
 			//add to event
-	db.events.insert(newEvent, function(err, doc){
+	EventsModel.create(newEvent, function(err, doc){
 	if(err){
 		res.send(err);
 	}

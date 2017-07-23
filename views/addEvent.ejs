@@ -5,6 +5,7 @@
 <% } %>
 <%= messages()%>
 <%- include('includes/header') %>
+
 <nav class="navbar navbar-inverse">
       <div class="container">
         <div class="navbar-header">
@@ -77,7 +78,7 @@
         </select>
         <br>
         <lable>State or Province</lable><br>
-    <select class="form-control" name="state" disabled="disabled" onchange="print_city_state(country,this)">
+    <select class="form-control" name="state" disabled="disabled">
         <option value="" selected="selected">PLEASE SELECT A STATE OR PROVINCE</option>
     </select>
         <br>
@@ -120,6 +121,5 @@
       </form>
 
     </div> <!-- /container -->
-
 
 <%- include('includes/footer') %>

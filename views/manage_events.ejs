@@ -55,7 +55,7 @@
 <ul class="nav nav-tabs">
   <li class="active"><a data-toggle="tab" href="#to_be_approved">To Be Approved</a></li>
   <li><a data-toggle="tab" href="#approved">Approved</a></li>
-  <li><a data-toggle="tab" href="#ask_for_revised">Ask for Revised</a></li>
+  <li><a data-toggle="tab" href="#ask_for_revision">Ask for revision</a></li>
 </ul>
 <div class="tab-content">
     <div id="to_be_approved" class="tab-pane fade in active">
@@ -76,14 +76,15 @@
           <% var index = 1; results1.forEach(function(rs) {%>
           <tr>
             <td><%=index++%></td>
+            <td id="id_<%=index%>" class="hidID"><%=rs._id%></td>
             <td><%=rs.type%></td>
             <td><%=rs.name%></td>
             <td><%=rs.startDate%>~<%=rs.endDate%></td>
             <td><%=rs.city%>,<%=rs.state%>,<%=rs.country%></td>
             <td>
-              <button class="btn btn-warning">Detail</button>
-              <a href="/manage/events/approve?id=<%=rs._id%>"><button class="btn btn-success">Approve</button></a>
-              <a href="/manage/events/disapprove?id=<%=rs._id%>"><button class="btn btn-danger">Disapprove</button></a>
+              <a href="/manage/events/details?id=<%=rs._id%>"><button class="btn btn-warning">Detail</button></a>
+              <a id="approve_<%=index%>"><button class="btn btn-success" onclick="approveEvent(<%=index%>)">Approve</button></a>
+              <a id="disapprove_<%=index%>"><button class="btn btn-danger" onclick="disapproveEvent(<%=index%>)">Disapprove</button></a>
             </td>
           </tr>
           <% }) %>
@@ -110,13 +111,14 @@
           <% var index = 1; results2.forEach(function(rs) {%>
           <tr>
             <td><%=index++%></td>
+            <td id="id_<%=index%>" class="hidID"><%=rs._id%></td>
             <td><%=rs.type%></td>
             <td><%=rs.name%></td>
             <td><%=rs.startDate%>~<%=rs.endDate%></td>
             <td><%=rs.city%>,<%=rs.state%>,<%=rs.country%></td>
             <td>
-              <button class="btn btn-warning">Detail</button>
-              <a href="/manage/events/disapprove?id=<%=rs._id%>"><button class="btn btn-danger">Disapprove</button></a>
+              <a href="/manage/events/details?id=<%=rs._id%>"><button class="btn btn-warning">Details</button></a>
+              <a id="disapprove_<%=index%>"><button class="btn btn-danger" onclick="disapproveEvent(<%=index%>)">Disapprove</button></a>
             </td>
           </tr>
           <% }) %>
@@ -125,7 +127,7 @@
     </div>
     </div>
     
-    <div id="ask_for_revised" class="tab-pane fade">
+    <div id="ask_for_revision" class="tab-pane fade">
     <%=results3.length%>
     <div class="panel panel-default">
       <table class="table table-striped table-bordered"  border="1px" cellspacing="0">
@@ -143,14 +145,15 @@
           <% var index = 1; results3.forEach(function(rs) {%>
           <tr>
             <td><%=index++%></td>
+            <td id="id_<%=index%>" class="hidID"><%=rs._id%></td>
             <td><%=rs.type%></td>
             <td><%=rs.name%></td>
             <td><%=rs.startDate%>~<%=rs.endDate%></td>
             <td><%=rs.city%>,<%=rs.state%>,<%=rs.country%></td>
             <td>
-              <button class="btn btn-warning">Detail</button>
-              <a href="/manage/events/approve?id=<%=rs._id%>"><button class="btn btn-success">Approve</button></a>
-              <a href="/manage/events/disapprove?id=<%=rs._id%>"><button class="btn btn-danger">Disapprove</button></a>
+              <a href="/manage/events/details?id=<%=rs._id%>"><button class="btn btn-warning">Details</button></a>
+              <a id="approve_<%=index%>"><button class="btn btn-success approve" onclick="approveEvent(<%=index%>)">Approve</button></a>
+              <a id="disapprove_<%=index%>"><button class="btn btn-danger" onclick="disapproveEvent(<%=index%>)">Disapprove</button></a>
             </td>
           </tr>
           <% }) %>
@@ -159,6 +162,5 @@
     </div>
     </div>
 </div>
-
       
 <%- include('includes/footer') %>

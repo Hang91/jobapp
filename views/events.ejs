@@ -52,24 +52,24 @@
 <p>Click on "[-] Less info" to show less details.</p>
 <p>----------------------------------------------------------------</p>
 
-<%  for(var i=0; i< results.length; i++) {%>
-	<p class="adv-toggle-buttons">
-		<span><%=results[i].startDate%>~<%=results[i].endDate%>, <%=results[i].name%>, <%=results[i].city%>,<%=results[i].state%>,<%=results[i].country%>. </span><a href="#">[+] More info</a><a href="#" style="display: none;">[-] Less info</a>
-	</p>
-	<div class="adv-unit-options" style="display: none;">
-		<ul>
-		    <li><a href=<%=results[i].website%>><strong>Website:</strong> <%=results[i].website%></a></li>
-		    <li><strong>Type:</strong> <%=results[i].type%></a></li>
-		    <li><strong>Organization:</strong> <%=results[i].organization%></li>
-		    <li><strong>Contact:</strong> <%=results[i].contact%></li>
-		    <li><strong>Email:</strong>  <%=results[i].email%></li>
-		    <li><strong>Description:</strong> <%=results[i].description%></li>
-		    <li><strong>Abstracts or Proposals Deadline:</strong> <%=results[i].deadline%></li>
-		    <li><strong>Keywords:</strong> <%=results[i].keywords%></li>
-		</ul>
-	</div>
+<% results.forEach(function(result){ %>
+  <p class="adv-toggle-buttons">
+    <span><%=result.startDate%>~<%=result.endDate%>, <%=result.name%>, <%=result.city%>,<%=result.state%>,<%=result.country%>,<%=result.region%>. </span><a href="#">[+] More info</a><a href="#" style="display: none;">[-] Less info</a>
+  </p>
+  <div class="adv-unit-options" style="display: none;">
+    <ul>
+        <li><a href=<%=result.website%>><strong>Website:</strong> <%=result.website%></a></li>
+        <li><strong>Type:</strong> <%=result.type%></a></li>
+        <li><strong>Organization:</strong> <%=result.organization%></li>
+        <li><strong>Contact:</strong> <%=result.contact%></li>
+        <li><strong>Email:</strong>  <%=result.email%></li>
+        <li><strong>Description:</strong> <%=result.description%></li>
+        <li><strong>Abstracts or Proposals Deadline:</strong> <%=result.deadline%></li>
+        <li><strong>Keywords:</strong> <%=result.keywords%></li>
+    </ul>
+  </div>
   <br>
-<% } %>
+<% }) %>
   <ul class="pagination">
   <li><a href="?type=<%=type%>
         &&keywords=<%=keywords%>
@@ -120,6 +120,6 @@
                 
             });
         });   
-    });
+  });
 </script>        
 <%- include('includes/footer') %>
