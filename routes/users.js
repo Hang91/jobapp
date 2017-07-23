@@ -613,6 +613,28 @@ router.get('/editSub', ensureLoggedIn('login'), function(req, res){
 	
 });
 
+router.get('/editEvent', ensureLoggedIn('login'), function(req, res){
+	console.log('in get editEvent');
+	var types;
+	db.types.find({}).toArray(function(err, typeresults){
+		if (err) {
+    		console.dir( err );
+    	}
+    	//console.log('find types '+typeresults.length);
+    	types = typeresults;
+    	db.events.find({_id: ObjectId(req.query.id)}).toArray(function(err, results){
+			if(err) {
+				console.dir(err);
+			}
+		// console.log('find subscription ' + results.length);
+		// console.log('results.name: ' + results[0].name);
+		//console.log('find types '+types.length);
+			res.render('editEvent', { title:'Edit event', user: req.user, types: types, event: results});
+		});
+	});
+	
+});
+
 router.post('/editSub', ensureLoggedIn('login'), function(req, res){
 	//get form values
 	var name 		= req.body.name;
@@ -675,6 +697,73 @@ router.post('/editSub', ensureLoggedIn('login'), function(req, res){
 		    	}
 		    	//console.log('number of subcriptions: '+results.length);
 				res.render('mySub',{title:'My subcriptions', user:req.user, results:results});
+			}); 
+		}
+	});
+});
+
+router.post('/editEvent', ensureLoggedIn('login'), function(req, res){
+	//get form values
+	var name 		= req.body.name;
+	var type 		= req.body.type;
+	var city    = req.body.city;
+	var state 	= req.body.state;
+	var country 	= req.body.country;
+	var region 	= req.body.region;
+	var organization 	= req.body.organization;
+	var contact 	= req.body.contact;
+	var email 	= req.body.email;
+	var website 	= req.body.website;
+	var startDate 	= req.body.startDate;
+	var endDate	= req.body.endDate;
+	var deadline = req.body.deadline;
+	var description	= req.body.description;
+	if(typeof req.body.keywords == 'string') {
+		var keywords	= req.body.keywords.split(",");
+	} else {
+		var keywords = null;
+		console.log('keywords is not a string');
+	}
+	var approved = 0;//0:not check yet; 1:approve; 2:disapprove\
+	var userName = req.user.name;
+	var userEmail = req.user.email;
+	var id = req.body.id;
+	var newEvent = {
+		   name: name,
+		   type: type,
+		   city: city,
+		   state: state,
+		   country: country,
+		   region: region,
+		   organization: organization,
+		   contact: contact,
+		   email: email,
+			website: website,
+		   startDate: startDate,
+		   endDate: endDate,
+		   deadline: deadline,
+		   description: description,
+		   keywords: keywords,
+		   approved: approved,
+		   userName: userName,
+		   userEmail: userEmail
+	}
+	console.log('id = '+id);
+	db.events.update({_id:ObjectId(id)}, newEvent, function(err, doc){
+		if(err){
+			res.send(err);
+		}
+		else{
+			console.log('event updated');
+			//success msg
+
+			req.flash('success', 'Successfully edited an event!');
+			db.events.find({userEmail: req.user.email}).toArray(function(err, results){
+				if (err) {
+		    		console.dir( err );
+		    	}
+		    	//console.log('number of subcriptions: '+results.length);
+				res.render('myEvent',{title:'My events', user:req.user, results:results});
 			}); 
 		}
 	});
