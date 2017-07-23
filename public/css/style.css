@@ -1,7 +1,16 @@
+html {
+  height: 100%;
+}
 body {
   background-color: white !important;
+  min-height: 100%;
+  display: grid;
+  grid-template-rows: 1fr auto;
 }
-
+footer {
+  grid-row-start: 2;
+  grid-row-end: 3;
+}
 .reg-page, .login-page{
   padding-top: 40px;
   padding-bottom: 40px;
@@ -62,16 +71,6 @@ body {
   margin-bottom: 20px;
   border: 1px solid transparent;
   border-radius: 4px;
-}
-
-footer{
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: #666;
-  text-align: center;
-  padding:10px;
 }
 
 
@@ -165,3 +164,4 @@ td{
 .hidID {
   display: none;
 }
+
