@@ -82,7 +82,7 @@
             <td class="col-md-2"><%=rs.startDate%>~<%=rs.endDate%></td>
             <td class="col-md-2"><%=rs.city%>,<%=rs.state%>,<%=rs.country%></td>
             <td class="col-md-3">
-              <a href="/manage/events/details?id=<%=rs._id%>"><button class="btn btn-warning">Detail</button></a>
+              <a href="/manage/events/details?id=<%=rs._id%>"><button class="btn btn-info">Details</button></a>
               <a id="approve_<%=index%>"><button class="btn btn-success" onclick="approveEvent(<%=index%>)">Approve</button></a>
               <a id="disapprove_<%=index%>"><button class="btn btn-danger" onclick="disapproveEvent(<%=index%>)">Disapprove</button></a>
             </td>
@@ -108,7 +108,7 @@
           </tr>
         </thead>
         <tbody>
-          <% var index = 1; results2.forEach(function(rs) {%>
+          <% results2.forEach(function(rs) {%>
           <tr>
             <td class="col-md-1"><%=index++%></td>
             <td id="id_<%=index%>" class="hidID"><%=rs._id%></td>
@@ -117,7 +117,7 @@
             <td class="col-md-2"><%=rs.startDate%>~<%=rs.endDate%></td>
             <td class="col-md-2"><%=rs.city%>,<%=rs.state%>,<%=rs.country%></td>
             <td class="col-md-3">
-              <a href="/manage/events/details?id=<%=rs._id%>"><button class="btn btn-warning">Details</button></a>
+              <a href="/manage/events/details?id=<%=rs._id%>"><button class="btn btn-info">Details</button></a>
               <a id="disapprove_<%=index%>"><button class="btn btn-danger" onclick="disapproveEvent(<%=index%>)">Disapprove</button></a>
             </td>
           </tr>
@@ -142,7 +142,7 @@
           </tr>
         </thead>
         <tbody>
-          <% var index = 1; results3.forEach(function(rs) {%>
+          <% results3.forEach(function(rs) {%>
           <tr>
             <td class="col-md-1"><%=index++%></td>
             <td id="id_<%=index%>" class="hidID"><%=rs._id%></td>
@@ -151,7 +151,7 @@
             <td class="col-md-2"><%=rs.startDate%>~<%=rs.endDate%></td>
             <td class="col-md-2"><%=rs.city%>,<%=rs.state%>,<%=rs.country%></td>
             <td class="col-md-3">
-              <a href="/manage/events/details?id=<%=rs._id%>"><button class="btn btn-warning">Details</button></a>
+              <a href="/manage/events/details?id=<%=rs._id%>"><button class="btn btn-info">Details</button></a>
               <a id="approve_<%=index%>"><button class="btn btn-success approve" onclick="approveEvent(<%=index%>)">Approve</button></a>
               <a id="disapprove_<%=index%>"><button class="btn btn-danger" onclick="disapproveEvent(<%=index%>)">Disapprove</button></a>
             </td>

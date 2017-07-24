@@ -65,6 +65,9 @@ var eventsSchema = new mongoose.Schema({
 	approved: {
 		type: Number
 	},
+	comments: {
+		type: String
+	},
 	userName: {
 		type: String
 	},

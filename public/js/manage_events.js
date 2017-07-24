@@ -29,7 +29,8 @@
 　　　　if (disapproveConfirm()) {
           var disapprove = document.getElementById('disapprove_'+index);
           var id = document.getElementById('id_'+index).innerHTML;           
-　　　　　　alert("Disapproved");
+　　　　　　//alert("Disapproved id="+id+", index="+index);
+          alert("Disapproved");
           disapprove.href = "/manage/events/disapprove?id="+id;
 　　　　}
 　　　　else {
@@ -45,3 +46,4 @@
 　　　　　　return false;//cancel
 　　　　}
 　　}
+

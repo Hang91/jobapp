@@ -43,10 +43,10 @@
     </nav>
     
 <div class="container">
-    <h1>id: <%=event.id%></h1>
-      <form method="post" action="/manage/events/edit" class="form-signin">
+      <form method="post" action="/manage/events/details" class="form-signin">
         <h2 class="form-signin-heading">Edit Events</h2>
         <!-- <label>ID</label> -->
+        <label class="hid" id="id_1" ><%=event.id%></label>
         <input class="hid" type="text" name="id" class="form-control" value="<%= (!!event.id)?event.id:'' %>">
         <label>Event Name</label>
         <input type="text" name="name" class="form-control" value="<%= (!!event.name)?event.name:'' %>">
@@ -94,22 +94,41 @@
         <label>Organizing Society</label>
         <input type="text" name="organization" class="form-control" value="<%= (!!event.organization)?event.organization:'' %>">
         <br>
+        <label>Contact Person for Event</label>
+        <input type="text" name="contact" class="form-control" value="<%= (!!locals.contact)?event.contact:'' %>">
+        <br>
+        <label>Event Enquiries Email Address</label>
+        <input type="text" name="email" class="form-control" value="<%= (!!locals.email)?event.email:'' %>">
+        <br>
+        <label>Website Address</label>
+        <input type="text" name="website" class="form-control" value="<%= (!!locals.website)?event.website:'' %>">
+        <br>
         <label>Start Date</label>
         <input type="date" name="startDate" class="form-control" value="<%= (!!event.startDate)?event.startDate:'' %>">
         <br>
         <label>End Date</label>
         <input type="date" name="endDate" class="form-control" value="<%= (!!event.endDate)?event.endDate:'' %>">
         <br>
+        <label>Abstracts/Proposals Deadline</label>
+        <input type="date" name="deadline" class="form-control" value="<%= (!!locals.deadline)?event.deadline:'' %>">
+        <br>
+        <label>Description</label>
+        <input type="text" name="description" class="form-control" value="<%= (!!locals.description)?event.description:'' %>">
+        <br>
         <label>Event Keywords</label>
         <input type="text" name="keywords" class="form-control" value="<%= (!!event.keywords)?event.keywords:'' %>">
         <br>
         <label>Comments</label>
-        <input type="text" name="Comments" class="form-control" value="<%= (!!event.Comments)?event.Comments:'' %>">
+        <input type="text" name="comments" class="form-control" value="<%= (!!event.comments)?event.comments:'' %>">
         <br> 
 
         <button class="btn btn-lg btn-primary btn-block btn-warning" type="submit">Ask for revision</button>
-        <button class="btn btn-lg btn-primary btn-block btn-success" type="submit">Approve</button>
       </form>
+        <!-- one form one button -->
+        <div class="text-center">
+          <a id="approve_1"><button class="btn btn-lg btn-primary btn-success" onclick="approveEvent(1)">Approve</button></a>
+          <a id="disapprove_1"><button class="btn btn-lg btn-primary btn-danger" onclick="disapproveEvent(1)">Disapprove</button></a>
+        </div>
 </div> <!-- /container -->
 
 
