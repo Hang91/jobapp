@@ -64,24 +64,24 @@
       <table class="table table-striped table-bordered"  border="1px" cellspacing="0">
         <thead>
           <tr>
-            <th>No.</th>
-            <th>Type</th>
-            <th>Name</th>
-            <th>Date</th>
-            <th>Location</th>
-            <th>Operation</th>
+            <th class="col-xs-1">No.</th>
+            <th class="col-md-1">Type</th>
+            <th class="col-md-3">Name</th>
+            <th class="col-md-2">Date</th>
+            <th class="col-md-2">Location</th>
+            <th class="col-md-3">Operation</th>
           </tr>
         </thead>
         <tbody>
           <% var index = 1; results1.forEach(function(rs) {%>
           <tr>
-            <td><%=index++%></td>
+            <td class="col-xs-1"><%=index++%></td>
             <td id="id_<%=index%>" class="hidID"><%=rs._id%></td>
-            <td><%=rs.type%></td>
-            <td><%=rs.name%></td>
-            <td><%=rs.startDate%>~<%=rs.endDate%></td>
-            <td><%=rs.city%>,<%=rs.state%>,<%=rs.country%></td>
-            <td>
+            <td class="col-md-1"><%=rs.type%></td>
+            <td class="col-md-3"><%=rs.name%></td>
+            <td class="col-md-2"><%=rs.startDate%>~<%=rs.endDate%></td>
+            <td class="col-md-2"><%=rs.city%>,<%=rs.state%>,<%=rs.country%></td>
+            <td class="col-md-3">
               <a href="/manage/events/details?id=<%=rs._id%>"><button class="btn btn-warning">Detail</button></a>
               <a id="approve_<%=index%>"><button class="btn btn-success" onclick="approveEvent(<%=index%>)">Approve</button></a>
               <a id="disapprove_<%=index%>"><button class="btn btn-danger" onclick="disapproveEvent(<%=index%>)">Disapprove</button></a>
@@ -99,24 +99,24 @@
       <table class="table table-striped table-bordered"  border="1px" cellspacing="0">
         <thead>
           <tr>
-            <th>No.</th>
-            <th>Type</th>
-            <th>Name</th>
-            <th>Date</th>
-            <th>Location</th>
-            <th>Operation</th>
+            <th class="col-md-1">No.</th>
+            <th class="col-md-1">Type</th>
+            <th class="col-md-3">Name</th>
+            <th class="col-md-2">Date</th>
+            <th class="col-md-2">Location</th>
+            <th class="col-md-3">Operation</th>
           </tr>
         </thead>
         <tbody>
           <% var index = 1; results2.forEach(function(rs) {%>
           <tr>
-            <td><%=index++%></td>
+            <td class="col-md-1"><%=index++%></td>
             <td id="id_<%=index%>" class="hidID"><%=rs._id%></td>
-            <td><%=rs.type%></td>
-            <td><%=rs.name%></td>
-            <td><%=rs.startDate%>~<%=rs.endDate%></td>
-            <td><%=rs.city%>,<%=rs.state%>,<%=rs.country%></td>
-            <td>
+            <td class="col-md-1"><%=rs.type%></td>
+            <td class="col-md-3"><%=rs.name%></td>
+            <td class="col-md-2"><%=rs.startDate%>~<%=rs.endDate%></td>
+            <td class="col-md-2"><%=rs.city%>,<%=rs.state%>,<%=rs.country%></td>
+            <td class="col-md-3">
               <a href="/manage/events/details?id=<%=rs._id%>"><button class="btn btn-warning">Details</button></a>
               <a id="disapprove_<%=index%>"><button class="btn btn-danger" onclick="disapproveEvent(<%=index%>)">Disapprove</button></a>
             </td>
@@ -133,24 +133,24 @@
       <table class="table table-striped table-bordered"  border="1px" cellspacing="0">
         <thead>
           <tr>
-            <th>No.</th>
-            <th>Type</th>
-            <th>Name</th>
-            <th>Date</th>
-            <th>Location</th>
-            <th>Operation</th>
+            <th class="col-md-1">No.</th>
+            <th class="col-md-1">Type</th>
+            <th class="col-md-3">Name</th>
+            <th class="col-md-2">Date</th>
+            <th class="col-md-2">Location</th>
+            <th class="col-md-3">Operation</th>
           </tr>
         </thead>
         <tbody>
           <% var index = 1; results3.forEach(function(rs) {%>
           <tr>
-            <td><%=index++%></td>
+            <td class="col-md-1"><%=index++%></td>
             <td id="id_<%=index%>" class="hidID"><%=rs._id%></td>
-            <td><%=rs.type%></td>
-            <td><%=rs.name%></td>
-            <td><%=rs.startDate%>~<%=rs.endDate%></td>
-            <td><%=rs.city%>,<%=rs.state%>,<%=rs.country%></td>
-            <td>
+            <td class="col-md-1"><%=rs.type%></td>
+            <td class="col-md-3"><%=rs.name%></td>
+            <td class="col-md-2"><%=rs.startDate%>~<%=rs.endDate%></td>
+            <td class="col-md-2"><%=rs.city%>,<%=rs.state%>,<%=rs.country%></td>
+            <td class="col-md-3">
               <a href="/manage/events/details?id=<%=rs._id%>"><button class="btn btn-warning">Details</button></a>
               <a id="approve_<%=index%>"><button class="btn btn-success approve" onclick="approveEvent(<%=index%>)">Approve</button></a>
               <a id="disapprove_<%=index%>"><button class="btn btn-danger" onclick="disapproveEvent(<%=index%>)">Disapprove</button></a>
