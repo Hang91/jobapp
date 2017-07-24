@@ -122,13 +122,14 @@
         <input type="text" name="comments" class="form-control" value="<%= (!!event.comments)?event.comments:'' %>">
         <br> 
 
-        <button class="btn btn-lg btn-primary btn-block btn-warning" type="submit">Ask for revision</button>
+        <input id="revise" type="button" class="btn btn-lg btn-primary btn-block btn-warning" name="manage_event_detail" value="revise" onclick="reviseInDetail()">
+        <input id="approve" type="button" class="btn btn-lg btn-primary btn-block btn-success" name="manage_event_detail" value="approve" onclick="approveEventInDetail()">
+        <input id="disapprove" type="button" class="btn btn-lg btn-primary btn-block btn-danger" name="manage_event_detail" value="disapprove" onclick="disapproveEventInDetail()">
       </form>
-        <!-- one form one button -->
-        <div class="text-center">
+        <!-- <div class="text-center">
           <a id="approve_1"><button class="btn btn-lg btn-primary btn-success" onclick="approveEvent(1)">Approve</button></a>
           <a id="disapprove_1"><button class="btn btn-lg btn-primary btn-danger" onclick="disapproveEvent(1)">Disapprove</button></a>
-        </div>
+        </div> -->
 </div> <!-- /container -->
 
 
