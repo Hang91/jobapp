@@ -23,14 +23,8 @@
         </div><!--/.nav-collapse -->
       </div>
     </nav>
-<%- messages() %>
-<div class="container reg-page">
-    <% if (locals.errors) { %>
-        <% errors.forEach(function(error){ %>
-            <div class="alert alert-danger"><%= error.msg %></div>
-        <% }) %>
-    <% } %>
-  <%- messages() %>
+    <%- messages() %>
+<div class="container reg-page">    
       <form method="post" action="/users/register" class="form-signin">
         <h2 class="form-signin-heading text-center">Sign up</h2>
         <label>Name</label>

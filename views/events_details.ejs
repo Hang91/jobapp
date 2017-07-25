@@ -95,13 +95,13 @@
         <input type="text" name="organization" class="form-control" value="<%= (!!event.organization)?event.organization:'' %>">
         <br>
         <label>Contact Person for Event</label>
-        <input type="text" name="contact" class="form-control" value="<%= (!!locals.contact)?event.contact:'' %>">
+        <input type="text" name="contact" class="form-control" value="<%= (!!event.contact)?event.contact:'' %>">
         <br>
         <label>Event Enquiries Email Address</label>
-        <input type="text" name="email" class="form-control" value="<%= (!!locals.email)?event.email:'' %>">
+        <input type="text" name="email" class="form-control" value="<%= (!!event.email)?event.email:'' %>">
         <br>
         <label>Website Address</label>
-        <input type="text" name="website" class="form-control" value="<%= (!!locals.website)?event.website:'' %>">
+        <input type="text" name="website" class="form-control" value="<%= (!!event.website)?event.website:'' %>">
         <br>
         <label>Start Date</label>
         <input type="date" name="startDate" class="form-control" value="<%= (!!event.startDate)?event.startDate:'' %>">
@@ -110,10 +110,10 @@
         <input type="date" name="endDate" class="form-control" value="<%= (!!event.endDate)?event.endDate:'' %>">
         <br>
         <label>Abstracts/Proposals Deadline</label>
-        <input type="date" name="deadline" class="form-control" value="<%= (!!locals.deadline)?event.deadline:'' %>">
+        <input type="date" name="deadline" class="form-control" value="<%= (!!event.deadline)?event.deadline:'' %>">
         <br>
         <label>Description</label>
-        <input type="text" name="description" class="form-control" value="<%= (!!locals.description)?event.description:'' %>">
+        <input type="text" name="description" class="form-control" value="<%= (!!event.description)?event.description:'' %>">
         <br>
         <label>Event Keywords</label>
         <input type="text" name="keywords" class="form-control" value="<%= (!!event.keywords)?event.keywords:'' %>">

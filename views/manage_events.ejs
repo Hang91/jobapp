@@ -108,9 +108,9 @@
           </tr>
         </thead>
         <tbody>
-          <% results2.forEach(function(rs) {%>
+          <% var index2 = 1; results2.forEach(function(rs) {%>
           <tr>
-            <td class="col-md-1"><%=index++%></td>
+            <td class="col-md-1"><%=index2++%></td>
             <td id="id_<%=index%>" class="hidID"><%=rs._id%></td>
             <td class="col-md-1"><%=rs.type%></td>
             <td class="col-md-3"><%=rs.name%></td>
@@ -142,9 +142,9 @@
           </tr>
         </thead>
         <tbody>
-          <% results3.forEach(function(rs) {%>
+          <% var index3=1; results3.forEach(function(rs) {%>
           <tr>
-            <td class="col-md-1"><%=index++%></td>
+            <td class="col-md-1"><%=index3++%></td>
             <td id="id_<%=index%>" class="hidID"><%=rs._id%></td>
             <td class="col-md-1"><%=rs.type%></td>
             <td class="col-md-3"><%=rs.name%></td>
