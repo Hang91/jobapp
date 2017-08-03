@@ -1,3 +1,9 @@
+<% if (locals.errors) { %>
+    <% errors.forEach(function(error){ %>
+        <div class="alert alert-danger"><%= error.msg %></div>
+    <% }) %>
+<% } %>
+<%= messages()%>
 <%- include('includes/header') %>
 <nav class="navbar navbar-inverse">
       <div class="container">
@@ -11,13 +17,14 @@
           <a class="navbar-brand" href="/">Home</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-              <li><a href="/search">Search</a></li>
-              <li><a href="/users/addEvent">Add Event</a></li>
-              <li><a href="/users/addSub">Subscribe</a></li>
-            </ul>
+          <ul class="nav navbar-nav">
+          <li><a href="/search">Search</a></li>
+          <li><a href="/users/addEvent">Add Event</a></li>
+          <li class="active"><a href="/users/addSub">Subscribe</a></li>
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right">
             <% if(user){ %>
-            <ul class="nav navbar-nav navbar-right">
                 <% if(user.name == 'admin'){ %>
                   <li class="dropdown"><a href="#">Manage</a>
                       <div class="dropdown-content">
@@ -27,7 +34,7 @@
                       </div>
                   </li>
                 <% } %>
-                  <li class="dropdown"><a href="#">Welcome, <%= user.name%>!</a>
+              <li class="dropdown"><a href="#">Welcome, <%= user.name%>!</a>
                   <div class="dropdown-content">
                     <hr><a href="/users/myEvent">My Events</a><br>
                     <a href="/users/mySub">My Subscriptions</a><br>
@@ -35,19 +42,29 @@
                     <hr><a href="/users/logout">Log out</a><br>
                   </div>
                 </li>
-            </ul>
-          <% }else{ %>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="/users/register">Sign up</a></li>               
-                <li><a href="/users/login">sign in</a></li>
-            </ul>
-          <% } %>
+              <% } %>
+          </ul>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
-<%- messages() %>
+    
+<div class="container">
+    <h1>id: <%=results[0]._id%></h1>
+      <form method="post" action="/users/editEvent" class="form-signin">
+        <h2 class="form-signin-heading">Edit Profile</h2>
+        <!-- <label>ID</label> -->
+        <input class="hid" type="text" name="id" class="form-control" value="<%= (!!results[0]._id)?results[0]._id:'' %>">
+        <label>Name</label>
+        <input type="text" name="name" class="form-control" value="<%= (!!results[0].name)?results[0].name:'' %>">
+        <br>
 
-<div class="container reg-page">
-<h1>Welcome to Events App!</h1>
-</div>
+
+
+        <!-- <p>Have Account? <a href="/users/login">Login</a></p> -->
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+      </form>
+
+    </div> <!-- /container -->
+
+
 <%- include('includes/footer') %>
