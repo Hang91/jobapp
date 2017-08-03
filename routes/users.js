@@ -591,6 +591,18 @@ router.get('/myEvent', ensureLoggedIn('login'),
 	}); 	
 });
 
+router.get('/myProfile', ensureLoggedIn('login'),
+	function(req, res){
+		var collection = db.collection('users');
+		collection.find({email: req.user.email}).toArray(function(err, results){
+			if(err){
+				console.log(err);
+			}
+			res.render('myProfile', {title: 'My profile', results: results});
+		});
+	}
+);
+
 router.get('/editSub', ensureLoggedIn('login'), function(req, res){
 	console.log('in get editSub');
 	var types;
@@ -633,6 +645,21 @@ router.get('/editEvent', ensureLoggedIn('login'), function(req, res){
 		});
 	});
 	
+});
+
+router.get('/editProfile', ensureLoggedIn('login'), function(req, res){
+	console.log('in editProfile');
+
+	db.users.find({_id: ObjectId(req.query.id)}).toArray(function(err, results){
+		if(err) {
+			console.dir(err);
+		}
+	// console.log('find subscription ' + results.length);
+	// console.log('results.name: ' + results[0].name);
+	//console.log('find types '+types.length);
+		console.log(results);
+		res.render('editProfile', { title:'Edit profile', user: req.user, results: results});
+	});	
 });
 
 router.post('/editSub', ensureLoggedIn('login'), function(req, res){
@@ -768,6 +795,133 @@ router.post('/editEvent', ensureLoggedIn('login'), function(req, res){
 		}
 	});
 });
+
+
+router.post('/editProfile', ensureLoggedIn('login'), function(req, res){
+	//get form values
+	var name 		= req.body.name;
+	// var type 		= req.body.type;
+	// var city    = req.body.city;
+	// var state 	= req.body.state;
+	// var country 	= req.body.country;
+	// var region 	= req.body.region;
+	// var organization 	= req.body.organization;
+	// var contact 	= req.body.contact;
+	// var email 	= req.body.email;
+	// var website 	= req.body.website;
+	// var startDate 	= req.body.startDate;
+	// var endDate	= req.body.endDate;
+	// var deadline = req.body.deadline;
+	// var description	= req.body.description;
+	// if(typeof req.body.keywords == 'string') {
+	// 	var keywords	= req.body.keywords.split(",");
+	// } else {
+	// 	var keywords = null;
+	// 	console.log('keywords is not a string');
+	// }
+	// var approved = 0;//0:not check yet; 1:approve; 2:disapprove\
+	// var userName = req.user.name;
+	// var userEmail = req.user.email;
+	// var id = req.body.id;
+	// var newEvent = {
+	// 	   name: name,
+	// 	   type: type,
+	// 	   city: city,
+	// 	   state: state,
+	// 	   country: country,
+	// 	   region: region,
+	// 	   organization: organization,
+	// 	   contact: contact,
+	// 	   email: email,
+	// 		website: website,
+	// 	   startDate: startDate,
+	// 	   endDate: endDate,
+	// 	   deadline: deadline,
+	// 	   description: description,
+	// 	   keywords: keywords,
+	// 	   approved: approved,
+	// 	   userName: userName,
+	// 	   userEmail: userEmail
+	// }
+	console.log('id = '+id);
+	db.events.update({_id:ObjectId(id)}, {$set: {'name':name}}, function(err, doc){
+		if(err){
+			res.send(err);
+		}
+		else{
+			console.log('profile updated');
+			//success msg
+
+			req.flash('success', 'Successfully edited your profile!');
+			db.users.find({_id: ObjectId(req.query.id)}).toArray(function(err, results){
+				if(err) {
+					console.dir(err);
+				}
+			// console.log('find subscription ' + results.length);
+			// console.log('results.name: ' + results[0].name);
+			//console.log('find types '+types.length);
+				res.render('editProfile', { title:'Edit profile', user: req.user, results: results});
+			});	
+		}
+	});
+});
+
+router.post('/editPw', ensureLoggedIn('login'), 
+	function(req, res){
+		//get form values
+		var id 					= req.body.id;
+		var origin_password 	= req.body.origin_password;
+		var new_password 		= req.body.new_password;
+		var new_password2		= req.body.new_password2;
+
+		function(req, email, password, done){
+		
+			db.users.findOne({_id: ObjectId(req.query.id)}, function(err, user){
+			if(err){
+				return done(err);
+			}
+			if(!user){
+				return done(null, false, req.flash('error', 'User not found.'));
+			}
+
+			bcrypt.compare(origin_password, user.password, function(err, isMatch){
+				if(err){
+					return done(err);
+				}
+				if(isMatch){
+					
+					return done(null,user);
+				}
+				else{
+					return done(null, false, req.flash('error','Password incorrect.'));
+				}
+			});
+		});
+
+		console.log('id = '+id);
+		db.events.update({_id:ObjectId(id)}, {$set: {'name':name}}, function(err, doc){
+			if(err){
+				res.send(err);
+			}
+			else{
+				console.log('profile updated');
+				//success msg
+
+				req.flash('success', 'Successfully edited your profile!');
+				db.users.find({_id: ObjectId(req.query.id)}).toArray(function(err, results){
+					if(err) {
+						console.dir(err);
+					}
+				// console.log('find subscription ' + results.length);
+				// console.log('results.name: ' + results[0].name);
+				//console.log('find types '+types.length);
+					res.render('editProfile', { title:'Edit profile', user: req.user, results: results});
+				});	
+			}
+		});
+	},
+
+);
 
 router.get('/deleteSub', ensureLoggedIn('login'), function(req, res){
 	var collection = db.collection('subs');
