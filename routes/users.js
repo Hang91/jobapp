@@ -841,7 +841,7 @@ router.post('/editProfile', ensureLoggedIn('login'), function(req, res){
 	// var approved = 0;//0:not check yet; 1:approve; 2:disapprove\
 	// var userName = req.user.name;
 	// var userEmail = req.user.email;
-	// var id = req.body.id;
+	var id = req.body.id;
 	// var newEvent = {
 	// 	   name: name,
 	// 	   type: type,
@@ -862,7 +862,6 @@ router.post('/editProfile', ensureLoggedIn('login'), function(req, res){
 	// 	   userName: userName,
 	// 	   userEmail: userEmail
 	// }
-	console.log('id = '+id);
 	db.users.update({_id:ObjectId(id)}, {$set: {'name':name}}, function(err, doc){
 		if(err){
 			res.send(err);
@@ -872,14 +871,14 @@ router.post('/editProfile', ensureLoggedIn('login'), function(req, res){
 			//success msg
 
 			req.flash('success', 'Successfully edited your profile!');
-			db.users.find({_id: ObjectId(req.query.id)}).toArray(function(err, results){
+			db.users.find({_id: ObjectId(id)}).toArray(function(err, results){
 				if(err) {
 					console.dir(err);
 				}
 			// console.log('find subscription ' + results.length);
 			// console.log('results.name: ' + results[0].name);
 			//console.log('find types '+types.length);
-				res.render('editProfile', { title:'Edit profile', user: req.user, results: results});
+				res.render('myProfile', { title:'My profile', user: req.user, results: results});
 			});	
 		}
 	});
