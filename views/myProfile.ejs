@@ -40,7 +40,7 @@
           <% }else{ %>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="/users/register">Sign up</a></li>               
-                <li><a href="/users/login">sign in</a></li>
+                <li><a href="/users/login">Sign in</a></li>
             </ul>
           <% } %>
         </div><!--/.nav-collapse -->
@@ -52,23 +52,20 @@
 
   <div class="container" role="main">
     <div class="well">
-      <h3>Event <%=i%></h3>
+      <h3>Subscription <%=i%></h3>
       <li><strong>ID:</strong> <%=results[i]._id%></li>      
       <li><strong>Name:</strong> <%=results[i].name%></li>
-      <li><strong>Type:</strong> <%=results[i].type%></li>
-      <li><strong>Region:</strong> <%=results[i].region%></li>
-      <li><strong>Country:</strong> <%=results[i].country%></li>
-      <li><strong>State:</strong> <%=results[i].state%></li>
-      <li><strong>City:</strong> <%=results[i].city%></li>
+      <li><strong>Email:</strong> <%=results[i].email%></li>
+<!--       <li><strong>Type:</strong> <%=results[i].type%></a></li>
+      <li><strong>Region:</strong> <%=results[i].region%></a></li>
+      <li><strong>Country:</strong> <%=results[i].country%></a></li>
+      <li><strong>State:</strong> <%=results[i].state%></a></li>
+      <li><strong>City:</strong> <%=results[i].city%></a></li>
       <li><strong>Organization:</strong> <%=results[i].organization%></li>
       <li><strong>Date:</strong> <%=results[i].startDate%>~<%=results[i].endDate%></li>
-      <li><strong>Contact:</strong> <%=results[i].contact%></li>
-      <li><strong>Email:</strong>  <%=results[i].email%></li>
-      <li><strong>Description:</strong> <%=results[i].description%></li>
-      <li><strong>Abstracts or Proposals Deadline:</strong> <%=results[i].deadline%></li>
-      <li><strong>Keywords:</strong> <%=results[i].keywords%></li>
-      <a href="/users/editEvent?id=<%=results[i]._id%>"><button type="button" class="btn btn-warning" >Edit</button></a>
-      <a href="/users/deleteEvent?id=<%=results[i]._id%>"><button type="button" class="btn btn-danger">Delete</button></a>
+      <li><strong>Keywords:</strong> <%=results[i].keywords%></li> -->
+      <a href="/users/editProfile?id=<%=results[i]._id%>"><button type="button" class="btn btn-warning" >Edit</button></a>
+      <a href="/users/editPassword?id=<%=results[i]._id%>"><button type="button" class="btn btn-danger">Change Password</button></a>
     </div>
   </div>
   <br>
