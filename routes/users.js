@@ -822,7 +822,7 @@ router.post('/editEvent', ensureLoggedIn('login'), function(req, res){
 router.post('/editProfile', ensureLoggedIn('login'), function(req, res){
 	//get form values
 	var name 		= req.body.name;
-	console.log('id = '+id);
+	var id = req.body.id;
 	db.users.update({_id:ObjectId(id)}, {$set: {'name':name}}, function(err, doc){
 		if(err){
 			res.send(err);
@@ -832,11 +832,11 @@ router.post('/editProfile', ensureLoggedIn('login'), function(req, res){
 			//success msg
 
 			req.flash('success', 'Successfully edited your profile!');
-			db.users.find({_id: ObjectId(req.query.id)}).toArray(function(err, results){
+			db.users.find({_id: ObjectId(id)}).toArray(function(err, results){
 				if(err) {
 					console.dir(err);
 				}
-				res.render('editProfile', { title:'Edit profile', user: req.user, results: results});
+				res.render('myProfile', { title:'My profile', user: req.user, results: results});
 			});	
 		}
 	});
