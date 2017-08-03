@@ -579,7 +579,7 @@ router.get('/mySub', ensureLoggedIn('login'),
     		console.dir( err );
     	}
     	//console.log('number of subcriptions: '+results.length);
-		res.render('mySub',{title:'My subcriptions',results:results});
+		res.render('mySub',{title:'My subcriptions', user: req.user, results:results});
 	}); 	
 });
 
@@ -591,7 +591,7 @@ router.get('/myEvent', ensureLoggedIn('login'),
     		console.dir( err );
     	}
     	console.log('number of events: '+results.length);
-		res.render('myEvent',{title:'My events',results:results});
+		res.render('myEvent',{title:'My events', user: req.user, results:results});
 	}); 	
 });
 
@@ -602,7 +602,7 @@ router.get('/myProfile', ensureLoggedIn('login'),
 			if(err){
 				console.log(err);
 			}
-			res.render('myProfile', {title: 'My profile', results: results});
+			res.render('myProfile', {title: 'My profile', user: req.user, results: results});
 		});
 	}
 );
@@ -663,6 +663,21 @@ router.get('/editProfile', ensureLoggedIn('login'), function(req, res){
 	//console.log('find types '+types.length);
 		console.log(results);
 		res.render('editProfile', { title:'Edit profile', user: req.user, results: results});
+	});	
+});
+
+router.get('/editPassword', ensureLoggedIn('login'), function(req, res){
+	console.log('in editPassword');
+
+	db.users.find({_id: ObjectId(req.query.id)}).toArray(function(err, results){
+		if(err) {
+			console.dir(err);
+		}
+	// console.log('find subscription ' + results.length);
+	// console.log('results.name: ' + results[0].name);
+	//console.log('find types '+types.length);
+		console.log(results);
+		res.render('editPassword', { title:'Edit password', user: req.user, results: results});
 	});	
 });
 
@@ -848,7 +863,7 @@ router.post('/editProfile', ensureLoggedIn('login'), function(req, res){
 	// 	   userEmail: userEmail
 	// }
 	console.log('id = '+id);
-	db.events.update({_id:ObjectId(id)}, {$set: {'name':name}}, function(err, doc){
+	db.users.update({_id:ObjectId(id)}, {$set: {'name':name}}, function(err, doc){
 		if(err){
 			res.send(err);
 		}
@@ -870,7 +885,7 @@ router.post('/editProfile', ensureLoggedIn('login'), function(req, res){
 	});
 });
 
-router.post('/editPw', ensureLoggedIn('login'), 
+router.post('/editPassword', ensureLoggedIn('login'), 
 	function(req, res){
 		//get form values
 		var id 					= req.body.id;
@@ -878,54 +893,96 @@ router.post('/editPw', ensureLoggedIn('login'),
 		var new_password 		= req.body.new_password;
 		var new_password2		= req.body.new_password2;
 
-		function(req, email, password, done){
-		
-			db.users.findOne({_id: ObjectId(req.query.id)}, function(err, user){
-			if(err){
-				return done(err);
-			}
-			if(!user){
-				return done(null, false, req.flash('error', 'User not found.'));
-			}
 
-			bcrypt.compare(origin_password, user.password, function(err, isMatch){
+		req.checkBody('origin_password', 'password filed is required').notEmpty();
+		req.checkBody('new_password', 'password filed is required').notEmpty();		
+		req.checkBody('new_password2', 'Passwords do not match').equals(new_password);		
+
+
+		var errors = req.validationErrors();
+		if(errors){
+			console.log('form has errors');
+			req.flash('error', 'New password and confirm password are not same.');
+			db.users.find({_id: ObjectId(id)}).toArray(function(err, results){
+				if(err) {
+					console.dir(err);
+				}
+			// console.log('find subscription ' + results.length);
+			// console.log('results.name: ' + results[0].name);
+				res.render('editPassword', {
+					errors: errors,
+					title:'Edit Password',
+					user: req.user,
+					results: results
+				});
+			});	
+
+		}
+		else{
+			db.users.findOne({_id: ObjectId(id)}, function(err, user){
 				if(err){
-					return done(err);
+					res.send(err);
 				}
-				if(isMatch){
-					
-					return done(null,user);
+				if(!user){
+					req.flash('error', 'Database error, your profile is missing!')
+					db.users.find({_id: ObjectId(id)}).toArray(function(err, results){
+						if(err) {
+							console.dir(err);
+						}
+					// console.log('find subscription ' + results.length);
+					// console.log('results.name: ' + results[0].name);
+						res.render('myProfile', {
+							title:'My Profile',
+							user: req.user,
+							results: results
+						});
+					});
 				}
-				else{
-					return done(null, false, req.flash('error','Password incorrect.'));
-				}
-			});
-		});
 
-		console.log('id = '+id);
-		db.events.update({_id:ObjectId(id)}, {$set: {'name':name}}, function(err, doc){
-			if(err){
-				res.send(err);
-			}
-			else{
-				console.log('profile updated');
-				//success msg
-
-				req.flash('success', 'Successfully edited your profile!');
-				db.users.find({_id: ObjectId(req.query.id)}).toArray(function(err, results){
-					if(err) {
-						console.dir(err);
+				bcrypt.compare(origin_password, user.password, function(err, isMatch){
+					if(err){
+						res.send(err);
 					}
-				// console.log('find subscription ' + results.length);
-				// console.log('results.name: ' + results[0].name);
-				//console.log('find types '+types.length);
-					res.render('editProfile', { title:'Edit profile', user: req.user, results: results});
-				});	
-			}
-		});
-	},
-
+					if(isMatch){
+						bcrypt.genSalt(10, function(err, salt){
+							bcrypt.hash(new_password, salt, function(err, hash){
+								new_password = hash;
+								db.users.update({_id:ObjectId(id)}, {$set: {'password':new_password}}, function(err, doc){
+									if(err){
+										res.send(err);
+									}
+									else{
+										console.log('Password changed');
+										//success msg
+										req.flash('success', 'You have changed your password!');
+										res.location('/users/login');
+										res.redirect('/users/login');
+									}
+								});
+							});
+						});						
+					}
+					else{
+						req.flash('error', 'Origin password is incorrect.');
+						db.users.find({_id: ObjectId(id)}).toArray(function(err, results){
+							if(err) {
+								console.dir(err);
+							}
+						// console.log('find subscription ' + results.length);
+						// console.log('results.name: ' + results[0].name);
+							res.render('editPassword', {
+								title:'Edit Password',
+								user: req.user,
+								results: results
+							});
+						});
+					}
+				});
+			});			
+		}
+	}
 );
+
 
 router.get('/deleteSub', ensureLoggedIn('login'), function(req, res){
 	var collection = db.collection('subs');
@@ -935,7 +992,7 @@ router.get('/deleteSub', ensureLoggedIn('login'), function(req, res){
     		console.dir( err );
     	}
     	console.log('number of subcriptions: '+results.length);
-		res.render('mySub',{title:'My subcriptions',results:results});
+		res.render('mySub',{title:'My subcriptions', user: req.user, results:results});
 	}); 	
 });
 
@@ -947,7 +1004,7 @@ router.get('/deleteEvent', ensureLoggedIn('login'), function(req, res){
     		console.dir( err );
     	}
     	console.log('number of events: '+results.length);
-		res.render('myEvent',{title:'My events',results:results});
+		res.render('myEvent',{title:'My events',user: req.user, results:results});
 	}); 	
 });
 

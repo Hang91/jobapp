@@ -65,7 +65,7 @@
       <li><strong>Date:</strong> <%=results[i].startDate%>~<%=results[i].endDate%></li>
       <li><strong>Keywords:</strong> <%=results[i].keywords%></li> -->
       <a href="/users/editProfile?id=<%=results[i]._id%>"><button type="button" class="btn btn-warning" >Edit</button></a>
-      <a href="#"><button type="button" class="btn btn-danger">Change Password</button></a>
+      <a href="/users/editPassword?id=<%=results[i]._id%>"><button type="button" class="btn btn-danger">Change Password</button></a>
     </div>
   </div>
   <br>
