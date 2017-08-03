@@ -46,11 +46,20 @@ router.get('/users', ensureLoggedIn('/users/login'), isAdmin, function(req, res)
 
 //manage events page - GET
 router.get('/events', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
-    EventsModel.find({approved : 0},function(err, results1){//to be approve
+    EventsModel.find({approved : 0},function(err1, results1){//to be approve
+        if(err1){
+            return next(err1);
+        }
         //console.log(results1.length);
-        EventsModel.find({approved : 1},function(err, results2){//approve
+        EventsModel.find({approved : 1},function(err2, results2){//approve
+            if(err2){
+                return next(err2);
+            }
             //console.log(results2.length);
-            EventsModel.find({approved : 3},function(err, results3){//revise
+            EventsModel.find({approved : 3},function(err3, results3){//revise
+                if(err3){
+                return next(err3);
+            }
                 //console.log(results3.length);
                 res.render('manage_events', { title:'Manage | Manage Events', user: req.user, 
                     results1 : results1, results2 : results2, results3 : results3}); 

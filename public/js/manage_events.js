@@ -1,6 +1,6 @@
 //manage_events
 
-//revise
+//revise: admin / users
 function reviseInDetail(){
   if (reviseConfirm()) {
 　　　　　　//删除操作
@@ -23,6 +23,7 @@ function reviseConfirm() {
 　　　　}
 　　}
 
+//only admin
 //approve
 function approveEventInDetail() {
 　　　　if (approveConfirm()) {
@@ -91,6 +92,29 @@ function disapproveEventInDetail() {
 　　}
   function disapproveConfirm() {
 　　　　if (window.confirm("Confirm to disapprove this event?")) {
+　　　　　　return true;//confirm
+　　　　}
+　　　　else {
+　　　　　　return false;//cancel
+　　　　}
+　　}
+
+//only users
+function deleteEvent(index) {
+　　　　if (deleteConfirm()) {
+          var delete_event = document.getElementById('delete_'+index);
+          var id = document.getElementById('id_'+index).innerHTML;           
+　　　　　　//alert("Disapproved id="+id+", index="+index);
+          alert("Deleted!");
+          delete_event.href = "/users/deleteEvent?id="+id;
+　　　　}
+　　　　else {
+　　　　　　//取消返回
+　　　　　　//alert("Canceled");
+　　　　}
+　　}
+  function deleteConfirm() {
+　　　　if (window.confirm("Confirm to delete this event?")) {
 　　　　　　return true;//confirm
 　　　　}
 　　　　else {

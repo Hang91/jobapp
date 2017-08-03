@@ -49,32 +49,31 @@
     </nav>
     
 <div class="container">
-    <h1>id: <%=event[0]._id%></h1>
       <form method="post" action="/users/editEvent" class="form-signin">
-        <h2 class="form-signin-heading">Edit Event</h2>
+        <h2 class="form-signin-heading">Edit Events</h2>
         <!-- <label>ID</label> -->
-        <input class="hid" type="text" name="id" class="form-control" value="<%= (!!event[0]._id)?event[0]._id:'' %>">
+        <label class="hid" id="id_1" ><%=event.id%></label>
+        <input class="hid" type="text" name="id" class="form-control" value="<%= (!!event.id)?event.id:'' %>">
         <label>Event Name</label>
-        <input type="text" name="name" class="form-control" value="<%= (!!event[0].name)?event[0].name:'' %>">
+        <input type="text" name="name" class="form-control" value="<%= (!!event.name)?event.name:'' %>">
         <br>
         <lable>Event Type</lable><br>
         <select class="form-control" name="type">
             <option value="">-----ALL-----</option>
-            <% for (var i=0; i<types.length; i++){ 
-                    console.log(types.length); %>
-                  <%  if(event[0].type == types[i].type){ %>
-                      <option value="<%=types[i].type%>" selected="selected"><%=types[i].type%></option>
+            <% types.forEach(function(onetype) { %>
+              <%  if(event.type == onetype.type){ %>
+                      <option value="<%=onetype.type%>" selected="selected"><%=onetype.type%></option>
                   <%  }
                     else{ %>
-                      <option value="<%=types[i].type%>"><%=types[i].type%></option>
-                  <%  } %>
-            <% } %>
+                      <option value="<%=onetype.type%>"><%=onetype.type%></option>
+                  <%  } %>                  
+            <% }) %>
         </select>
         <br>
         <lable>Region</lable><br>
         <select class="form-control" onchange="set_country(this,country,state, true)" name="region" >
             <option value="">-----ALL-----</option>
-            <option value="<%=event[0].region%>" selected="selected"><%=event[0].region%></option>
+            <option value="<%=event.region%>" selected="selected"><%=event.region%></option>
             <script type="text/javascript">
                 setRegions(this);
             </script>
@@ -84,56 +83,51 @@
         <lable>Country</lable><br>
         <select class="form-control" name="country" onchange="set_city_state(this,state, true)">
             <option value="">-----ALL-----</option>
-            <option value="<%=event[0].country%>" selected="selected"><%=event[0].country%></option>
+            <option value="<%=event.country%>" selected="selected"><%=event.country%></option>
         </select>
         <br>
         <br>
         <lable>State/Province</lable><br>
         <select class="form-control" name="state">
             <option value="">-----ALL-----</option>
-            <option value="<%=event[0].state%>" selected="selected"><%=event[0].state%></option>
+            <option value="<%=event.state%>" selected="selected"><%=event.state%></option>
         </select>
         <br>
         <br>
         <label>City</label>
-        <input type="text" name="city" class="form-control" value="<%= (!!event[0].city)?event[0].city:'' %>">
+        <input type="text" name="city" class="form-control" value="<%= (!!event.city)?event.city:'' %>">
         <br>
         <label>Organizing Society</label>
-        <input type="text" name="organization" class="form-control" value="<%= (!!event[0].organization)?event[0].organization:'' %>">
+        <input type="text" name="organization" class="form-control" value="<%= (!!event.organization)?event.organization:'' %>">
         <br>
         <label>Contact Person for Event</label>
-        <input type="text" name="contact" class="form-control" value="<%= (!!event[0].contact)?event[0].contact:'' %>"  required autofocus>
+        <input type="text" name="contact" class="form-control" value="<%= (!!event.contact)?event.contact:'' %>">
         <br>
         <label>Event Enquiries Email Address</label>
-        <input type="text" name="email" class="form-control" value="<%= (!!event[0].email)?event[0].email:'' %>">
+        <input type="text" name="email" class="form-control" value="<%= (!!event.email)?event.email:'' %>">
         <br>
         <label>Website Address</label>
-        <input type="url" name="website" class="form-control" value="<%= (!!event[0].website)?event[0].website:'' %>"  required autofocus>
-        <br>        
-        <label>Event Start Date</label>
-        <input type="date" name="startDate" class="form-control" value="<%= (!!event[0].startDate)?event[0].startDate:'' %>">
+        <input type="text" name="website" class="form-control" value="<%= (!!event.website)?event.website:'' %>">
         <br>
-        <label>Last Day of Event</label>
-        <input type="date" name="endDate" class="form-control" value="<%= (!!event[0].endDate)?event[0].endDate:'' %>">
+        <label>Start Date</label>
+        <input type="date" name="startDate" class="form-control" value="<%= (!!event.startDate)?event.startDate:'' %>">
+        <br>
+        <label>End Date</label>
+        <input type="date" name="endDate" class="form-control" value="<%= (!!event.endDate)?event.endDate:'' %>">
         <br>
         <label>Abstracts/Proposals Deadline</label>
-        <input type="date" name="deadline" class="form-control" value="<%= (!!event[0].deadline)?event[0].deadline:'' %>">
+        <input type="date" name="deadline" class="form-control" value="<%= (!!event.deadline)?event.deadline:'' %>">
         <br>
         <label>Description</label>
-        <input type="text" name="description" class="form-control" value="<%= (!!event[0].description)?event[0].description:'' %>"  required autofocus>
+        <input type="text" name="description" class="form-control" value="<%= (!!event.description)?event.description:'' %>">
         <br>
         <label>Event Keywords</label>
-        <input type="text" name="keywords" class="form-control" value="<%= (!!event[0].keywords)?event[0].keywords:'' %>">
-        <p>Please use "," to separate keywords without space</p>
-        <br> 
+        <input type="text" name="keywords" class="form-control" value="<%= (!!event.keywords)?event.keywords:'' %>">
+        <br>
 
-
-
-        <!-- <p>Have Account? <a href="/users/login">Login</a></p> -->
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+        <input id="revise" type="button" class="btn btn-lg btn-primary btn-block btn-success" name="revise_event" value="Confirm Revision" onclick="reviseInDetail()">
       </form>
-
-    </div> <!-- /container -->
+</div> <!-- /container -->
 
 
 <%- include('includes/footer') %>

@@ -48,43 +48,115 @@
     </nav>
 <%- messages() %>
 
-<%  for(var i=0; i<results.length; i++) {%>
-
-  <div class="container" role="main">
-    <div class="well">
-      <h3>Event <%=i%></h3>
-      <li><strong>ID:</strong> <%=results[i]._id%></li>      
-      <li><strong>Name:</strong> <%=results[i].name%></li>
-      <li><strong>Type:</strong> <%=results[i].type%></li>
-      <li><strong>Region:</strong> <%=results[i].region%></li>
-      <li><strong>Country:</strong> <%=results[i].country%></li>
-      <li><strong>State:</strong> <%=results[i].state%></li>
-      <li><strong>City:</strong> <%=results[i].city%></li>
-      <li><strong>Organization:</strong> <%=results[i].organization%></li>
-      <li><strong>Date:</strong> <%=results[i].startDate%>~<%=results[i].endDate%></li>
-      <li><strong>Contact:</strong> <%=results[i].contact%></li>
-      <li><strong>Email:</strong>  <%=results[i].email%></li>
-      <li><strong>Description:</strong> <%=results[i].description%></li>
-      <li><strong>Abstracts or Proposals Deadline:</strong> <%=results[i].deadline%></li>
-      <li><strong>Keywords:</strong> <%=results[i].keywords%></li>
-      <a href="/users/editEvent?id=<%=results[i]._id%>"><button type="button" class="btn btn-warning" >Edit</button></a>
-      <a href="/users/deleteEvent?id=<%=results[i]._id%>"><button type="button" class="btn btn-danger">Delete</button></a>
+<h2>My Events: </h2>
+<p>"To Be Approved" are your events waiting to be approved by administration.</p>
+<p>"Approved" are your events already approved by administration.</p>
+<p>"Ask for revision" are your events asked for your revision.</p>
+<p>----------------------------------------------------------------</p>
+<ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#to_be_approved">To Be Approved</a></li>
+  <li><a data-toggle="tab" href="#approved">Approved</a></li>
+  <li><a data-toggle="tab" href="#ask_for_revision">Ask for revision</a></li>
+</ul>
+<div class="tab-content">
+    <div id="to_be_approved" class="tab-pane fade in active">
+    <%=results1.length%>
+    <div class="panel panel-default">
+      <table class="table table-striped table-bordered"  border="1px" cellspacing="0">
+        <thead>
+          <tr>
+            <th class="col-xs-1">No.</th>
+            <th class="col-md-1">Type</th>
+            <th class="col-md-4">Name</th>
+            <th class="col-md-2">Date</th>
+            <th class="col-md-2">Location</th>
+            <th class="col-md-2">Operation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% var index = 1; results1.forEach(function(rs) {%>
+          <tr>
+            <td class="col-xs-1"><%=index++%></td>
+            <td id="id_<%=index%>" class="hidID"><%=rs._id%></td>
+            <td class="col-md-1"><%=rs.type%></td>
+            <td class="col-md-4"><%=rs.name%></td>
+            <td class="col-md-2"><%=rs.startDate%>~<%=rs.endDate%></td>
+            <td class="col-md-2"><%=rs.city%>,<%=rs.state%>,<%=rs.country%></td>
+            <td class="col-md-2">
+              <a href="/users/editEvent?id=<%=rs._id%>"><button class="btn btn-info">Revise</button></a>              
+              <a id="delete_<%=index%>"><button class="btn btn-danger" onclick="deleteEvent(<%=index%>)">Delete</button></a>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
     </div>
-  </div>
-  <br>
-<% } %>
-
-
-
-<script>
-  $('.adv-toggle-buttons a').each(function() { 
-        $(this).on('click', function(){
-            $(this).parent().next().slideToggle();
-            $(this).parent().find('a').each(function(){
-                $(this).toggle();
-                
-            });
-        });   
-    });
-</script>        
+    </div>
+    
+    <div id="approved" class="tab-pane fade">
+    <%=results2.length%>
+    <div class="panel panel-default">
+      <table class="table table-striped table-bordered"  border="1px" cellspacing="0">
+        <thead>
+          <tr>
+            <th class="col-md-1">No.</th>
+            <th class="col-md-1">Type</th>
+            <th class="col-md-4">Name</th>
+            <th class="col-md-2">Date</th>
+            <th class="col-md-2">Location</th>
+            <th class="col-md-2">Operation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% var index2 = 1; results2.forEach(function(rs) {%>
+          <tr>
+            <td class="col-md-1"><%=index2++%></td>
+            <td id="id_<%=index%>" class="hidID"><%=rs._id%></td>
+            <td class="col-md-1"><%=rs.type%></td>
+            <td class="col-md-4"><%=rs.name%></td>
+            <td class="col-md-2"><%=rs.startDate%>~<%=rs.endDate%></td>
+            <td class="col-md-2"><%=rs.city%>,<%=rs.state%>,<%=rs.country%></td>
+            <td class="col-md-2">
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+    </div>
+    
+    <div id="ask_for_revision" class="tab-pane fade">
+    <%=results3.length%>
+    <div class="panel panel-default">
+      <table class="table table-striped table-bordered"  border="1px" cellspacing="0">
+        <thead>
+          <tr>
+            <th class="col-md-1">No.</th>
+            <th class="col-md-1">Type</th>
+            <th class="col-md-4">Name</th>
+            <th class="col-md-2">Date</th>
+            <th class="col-md-2">Location</th>
+            <th class="col-md-2">Operation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% var index3=1; results3.forEach(function(rs) {%>
+          <tr>
+            <td class="col-md-1"><%=index3++%></td>
+            <td id="id_<%=index%>" class="hidID"><%=rs._id%></td>
+            <td class="col-md-1"><%=rs.type%></td>
+            <td class="col-md-4"><%=rs.name%></td>
+            <td class="col-md-2"><%=rs.startDate%>~<%=rs.endDate%></td>
+            <td class="col-md-2"><%=rs.city%>,<%=rs.state%>,<%=rs.country%></td>
+            <td class="col-md-2">
+              <a href="/users/editEvent?id=<%=rs._id%>"><button class="btn btn-info">Revise</button></a>
+              <a id="delete_<%=index%>"><button class="btn btn-danger" onclick="deleteEvent(<%=index%>)">Delete</button></a>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+    </div>
+</div>       
 <%- include('includes/footer') %>
