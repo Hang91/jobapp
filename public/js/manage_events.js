@@ -1,7 +1,44 @@
 //manage_events
 
+//revise
+function reviseInDetail(){
+  if (reviseConfirm()) {
+　　　　　　//删除操作
+          var revise = document.getElementById('revise');
+　　　　　　alert("Revised");
+          revise.type="submit";
+　　　　}
+　　　　else {
+　　　　　　//取消返回
+　　　　　　//alert("Canceled");
+　　　　}
+}
+
+function reviseConfirm() {
+　　　　if (window.confirm("Confirm to revise this event?")) {
+　　　　　　return true;//confirm
+　　　　}
+　　　　else {
+　　　　　　return false;//cancel
+　　　　}
+　　}
+
 //approve
-  function approveEvent(index) {
+function approveEventInDetail() {
+　　　　if (approveConfirm()) {
+　　　　　　//删除操作
+          var approve = document.getElementById('approve');
+　　　　　　alert("Approved");
+          approve.type="submit";
+　　　　}
+　　　　else {
+　　　　　　//取消返回
+　　　　　　//alert("Canceled");
+　　　　}
+　　}
+  
+
+function approveEvent(index) {
 　　　　if (approveConfirm()) {
 　　　　　　//删除操作
           var approve = document.getElementById('approve_'+index);
@@ -11,7 +48,7 @@
 　　　　}
 　　　　else {
 　　　　　　//取消返回
-　　　　　　alert("Canceled");
+　　　　　　//alert("Canceled");
 　　　　}
 　　}
 
@@ -25,16 +62,31 @@
 　　}
 
 //disapprove
+function disapproveEventInDetail() {
+  　　　　if (disapproveConfirm()) {
+  　　　　　　//删除操作
+            var disapprove = document.getElementById('disapprove');
+  　　　　　　alert("Disapproved");
+            disapprove.type="submit";
+  　　　　}
+  　　　　else {
+  　　　　　　//取消返回
+  　　　　　　//alert("Canceled");
+  　　　　}
+}
+
+
   function disapproveEvent(index) {
 　　　　if (disapproveConfirm()) {
           var disapprove = document.getElementById('disapprove_'+index);
           var id = document.getElementById('id_'+index).innerHTML;           
-　　　　　　alert("Disapproved");
+　　　　　　//alert("Disapproved id="+id+", index="+index);
+          alert("Disapproved");
           disapprove.href = "/manage/events/disapprove?id="+id;
 　　　　}
 　　　　else {
 　　　　　　//取消返回
-　　　　　　alert("Canceled");
+　　　　　　//alert("Canceled");
 　　　　}
 　　}
   function disapproveConfirm() {
@@ -45,3 +97,4 @@
 　　　　　　return false;//cancel
 　　　　}
 　　}
+

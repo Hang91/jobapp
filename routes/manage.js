@@ -14,7 +14,7 @@ router.get('/events', ensureLoggedIn('/users/login'), isAdmin, function(req, res
         //console.log(results1.length);
         EventsModel.find({approved : 1},function(err, results2){//approve
             //console.log(results2.length);
-            EventsModel.find({approved : 2},function(err, results3){//revise
+            EventsModel.find({approved : 3},function(err, results3){//revise
                 //console.log(results3.length);
                 res.render('manage_events', { title:'Manage | Manage Events', user: req.user, 
                     results1 : results1, results2 : results2, results3 : results3}); 
@@ -42,11 +42,154 @@ router.get('/events/details', ensureLoggedIn('/users/login'), isAdmin, function(
     });
 });
 
+//edit & approve / disapprove / ask for revision
+router.post('/events/details', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
+    if(req.body.manage_event_detail == "disapprove"){
+            var id  = req.body.id;
+            EventsModel.findByIdAndRemove(ObjectId(id), function(err, event){
+                    if(err){
+                        res.send(err);
+                    }
+                    else {
+                        console.log("disapprove success!");
+                        EventsModel.find({approved : 0},function(err, results1){//to be approve
+                            if (err){ 
+                                console.log("edit error!");
+                                res.send({result:-1});
+                            }
+                            EventsModel.find({approved : 1},function(err, results2){//approve
+                                if (err){ 
+                                    console.log("edit error!");
+                                    res.send({result:-1});
+                                }
+                                EventsModel.find({approved : 3},function(err, results3){//revise
+                                    if (err){ 
+                                        console.log("edit error!");
+                                        res.send({result:-1});
+                                    }
+                                    //success msg
+                                    //alertUser(newEvent);
+                                    req.flash('success', 'disapprove success...');
+                                    res.location('/manage/events');
+                                    res.redirect('/manage/events');
+                                }); 
+                            }); 
+                        });
+                    }    
+                });
+    }
+    //get form values
+    var id        = req.body.id;
+    var name        = req.body.name;
+    var type        = req.body.type;
+    var city    = req.body.city;
+    var state   = req.body.state;
+    var country     = req.body.country;
+    var region      = req.body.region;
+    var organization    = req.body.organization;
+    var contact     = req.body.contact;
+    var email   = req.body.email;
+    var website     = req.body.website;
+    var startDate   = req.body.startDate;
+    var endDate = req.body.endDate;
+    var deadline = req.body.deadline;
+    var description = req.body.description;
+    var comments = req.body.comments;
+    if(typeof req.body.keywords == 'string') {
+        var keywords    = req.body.keywords.split(",");
+    } else {
+        var keywords = null;
+        console.log('keywords is not a string');
+    }
+    var userName = req.user.name;
+    var userEmail = req.user.email;
+
+    if(req.body.manage_event_detail == "revise"){
+        
+        var approved = 3;//0:not check yet; 1:approve; 2:disapprove; 3.ask for revision
+
+        var newEvent = {
+                   name: name,
+                   type: type,
+                   region: region,//continent
+                   country: country,
+                   state: state,
+                   city: city,
+                   organization: organization,
+                   contact: contact,
+                   email: email,
+                   website: website,
+                   startDate: startDate,
+                   endDate: endDate,
+                   deadline: deadline,
+                   description: description,
+                   keywords: keywords,
+                   approved: approved,
+                   comments: comments,
+                   userName: userName,
+                   userEmail: userEmail
+            }
+        //update
+        EventsModel.update({_id:ObjectId(id)}, newEvent, function(err, doc){
+        if(err){
+            res.send(err);
+        }
+        else{
+            console.log('ask for revision success!');
+            //success msg
+            //alertUser(newEvent);
+            req.flash('success', 'Ask for revision...');
+            res.location('/manage/events');
+            res.redirect('/manage/events');
+        }
+        });
+    }
+    else if(req.body.manage_event_detail == "approve"){
+        var approved = 1;//0:not check yet; 1:approve; 2:disapprove; 3.ask for revision
+
+        var newEvent = {
+                   name: name,
+                   type: type,
+                   region: region,//continent
+                   country: country,
+                   state: state,
+                   city: city,
+                   organization: organization,
+                   contact: contact,
+                   email: email,
+                   website: website,
+                   startDate: startDate,
+                   endDate: endDate,
+                   deadline: deadline,
+                   description: description,
+                   keywords: keywords,
+                   approved: approved,
+                   comments: comments,
+                   userName: userName,
+                   userEmail: userEmail
+            }
+        //update
+        EventsModel.update({_id:ObjectId(id)}, newEvent, function(err, doc){
+        if(err){
+            res.send(err);
+        }
+        else{
+            console.log('approve success!');
+            //success msg
+            //alertUser(newEvent);
+            req.flash('success', 'Approve...');
+            res.location('/manage/events');
+            res.redirect('/manage/events');
+        }
+        });
+    }
+    
+});
 
 //approve an event
 router.get('/events/approve', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
     var id = req.query.id;
-    //console.log(id);
+    console.log("in the approve function， id="+id);
     EventsModel.update({_id:ObjectId(id)}, {$set:{approved:1}}, function(err, movie){
         if(err){
             res.send(err);
@@ -62,12 +205,12 @@ router.get('/events/approve', ensureLoggedIn('/users/login'), isAdmin, function(
                         console.log("edit error!");
                         res.send({result:-1});
                     }
-                    EventsModel.find({approved : 2},function(err, results3){//revise
+                    EventsModel.find({approved : 3},function(err, results3){//revise
                         if (err){ 
                             console.log("edit error!");
                             res.send({result:-1});
                         }
-                        console.log("disapprove success!");
+                        console.log("approve success!");
                         res.location('/manage/events');
                         res.redirect('/manage/events');
                     }); 
@@ -80,12 +223,13 @@ router.get('/events/approve', ensureLoggedIn('/users/login'), isAdmin, function(
 //disapprove an event - delete
 router.get('/events/disapprove', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
     var id = req.query.id;
-    //console.log(id);
-    EventsModel.findByIdAndRemove(ObjectId(id), function(err, movie){
+    console.log(id);
+    EventsModel.findByIdAndRemove(ObjectId(id), function(err, event){
         if(err){
             res.send(err);
         }
         else {
+            console.log("disapprove success!");
             EventsModel.find({approved : 0},function(err, results1){//to be approve
                 if (err){ 
                     console.log("edit error!");
@@ -96,12 +240,12 @@ router.get('/events/disapprove', ensureLoggedIn('/users/login'), isAdmin, functi
                         console.log("edit error!");
                         res.send({result:-1});
                     }
-                    EventsModel.find({approved : 2},function(err, results3){//revise
+                    EventsModel.find({approved : 3},function(err, results3){//revise
                         if (err){ 
                             console.log("edit error!");
                             res.send({result:-1});
                         }
-                        console.log("approve success!");
+                        
                         res.location('/manage/events');
                         res.redirect('/manage/events');
                     }); 

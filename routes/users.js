@@ -384,8 +384,10 @@ router.post('/register',
 	var errors = req.validationErrors();
 	if(errors){
 		console.log('form has errors');
+		req.flash('error', 'Passwords do not match.');
 		res.render('register', {
 			errors: errors,
+			title:'Sign up',
 			name: name,
 			email: email,
 			// username: username,
@@ -409,6 +411,7 @@ router.post('/register',
 				//res.redirect('/users/register');
 				res.render('register', {
 					errors: errors,
+					title:'Sign up',
 					name: name,
 					email: email,
 					// username: username,
@@ -524,7 +527,7 @@ passport.use('local-login', new LocalStrategy({
 				return done(err);
 			}
 			if(isMatch){
-				return done(null,user);
+				return done(null,user, req.flash('success','Login successfully.'));
 			}
 			else{
 				return done(null, false, req.flash('error','Password incorrect.'));
@@ -538,7 +541,8 @@ passport.use('local-login', new LocalStrategy({
 
 //login - POST
 router.post('/login',
-  passport.authenticate('local-login', { successRedirect: '/',
+  passport.authenticate('local-login', { successFlash: true,
+  									successRedirect: '/',
                                    failureRedirect: '/users/login',
                                    failureFlash: true }), 
   function(req, res){
