@@ -140,7 +140,7 @@ router.get('/users/download', ensureLoggedIn('/users/login'), isAdmin, function(
 });
 
 //manage events page - GET
-router.get('/events', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
+router.get('/events', ensureLoggedIn('/users/login'), isManager, function(req, res){
     EventsModel.find({approved : 0},function(err1, results1){//to be approve
         if(err1){
             return next(err1);
@@ -165,7 +165,7 @@ router.get('/events', ensureLoggedIn('/users/login'), isAdmin, function(req, res
 
 
 //check detail of an event
-router.get('/events/details', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
+router.get('/events/details', ensureLoggedIn('/users/login'), isManager, function(req, res){
     var id = req.query.id;
     //console.log(id);
     TypesModel.find({}, function(err, types){
@@ -183,7 +183,7 @@ router.get('/events/details', ensureLoggedIn('/users/login'), isAdmin, function(
 });
 
 //edit & approve / disapprove / ask for revision
-router.post('/events/details', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
+router.post('/events/details', ensureLoggedIn('/users/login'), isManager, function(req, res){
     if(req.body.manage_event_detail == "disapprove"){
             var id  = req.body.id;
             EventsModel.findByIdAndRemove(ObjectId(id), function(err, event){
@@ -327,7 +327,7 @@ router.post('/events/details', ensureLoggedIn('/users/login'), isAdmin, function
 });
 
 //approve an event
-router.get('/events/approve', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
+router.get('/events/approve', ensureLoggedIn('/users/login'), isManager, function(req, res){
     var id = req.query.id;
     console.log("in the approve function， id="+id);
     EventsModel.update({_id:ObjectId(id)}, {$set:{approved:1}}, function(err, event){
@@ -365,7 +365,7 @@ router.get('/events/approve', ensureLoggedIn('/users/login'), isAdmin, function(
 });
 
 //disapprove an event - delete
-router.get('/events/disapprove', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
+router.get('/events/disapprove', ensureLoggedIn('/users/login'), isManager, function(req, res){
     var id = req.query.id;
     console.log(id);
     EventsModel.findByIdAndRemove(ObjectId(id), function(err, event){
@@ -492,13 +492,23 @@ router.get('/categories/delete', ensureLoggedIn('/users/login'), isAdmin, functi
 
 function isAdmin(req, res, next) {
 
-	 if ((!req.isAuthenticated()) || (req.user.name != 'admin')) {
+	 if ((!req.isAuthenticated()) || (req.user.priority != 2)) {
 	 	req.flash('error', 'Seems like you aren\'t an admin! '+req.user.name);
 		res.redirect('/');
 	 }
 	 else{
 	 	next();
 	 }
+};
+
+function isManager(req, res, next) {
+   if ((!req.isAuthenticated()) || (req.user.priority < 1)) {
+    req.flash('error', 'Seems like you aren\'t an manager! '+req.user.name);
+    res.redirect('/');
+   }
+   else{
+    next();
+   }
 };
 
 function alertUser(newEvent) {
