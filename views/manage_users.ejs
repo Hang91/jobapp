@@ -47,78 +47,69 @@
     </nav>
 <%- messages() %>
 
-<h2>Manage Events: </h2>
-<p>Click on "Approve" to approve events.</p>
-<p>Click on "Disapprove" to disapprove events.</p>
-<p>Click on "Details" to show more details.</p>
+<h2>Manage Users: </h2>
+<a href="/manage/users/download"><button class="btn">Click to Download All Users' Information</button></a>
+<p>Click on "Promote" to promote one user to manager.</p>
+<p>Click on "Demote" to demote one manager to user.</p>
 <p>----------------------------------------------------------------</p>
 <ul class="nav nav-tabs">
-  <li class="active"><a data-toggle="tab" href="#to_be_approved">To Be Approved</a></li>
-  <li><a data-toggle="tab" href="#approved">Approved</a></li>
-  <li><a data-toggle="tab" href="#ask_for_revision">Ask for revision</a></li>
+  <li class="active"><a data-toggle="tab" href="#user">Users</a></li>
+  <li><a data-toggle="tab" href="#manager">Managers</a></li>
+  <li><a data-toggle="tab" href="#administrator">Administrator</a></li>
 </ul>
 <div class="tab-content">
-    <div id="to_be_approved" class="tab-pane fade in active">
-    <%=results1.length%>
+    <div id="user" class="tab-pane fade in active">
+    <%=users1.length%>
     <div class="panel panel-default">
       <table class="table table-striped table-bordered"  border="1px" cellspacing="0">
         <thead>
           <tr>
             <th class="col-xs-1">No.</th>
-            <th class="col-md-1">Type</th>
             <th class="col-md-3">Name</th>
-            <th class="col-md-2">Date</th>
-            <th class="col-md-2">Location</th>
-            <th class="col-md-3">Operation</th>
+            <th class="col-md-3">Email</th>
+            <th class="col-md-3">Operations</th>
           </tr>
         </thead>
         <tbody>
-          <% var index = 1; results1.forEach(function(rs) {%>
+          <% var index = 1; users1.forEach(function(rs) {%>
           <tr>
             <td class="col-xs-1"><%=index%></td>
             <td id="id_<%=index%>" class="hidID"><%=rs._id%></td>
-            <td class="col-md-1"><%=rs.type%></td>
             <td class="col-md-3"><%=rs.name%></td>
-            <td class="col-md-2"><%=rs.startDate%>~<%=rs.endDate%></td>
-            <td class="col-md-2"><%=rs.city%>,<%=rs.state%>,<%=rs.country%></td>
+            <td class="col-md-3"><%=rs.email%></td>
             <td class="col-md-3">
-              <a href="/manage/events/details?id=<%=rs._id%>"><button class="btn btn-info">Details</button></a>
-              <a id="approve_<%=index%>"><button class="btn btn-success" onclick="approveEvent(<%=index%>)">Approve</button></a>
-              <a id="disapprove_<%=index%>"><button class="btn btn-danger" onclick="disapproveEvent(<%=index%>)">Disapprove</button></a>
+              <a id="promote_<%=index%>"><button class="btn btn-success" onclick="promoteUser(<%=index%>)">Promote</button></a>
+              <button class="btn btn-danger disabled">Demote</button>
             </td>
           </tr>
-          <% index++;}) %>
+          <% index++;})%>
         </tbody>
       </table>
     </div>
     </div>
     
-    <div id="approved" class="tab-pane fade">
-    <%=results2.length%>
+    <div id="manager" class="tab-pane fade">
+    <%=users2.length%>
     <div class="panel panel-default">
       <table class="table table-striped table-bordered"  border="1px" cellspacing="0">
         <thead>
           <tr>
             <th class="col-md-1">No.</th>
-            <th class="col-md-1">Type</th>
             <th class="col-md-3">Name</th>
-            <th class="col-md-2">Date</th>
-            <th class="col-md-2">Location</th>
-            <th class="col-md-3">Operation</th>
+            <th class="col-md-3">Email</th>
+            <th class="col-md-3">Operations</th>
           </tr>
         </thead>
         <tbody>
-          <% var index2 = 1; results2.forEach(function(rs) {%>
+          <% var index2 = 1; users2.forEach(function(rs) {%>
           <tr>
             <td class="col-md-1"><%=index2++%></td>
             <td id="id_<%=index%>" class="hidID"><%=rs._id%></td>
-            <td class="col-md-1"><%=rs.type%></td>
             <td class="col-md-3"><%=rs.name%></td>
-            <td class="col-md-2"><%=rs.startDate%>~<%=rs.endDate%></td>
-            <td class="col-md-2"><%=rs.city%>,<%=rs.state%>,<%=rs.country%></td>
+            <td class="col-md-3"><%=rs.email%></td>
             <td class="col-md-3">
-              <a href="/manage/events/details?id=<%=rs._id%>"><button class="btn btn-info">Details</button></a>
-              <a id="disapprove_<%=index%>"><button class="btn btn-danger" onclick="disapproveEvent(<%=index%>)">Disapprove</button></a>
+              <button class="btn btn-success disabled">Promote</button>
+              <a id="demote_<%=index%>"><button class="btn btn-danger" onclick="demoteUser(<%=index%>)">Demote</button></a>
             </td>
           </tr>
           <% index++;}) %>
@@ -127,36 +118,31 @@
     </div>
     </div>
     
-    <div id="ask_for_revision" class="tab-pane fade">
-    <%=results3.length%>
+    <div id="administrator" class="tab-pane fade">
+    <%=users3.length%>
     <div class="panel panel-default">
       <table class="table table-striped table-bordered"  border="1px" cellspacing="0">
         <thead>
           <tr>
             <th class="col-md-1">No.</th>
-            <th class="col-md-1">Type</th>
             <th class="col-md-3">Name</th>
-            <th class="col-md-2">Date</th>
-            <th class="col-md-2">Location</th>
-            <th class="col-md-3">Operation</th>
+            <th class="col-md-3">Email</th>
+            <th class="col-md-3">Operations</th>
           </tr>
         </thead>
         <tbody>
-          <% var index3=1; results3.forEach(function(rs) {%>
+          <% var index3=1; users3.forEach(function(rs) {%>
           <tr>
             <td class="col-md-1"><%=index3++%></td>
             <td id="id_<%=index%>" class="hidID"><%=rs._id%></td>
-            <td class="col-md-1"><%=rs.type%></td>
             <td class="col-md-3"><%=rs.name%></td>
-            <td class="col-md-2"><%=rs.startDate%>~<%=rs.endDate%></td>
-            <td class="col-md-2"><%=rs.city%>,<%=rs.state%>,<%=rs.country%></td>
+            <td class="col-md-3"><%=rs.email%></td>
             <td class="col-md-3">
-              <a href="/manage/events/details?id=<%=rs._id%>"><button class="btn btn-info">Details</button></a>
-              <a id="approve_<%=index%>"><button class="btn btn-success approve" onclick="approveEvent(<%=index%>)">Approve</button></a>
-              <a id="disapprove_<%=index%>"><button class="btn btn-danger" onclick="disapproveEvent(<%=index%>)">Disapprove</button></a>
+              <button class="btn btn-success disabled">Promote</button>
+              <button class="btn btn-danger disabled">Demote</button>
             </td>
           </tr>
-          <% index++;}) %>
+          <% }) %>
         </tbody>
       </table>
     </div>

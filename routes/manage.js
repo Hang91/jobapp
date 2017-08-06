@@ -4,6 +4,7 @@ var mongojs = require('mongojs');
 var db = mongojs('eventapp', ['users','events','types','subs']);
 var TypesModel = require('../models/TypeDB');
 var EventsModel = require('../models/EventDB');
+var UsersModel = require('../models/UserDB');
 var SubsModel = require('../models/SubDB');
 var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 var email   = require('emailjs/email');
@@ -14,37 +15,101 @@ var ObjectId = require('mongodb').ObjectID;
 var json2csv = require('json2csv');
 var fs = require('fs');
 
-//manage subscription page - GET - download using json2csv
+//manage users page - GET
 router.get('/users', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
     var fields = ['userName', 'userEmail', 'name', 'type', 'city', 'state', 'country', 'region', 
         'organization', 'startDate', 'endDate', 'keywords'];
     //find all users sorted by priority
-    usersModel.find({}).sort('userName').exec(function(err, results){
-        if(err){
-            res.json(err);
+    UsersModel.find({priority : 0},function(err1, users1){//usrs
+        if(err1){
+            return next(err1);
         }
-        //console.log(results3.length);
-        var csv = json2csv({ data: results, fields: fields });
-
-        var path='UsersSubscription'+Date.now()+'.csv';
-        
-        fs.writeFile(path, csv, function(err) {
-            if (err) {
-                throw err;
+        //console.log(results1.length);
+        UsersModel.find({priority : 1},function(err2, users2){//managers
+            if(err2){
+                return next(err2);
             }
-            console.log('File saved');
-            //res.download(path);
-            req.flash('success', 'Successfully download users\' subscription!');
-            res.location('/');
-            res.redirect('/');
-        });
-        // res.render('index', { title:'Home', 
-        //     user: req.user, 
-        //     results3 : results}); 
+            //console.log(results2.length);
+            UsersModel.find({priority : 2},function(err3, users3){//only one admin
+                if(err3){
+                return next(err3);
+            }
+                //console.log(results3.length);
+                res.render('manage_users', { title:'Manage | Manage Users', user: req.user, 
+                    users1 : users1, users2 : users2, users3 : users3}); 
+            }); 
+        }); 
     }); 
 });
 
-//click download button inmanage subscription page - GET - download using json2csv
+//promote one user to manager
+router.get('/users/promote', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
+    var id = req.query.id;
+    UsersModel.update({_id:ObjectId(id)}, {$set:{priority:1}}, function(err, user){//1 is manager
+        if(err){
+            res.send(err);
+        }
+        else {
+            UsersModel.find({priority : 0},function(err, users1){
+                if (err){ 
+                    console.log("edit error!");
+                    res.send({result:-1});
+                }
+                UsersModel.find({priority : 1},function(err, users2){
+                    if (err){ 
+                        console.log("edit error!");
+                        res.send({result:-1});
+                    }
+                    UsersModel.find({priority : 3},function(err, users3){
+                        if (err){ 
+                            console.log("edit error!");
+                            res.send({result:-1});
+                        }
+                        console.log("promote success!");
+                        res.location('/manage/users');
+                        res.redirect('/manage/users'); 
+                    }); 
+                }); 
+            });
+        }    
+    });
+});
+
+//demote one manager to user
+router.get('/users/demote', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
+    var id = req.query.id;
+    UsersModel.update({_id:ObjectId(id)}, {$set:{priority:0}}, function(err, user){//0 is user
+        if(err){
+            res.send(err);
+        }
+        else {
+            UsersModel.find({priority : 0},function(err, users1){
+                if (err){ 
+                    console.log("edit error!");
+                    res.send({result:-1});
+                }
+                UsersModel.find({priority : 1},function(err, users2){
+                    if (err){ 
+                        console.log("edit error!");
+                        res.send({result:-1});
+                    }
+                    UsersModel.find({priority : 2},function(err, users3){
+                        if (err){ 
+                            console.log("edit error!");
+                            res.send({result:-1});
+                        }
+                        console.log("demote success!");
+                        res.location('/manage/users');
+                        res.redirect('/manage/users'); 
+                    }); 
+                }); 
+            });
+        }    
+    });
+});
+
+//click download button in manage users page 
+//- GET - download using json2csv
 router.get('/users/download', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
     var fields = ['userName', 'userEmail', 'name', 'type', 'city', 'state', 'country', 'region', 
         'organization', 'startDate', 'endDate', 'keywords'];
@@ -65,8 +130,8 @@ router.get('/users/download', ensureLoggedIn('/users/login'), isAdmin, function(
             console.log('File saved');
             //res.download(path);
             req.flash('success', 'Successfully download users\' subscription!');
-            res.location('/');
-            res.redirect('/');
+            res.location('/manage/users');
+            res.redirect('/manage/users');
         });
         // res.render('index', { title:'Home', 
         //     user: req.user, 
@@ -265,7 +330,7 @@ router.post('/events/details', ensureLoggedIn('/users/login'), isAdmin, function
 router.get('/events/approve', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
     var id = req.query.id;
     console.log("in the approve function， id="+id);
-    EventsModel.update({_id:ObjectId(id)}, {$set:{approved:1}}, function(err, movie){
+    EventsModel.update({_id:ObjectId(id)}, {$set:{approved:1}}, function(err, event){
         if(err){
             res.send(err);
         }
@@ -285,7 +350,7 @@ router.get('/events/approve', ensureLoggedIn('/users/login'), isAdmin, function(
                             console.log("edit error!");
                             res.send({result:-1});
                         }
-
+                        //email alert
                         EventsModel.findById(id, function(err, event){
                             alertUser(event);
                             console.log("approve success!");

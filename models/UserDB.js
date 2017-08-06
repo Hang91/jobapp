@@ -21,39 +21,9 @@ var userSchema = new mongoose.Schema({
 		type: String
 	},
 	priority: {
-		type: String
+		type: Number
 	}
-	// region : {
-	// 	type: String
-	// },
-	// city : {
-	// 	type: String
-	// },
-	// state: {
-	// 	type: String
-	// },
-	// country: {
-	// 	type:String
-	// },
-	// organization: {
-	// 	type: String
-	// },
-	// startDate: {
-	// 	type: String
-	// },
-	// endDate: {
-	// 	type: String
-	// },
-	// keywords: {
-	// 	type: Array
-	// },
-	// userName: {
-	// 	type: String
-	// },
-	// userEmail: {
-	// 	type: String
-	// }
 });
 
 module.exports = mongoose.model('users', userSchema);
-//yellow 'subs' is the name of the collection
+//yellow 'users' is the name of the collection
