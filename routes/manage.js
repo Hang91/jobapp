@@ -6,6 +6,7 @@ var TypesModel = require('../models/TypeDB');
 var EventsModel = require('../models/EventDB');
 var SubsModel = require('../models/SubDB');
 var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
+var email   = require('emailjs/email');
 
 var ObjectId = require('mongodb').ObjectID;
 
@@ -250,7 +251,7 @@ router.post('/events/details', ensureLoggedIn('/users/login'), isAdmin, function
         else{
             console.log('approve success!');
             //success msg
-            //alertUser(newEvent);
+            alertUser(newEvent);
             req.flash('success', 'Approve!');
             res.location('/manage/events');
             res.redirect('/manage/events');
@@ -284,9 +285,13 @@ router.get('/events/approve', ensureLoggedIn('/users/login'), isAdmin, function(
                             console.log("edit error!");
                             res.send({result:-1});
                         }
-                        console.log("approve success!");
-                        res.location('/manage/events');
-                        res.redirect('/manage/events');
+
+                        EventsModel.findById(id, function(err, event){
+                            alertUser(event);
+                            console.log("approve success!");
+                            res.location('/manage/events');
+                            res.redirect('/manage/events');                            
+                        });
                     }); 
                 }); 
             });
@@ -430,5 +435,126 @@ function isAdmin(req, res, next) {
 	 	next();
 	 }
 };
+
+function alertUser(newEvent) {
+  var collection = db.collection('subs');
+  var name = newEvent.name;
+  var type = newEvent.type;
+  var keywords = newEvent.keywords;
+  var region = newEvent.region;
+  var country = newEvent.country;
+  var state = newEvent.state;
+  var city = newEvent.city;
+  var startDate = newEvent.startDate;
+  var endDate = newEvent.endDate;
+
+  //delete out-of-date subs
+  // var today = new Date();
+  // var dd = today.getDate();
+  // var mm = today.getMonth()+1; //January is 0!
+  // var yyyy = today.getFullYear();
+
+  // if(dd<10) {
+  //     dd = '0'+dd
+  // } 
+
+  // if(mm<10) {
+  //     mm = '0'+mm
+  // } 
+
+  // today =  yyyy + '-' + mm + '-' + dd;
+  // console.log(today);
+  // collection.remove({'startDate': {$lt:today}})
+
+  if(!name) {
+    var nameStr = {};
+  }
+  else {
+    nameStr = {$or: [{'name': name}, {'name': ""}]};
+  }
+  if(!type){
+    var typeStr = {};
+  }
+  else{
+    var typeStr = {$or: [{'type': type}, {'type': ""}]};
+  }
+  if(keywords.length == 1 && !keywords[0]){
+    var keywordsStr = {};
+  }
+  else{
+    var keywordsStr = {$or: [{'keywords': {$in:keywords}}, {'keywords' : ""} ]};//or
+    //var keywordsStr = {'keywords': {$all:keywords}};//and
+  }
+  if(!region){
+    var regionStr = {};
+  }
+  else{
+    var regionStr = {$or: [{'region' : region}, {'region': ""}, {'region': null}]};
+  }   
+  if(!country){
+    var countryStr = {};
+  }
+  else{
+    var countryStr = {$or: [{'country' : country}, {'country': ""}, {'country': null}]};
+  }
+  if(!state){
+    var stateStr = {};
+  }
+  else{
+    var stateStr = {$or: [{'state' : state}, {'state': ""}, {'state': null}]};
+  }
+  if(!city){
+    var cityStr = {};
+  }
+  else{
+    var cityStr = {$or: [{'city' : city}, {'city': ""}]};
+  }
+  if(!startDate){
+    var startDateStr = {};
+  }
+  else{
+    var startDateStr = {$or: [{'startDate': {$lte:startDate}}, {'startDate': ""}]};
+  }
+  if(!endDate){
+    var endDateStr = {};
+  }
+  else{
+    var endDateStr = {$or: [{'endDate' : {$gte:endDate}}, {'endDate': ""}]};
+  }
+  collection.find({$and: [nameStr, typeStr, regionStr, countryStr, stateStr, cityStr, startDateStr, endDateStr, keywordsStr]}).toArray(function(err, results){
+    console.log('user number' + results.length);
+    for(var i = 0; i < results.length; i++){
+      console.log('userEmail: ' + results[i].userEmail);
+      var server  = email.server.connect({
+         user:    "jinhang91@hotmail.com", 
+         password:"891110Hotmail", 
+         host:  "smtp-mail.outlook.com", 
+         tls: {ciphers: "SSLv3"}
+      });
+
+      var message = {
+         text:  "Hello " + results[i].userName + ", \n There is a new event match your subscription. Below is the detailed information. \n" + 
+         "Event name: " + name + "\n" + "Event type: " + type + "\n",
+         from:  "you <jinhang91@hotmail.com>", 
+         to:    "zhuyingcau <" + results[i].userEmail + ">",
+         cc:    "",
+         subject: "testing email js"
+         /*
+         attachment: 
+         [
+            {data:"<html>i <i>hope</i> this works!</html>", alternative:true},
+            {path:"path/to/file.zip", type:"application/zip", name:"renamed.zip"}
+         ]
+         */
+      };
+
+      // send the message and get a callback with an error or details of the message that was sent
+      server.send(message, function(err, message) { 
+          console.log(err || message); 
+      });
+    }
+
+  });
+}
 
 module.exports = router;
