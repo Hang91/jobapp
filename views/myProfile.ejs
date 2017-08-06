@@ -48,28 +48,19 @@
     </nav>
 <%- messages() %>
 
-<%  for(var i=0; i<results.length; i++) {%>
 
   <div class="container" role="main">
     <div class="well">
       <h3>My Profile</h3>
-      <li><strong>ID:</strong> <%=results[i]._id%></li>      
-      <li><strong>Name:</strong> <%=results[i].name%></li>
-      <li><strong>Email:</strong> <%=results[i].email%></li>
-<!--       <li><strong>Type:</strong> <%=results[i].type%></a></li>
-      <li><strong>Region:</strong> <%=results[i].region%></a></li>
-      <li><strong>Country:</strong> <%=results[i].country%></a></li>
-      <li><strong>State:</strong> <%=results[i].state%></a></li>
-      <li><strong>City:</strong> <%=results[i].city%></a></li>
-      <li><strong>Organization:</strong> <%=results[i].organization%></li>
-      <li><strong>Date:</strong> <%=results[i].startDate%>~<%=results[i].endDate%></li>
-      <li><strong>Keywords:</strong> <%=results[i].keywords%></li> -->
-      <a href="/users/editProfile?id=<%=results[i]._id%>"><button type="button" class="btn btn-warning" >Edit</button></a>
-      <a href="/users/editPassword?id=<%=results[i]._id%>"><button type="button" class="btn btn-danger">Change Password</button></a>
+      <li><strong>ID:</strong> <%=results._id%></li>      
+      <li><strong>Name:</strong> <%=results.name%></li>
+      <li><strong>Email:</strong> <%=results.email%></li>
+      <a href="/users/editProfile?id=<%=results._id%>"><button type="button" class="btn btn-warning" >Edit</button></a>
+      <a href="/users/editPassword?id=<%=results._id%>"><button type="button" class="btn btn-danger">Change Password</button></a>
     </div>
   </div>
   <br>
-<% } %>
+
 
 
 

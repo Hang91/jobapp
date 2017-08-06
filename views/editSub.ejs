@@ -49,32 +49,31 @@
     </nav>
     
 <div class="container">
-    <h1>id: <%=sub[0]._id%></h1>
+    <h1>id: <%=results._id%></h1>
       <form method="post" action="/users/editSub" class="form-signin">
         <h2 class="form-signin-heading">Edit Subscription</h2>
         <!-- <label>ID</label> -->
-        <input class="hid" type="text" name="id" class="form-control" value="<%= (!!sub[0]._id)?sub[0]._id:'' %>">
+        <input class="hid" type="text" name="id" class="form-control" value="<%= (!!results._id)?results._id:'' %>">
         <label>Event Name</label>
-        <input type="text" name="name" class="form-control" value="<%= (!!sub[0].name)?sub[0].name:'' %>">
+        <input type="text" name="name" class="form-control" value="<%= (!!results.name)?results.name:'' %>">
         <br>
         <lable>Event Type</lable><br>
         <select class="form-control" name="type">
             <option value="">-----ALL-----</option>
-            <% for (var i=0; i<types.length; i++){ 
-                    console.log(types.length); %>
-                  <%  if(sub[0].type == types[i].type){ %>
-                      <option value="<%=types[i].type%>" selected="selected"><%=types[i].type%></option>
+            <% types.forEach(function(onetype) { %>
+              <%  if(results.type == onetype.type){ %>
+                      <option value="<%=onetype.type%>" selected="selected"><%=onetype.type%></option>
                   <%  }
                     else{ %>
-                      <option value="<%=types[i].type%>"><%=types[i].type%></option>
-                  <%  } %>
-            <% } %>
+                      <option value="<%=onetype.type%>"><%=onetype.type%></option>
+                  <%  } %>                  
+            <% }) %>
         </select>
         <br>
         <lable>Region</lable><br>
         <select class="form-control" onchange="set_country(this,country,state, true)" name="region" >
             <option value="">-----ALL-----</option>
-            <option value="<%=sub[0].region%>" selected="selected"><%=sub[0].region%></option>
+            <option value="<%=results.region%>" selected="selected"><%=results.region%></option>
             <script type="text/javascript">
                 setRegions(this);
             </script>
@@ -84,31 +83,31 @@
         <lable>Country</lable><br>
         <select class="form-control" name="country" onchange="set_city_state(this,state, true)">
             <option value="">-----ALL-----</option>
-            <option value="<%=sub[0].country%>" selected="selected"><%=sub[0].country%></option>
+            <option value="<%=results.country%>" selected="selected"><%=results.country%></option>
         </select>
         <br>
         <br>
         <lable>State/Province</lable><br>
         <select class="form-control" name="state">
             <option value="">-----ALL-----</option>
-            <option value="<%=sub[0].state%>" selected="selected"><%=sub[0].state%></option>
+            <option value="<%=results.state%>" selected="selected"><%=results.state%></option>
         </select>
         <br>
         <br>
         <label>City</label>
-        <input type="text" name="city" class="form-control" value="<%= (!!sub[0].city)?sub[0].city:'' %>">
+        <input type="text" name="city" class="form-control" value="<%= (!!results.city)?results.city:'' %>">
         <br>
         <label>Organizing Society</label>
-        <input type="text" name="organization" class="form-control" value="<%= (!!sub[0].organization)?sub[0].organization:'' %>">
+        <input type="text" name="organization" class="form-control" value="<%= (!!results.organization)?results.organization:'' %>">
         <br>
         <label>Start Date</label>
-        <input type="date" name="startDate" class="form-control" value="<%= (!!sub[0].startDate)?sub[0].startDate:'' %>">
+        <input type="date" name="startDate" class="form-control" value="<%= (!!results.startDate)?results.startDate:'' %>">
         <br>
         <label>End Date</label>
-        <input type="date" name="endDate" class="form-control" value="<%= (!!sub[0].endDate)?sub[0].endDate:'' %>">
+        <input type="date" name="endDate" class="form-control" value="<%= (!!results.endDate)?results.endDate:'' %>">
         <br>
         <label>Event Keywords</label>
-        <input type="text" name="keywords" class="form-control" value="<%= (!!sub[0].keywords)?sub[0].keywords:'' %>">
+        <input type="text" name="keywords" class="form-control" value="<%= (!!results.keywords)?results.keywords:'' %>">
         <p>Please use "," to separate keywords without space</p>
         <br> 
 

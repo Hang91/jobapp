@@ -13,6 +13,8 @@ var ObjectId = require('mongodb').ObjectID;
 
 var TypesModel = require('../models/TypeDB');
 var EventsModel = require('../models/EventDB');
+var SubsModel = require('../models/SubDB');
+var UsersModel = require('../models/UserDB');
 
 //login page - GET
 router.get('/login', function(req, res){
@@ -33,25 +35,22 @@ router.get('/register', function(req, res){
 //add an event page - GET
 router.get('/addEvent', ensureLoggedIn('login'), 
  function(req, res){
- 	var collection = db.collection('types');
-	collection.find({}).toArray(function(err, results){
+	TypesModel.find({}, function(err, types){
 		if (err) {
     		console.dir( err );
     	}
-    	console.log('find types '+results.length);
-		res.render('addEvent', { title:'Add an Event', user: req.user, results:results});
+		res.render('addEvent', { title:'Add an Event', user: req.user, types: types});
 	});
 });
 
 router.get('/addSub', ensureLoggedIn('login'),
 function(req, res){
- 	var collection = db.collection('types');
-	collection.find({}).toArray(function(err, results){
+	TypesModel.find({}, function(err, types){
 		if (err) {
     		console.dir( err );
     	}
-    	console.log('find types '+results.length);
-		res.render('addSub', { title:'Add an subscription', user: req.user, results:results});
+    	console.log('types number:' + types.length);
+		res.render('addSub', { title:'Add an subscription', user: req.user, types: types});
 	});
 });
 
@@ -104,7 +103,7 @@ router.post('/addSub', function(req, res){
 		   userEmail: userEmail
 	}
 
-	db.subs.insert(newSub, function(err, doc){
+	SubsModel.create(newSub, function(err, doc){
 		if(err){
 			res.send(err);
 		}
@@ -204,7 +203,7 @@ router.post('/addEvent', function(req, res){
 	else{
 		console.log('Event added');
 		//success msg
-		alertUser(newEvent);
+		// alertUser(newEvent);
 		req.flash('success', 'Successfully added an event!');
 		res.location('/');
 		res.redirect('/');
@@ -236,126 +235,126 @@ router.post('/addEvent', function(req, res){
 	// }	
 });
 
-function alertUser(newEvent) {
-	var collection = db.collection('subs');
-	var name = newEvent.name;
-	var type = newEvent.type;
-	var keywords = newEvent.keywords;
-	var region = newEvent.region;
-	var country = newEvent.country;
-	var state = newEvent.state;
-	var city = newEvent.city;
-	var startDate = newEvent.startDate;
-	var endDate = newEvent.endDate;
+// function alertUser(newEvent) {
+// 	var collection = db.collection('subs');
+// 	var name = newEvent.name;
+// 	var type = newEvent.type;
+// 	var keywords = newEvent.keywords;
+// 	var region = newEvent.region;
+// 	var country = newEvent.country;
+// 	var state = newEvent.state;
+// 	var city = newEvent.city;
+// 	var startDate = newEvent.startDate;
+// 	var endDate = newEvent.endDate;
 
-	//delete out-of-date subs
-	// var today = new Date();
-	// var dd = today.getDate();
-	// var mm = today.getMonth()+1; //January is 0!
-	// var yyyy = today.getFullYear();
+// 	//delete out-of-date subs
+// 	// var today = new Date();
+// 	// var dd = today.getDate();
+// 	// var mm = today.getMonth()+1; //January is 0!
+// 	// var yyyy = today.getFullYear();
 
-	// if(dd<10) {
-	//     dd = '0'+dd
-	// } 
+// 	// if(dd<10) {
+// 	//     dd = '0'+dd
+// 	// } 
 
-	// if(mm<10) {
-	//     mm = '0'+mm
-	// } 
+// 	// if(mm<10) {
+// 	//     mm = '0'+mm
+// 	// } 
 
-	// today =  yyyy + '-' + mm + '-' + dd;
-	// console.log(today);
-	// collection.remove({'startDate': {$lt:today}})
+// 	// today =  yyyy + '-' + mm + '-' + dd;
+// 	// console.log(today);
+// 	// collection.remove({'startDate': {$lt:today}})
 
-	if(!name) {
-		var nameStr = {};
-	}
-	else {
-		nameStr = {$or: [{'name': name}, {'name': ""}]};
-	}
-	if(!type){
-		var typeStr = {};
-	}
-	else{
-		var typeStr = {$or: [{'type': type}, {'type': ""}]};
-	}
-	if(keywords.length == 1 && !keywords[0]){
-		var keywordsStr = {};
-	}
-	else{
-		var keywordsStr = {$or: [{'keywords': {$in:keywords}}, {'keywords' : ""} ]};//or
-		//var keywordsStr = {'keywords': {$all:keywords}};//and
-	}
-	if(!region){
-		var regionStr = {};
-	}
-	else{
-		var regionStr = {$or: [{'region' : region}, {'region': ""}, {'region': null}]};
-	}		
-	if(!country){
-		var countryStr = {};
-	}
-	else{
-		var countryStr = {$or: [{'country' : country}, {'country': ""}, {'country': null}]};
-	}
-	if(!state){
-		var stateStr = {};
-	}
-	else{
-		var stateStr = {$or: [{'state' : state}, {'state': ""}, {'state': null}]};
-	}
-	if(!city){
-		var cityStr = {};
-	}
-	else{
-		var cityStr = {$or: [{'city' : city}, {'city': ""}]};
-	}
-	if(!startDate){
-		var startDateStr = {};
-	}
-	else{
-		var startDateStr = {$or: [{'startDate': {$lte:startDate}}, {'startDate': ""}]};
-	}
-	if(!endDate){
-		var endDateStr = {};
-	}
-	else{
-		var endDateStr = {$or: [{'endDate' : {$gte:endDate}}, {'endDate': ""}]};
-	}
-	collection.find({$and: [nameStr, typeStr, regionStr, countryStr, stateStr, cityStr, startDateStr, endDateStr, keywordsStr]}).toArray(function(err, results){
-		console.log('user number' + results.length);
-		for(var i = 0; i < results.length; i++){
-			console.log('userEmail: ' + results[i].userEmail);
-			var server 	= email.server.connect({
-			   user:    "jinhang91@hotmail.com", 
-			   password:"891110Hotmail", 
-			   host:	"smtp-mail.outlook.com", 
-			   tls: {ciphers: "SSLv3"}
-			});
+// 	if(!name) {
+// 		var nameStr = {};
+// 	}
+// 	else {
+// 		nameStr = {$or: [{'name': name}, {'name': ""}]};
+// 	}
+// 	if(!type){
+// 		var typeStr = {};
+// 	}
+// 	else{
+// 		var typeStr = {$or: [{'type': type}, {'type': ""}]};
+// 	}
+// 	if(keywords.length == 1 && !keywords[0]){
+// 		var keywordsStr = {};
+// 	}
+// 	else{
+// 		var keywordsStr = {$or: [{'keywords': {$in:keywords}}, {'keywords' : ""} ]};//or
+// 		//var keywordsStr = {'keywords': {$all:keywords}};//and
+// 	}
+// 	if(!region){
+// 		var regionStr = {};
+// 	}
+// 	else{
+// 		var regionStr = {$or: [{'region' : region}, {'region': ""}, {'region': null}]};
+// 	}		
+// 	if(!country){
+// 		var countryStr = {};
+// 	}
+// 	else{
+// 		var countryStr = {$or: [{'country' : country}, {'country': ""}, {'country': null}]};
+// 	}
+// 	if(!state){
+// 		var stateStr = {};
+// 	}
+// 	else{
+// 		var stateStr = {$or: [{'state' : state}, {'state': ""}, {'state': null}]};
+// 	}
+// 	if(!city){
+// 		var cityStr = {};
+// 	}
+// 	else{
+// 		var cityStr = {$or: [{'city' : city}, {'city': ""}]};
+// 	}
+// 	if(!startDate){
+// 		var startDateStr = {};
+// 	}
+// 	else{
+// 		var startDateStr = {$or: [{'startDate': {$lte:startDate}}, {'startDate': ""}]};
+// 	}
+// 	if(!endDate){
+// 		var endDateStr = {};
+// 	}
+// 	else{
+// 		var endDateStr = {$or: [{'endDate' : {$gte:endDate}}, {'endDate': ""}]};
+// 	}
+// 	collection.find({$and: [nameStr, typeStr, regionStr, countryStr, stateStr, cityStr, startDateStr, endDateStr, keywordsStr]}).toArray(function(err, results){
+// 		console.log('user number' + results.length);
+// 		for(var i = 0; i < results.length; i++){
+// 			console.log('userEmail: ' + results[i].userEmail);
+// 			var server 	= email.server.connect({
+// 			   user:    "jinhang91@hotmail.com", 
+// 			   password:"891110Hotmail", 
+// 			   host:	"smtp-mail.outlook.com", 
+// 			   tls: {ciphers: "SSLv3"}
+// 			});
 
-			var message	= {
-			   text:	"Hello " + results[i].userName + ", \n There is a new event match your subscription. Below is the detailed information. \n" + 
-			   "Event name: " + name + "\n" + "Event type: " + type + "\n",
-			   from:	"you <jinhang91@hotmail.com>", 
-			   to:		"zhuyingcau <" + results[i].userEmail + ">",
-			   cc:		"",
-			   subject:	"testing email js"
-			   /*
-			   attachment: 
-			   [
-			      {data:"<html>i <i>hope</i> this works!</html>", alternative:true},
-			      {path:"path/to/file.zip", type:"application/zip", name:"renamed.zip"}
-			   ]
-			   */
-			};
+// 			var message	= {
+// 			   text:	"Hello " + results[i].userName + ", \n There is a new event match your subscription. Below is the detailed information. \n" + 
+// 			   "Event name: " + name + "\n" + "Event type: " + type + "\n",
+// 			   from:	"you <jinhang91@hotmail.com>", 
+// 			   to:		"zhuyingcau <" + results[i].userEmail + ">",
+// 			   cc:		"",
+// 			   subject:	"testing email js"
+// 			   /*
+// 			   attachment: 
+// 			   [
+// 			      {data:"<html>i <i>hope</i> this works!</html>", alternative:true},
+// 			      {path:"path/to/file.zip", type:"application/zip", name:"renamed.zip"}
+// 			   ]
+// 			   */
+// 			};
 
-			// send the message and get a callback with an error or details of the message that was sent
-			server.send(message, function(err, message) { 
-					console.log(err || message); 
-			});
-		}
+// 			// send the message and get a callback with an error or details of the message that was sent
+// 			server.send(message, function(err, message) { 
+// 					console.log(err || message); 
+// 			});
+// 		}
 
-	});
-}
+// 	});
+// }
 
 
 //register - POST
@@ -399,7 +398,7 @@ router.post('/register',
 	}
 	else{
 
-		db.users.findOne({'email': email}, function(err, user){
+		UsersModel.findOne({'email': email}, function(err, user){
 			if(err){
 				res.send(err);
 			}
@@ -425,14 +424,15 @@ router.post('/register',
 					name: name,
 					email: email,
 					// username: username,
-					password: password
+					password: password,
 					//events: events
+					priority: 0
 				}
 
 				bcrypt.genSalt(10, function(err, salt){
 					bcrypt.hash(newUser.password, salt, function(err, hash){
 						newUser.password = hash;
-						db.users.insert(newUser, function(err, doc){
+						UsersModel.create(newUser, function(err, doc){
 							if(err){
 								res.send(err);
 							}
@@ -485,7 +485,7 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(id, done) {
-  	db.users.findOne({_id:mongojs.ObjectId(id)}, function(err,user){
+  	UsersModel.findOne({_id:mongojs.ObjectId(id)}, function(err,user){
 		done(err, user);
   	});
 });
@@ -514,7 +514,7 @@ passport.use('local-login', new LocalStrategy({
 	},
 	function(req, email, password, done){
 		
-		db.users.findOne({'email': email}, function(err, user){
+		UsersModel.findOne({'email': email}, function(err, user){
 		if(err){
 			return done(err);
 		}
@@ -573,8 +573,7 @@ router.get('/logout', function(req, res){
 
 router.get('/mySub', ensureLoggedIn('login'), 
  function(req, res){
- 	var collection = db.collection('subs');
-	collection.find({userEmail: req.user.email}).toArray(function(err, results){
+	SubsModel.find({userEmail: req.user.email}, function(err, results){
 		if (err) {
     		console.dir( err );
     	}
@@ -609,11 +608,11 @@ router.get('/myEvent', ensureLoggedIn('login'),
 
 router.get('/myProfile', ensureLoggedIn('login'),
 	function(req, res){
-		var collection = db.collection('users');
-		collection.find({email: req.user.email}).toArray(function(err, results){
+		UsersModel.findOne({email: req.user.email}, function(err, results){
 			if(err){
 				console.log(err);
 			}
+			console.log('length: ' + results.length);
 			res.render('myProfile', {title: 'My profile', user: req.user, results: results});
 		});
 	}
@@ -622,20 +621,20 @@ router.get('/myProfile', ensureLoggedIn('login'),
 router.get('/editSub', ensureLoggedIn('login'), function(req, res){
 	console.log('in get editSub');
 	var types;
-	db.types.find({}).toArray(function(err, typeresults){
+	TypesModel.find({}, function(err, typeresults){
 		if (err) {
     		console.dir( err );
     	}
     	console.log('find types '+typeresults.length);
     	types = typeresults;
-    	db.subs.find({_id: ObjectId(req.query.id)}).toArray(function(err, results){
+    	SubsModel.findById(req.query.id, function(err, results){
 			if(err) {
 				console.dir(err);
 			}
 		// console.log('find subscription ' + results.length);
 		// console.log('results.name: ' + results[0].name);
 		//console.log('find types '+types.length);
-			res.render('editSub', { title:'Edit subscription', user: req.user, types: types, sub: results});
+			res.render('editSub', { title:'Edit subscription', user: req.user, types: types, results: results});
 		});
 	});
 	
@@ -662,14 +661,14 @@ router.get('/editEvent', ensureLoggedIn('login'), function(req, res){
 router.get('/editProfile', ensureLoggedIn('login'), function(req, res){
 	console.log('in editProfile');
 
-	db.users.find({_id: ObjectId(req.query.id)}).toArray(function(err, results){
+	UsersModel.findById(req.query.id, function(err, results){
 		if(err) {
 			console.dir(err);
 		}
 	// console.log('find subscription ' + results.length);
 	// console.log('results.name: ' + results[0].name);
 	//console.log('find types '+types.length);
-		console.log(results);
+		//console.log(results);
 		res.render('editProfile', { title:'Edit profile', user: req.user, results: results});
 	});	
 });
@@ -677,7 +676,7 @@ router.get('/editProfile', ensureLoggedIn('login'), function(req, res){
 router.get('/editPassword', ensureLoggedIn('login'), function(req, res){
 	console.log('in editPassword');
 
-	db.users.find({_id: ObjectId(req.query.id)}).toArray(function(err, results){
+	UsersModel.findById(req.query.id, function(err, results){
 		if(err) {
 			console.dir(err);
 		}
@@ -736,7 +735,7 @@ router.post('/editSub', ensureLoggedIn('login'), function(req, res){
 		   userEmail: userEmail
 	}
 	console.log('id = '+id);
-	db.subs.update({_id:ObjectId(id)}, newSub, function(err, doc){
+	SubsModel.update({_id:ObjectId(id)}, newSub, function(err, doc){
 		if(err){
 			res.send(err);
 		}
@@ -745,7 +744,7 @@ router.post('/editSub', ensureLoggedIn('login'), function(req, res){
 			//success msg
 
 			req.flash('success', 'Successfully edited a subscription!');
-			db.subs.find({userEmail: req.user.email}).toArray(function(err, results){
+			SubsModel.find({userEmail: req.user.email}, function(err, results){
 				if (err) {
 		    		console.dir( err );
 		    	}
@@ -823,7 +822,7 @@ router.post('/editProfile', ensureLoggedIn('login'), function(req, res){
 	//get form values
 	var name 		= req.body.name;
 	var id = req.body.id;
-	db.users.update({_id:ObjectId(id)}, {$set: {'name':name}}, function(err, doc){
+	UsersModel.update({_id:ObjectId(id)}, {$set: {'name':name}}, function(err, doc){
 		if(err){
 			res.send(err);
 		}
@@ -832,7 +831,7 @@ router.post('/editProfile', ensureLoggedIn('login'), function(req, res){
 			//success msg
 
 			req.flash('success', 'Successfully edited your profile!');
-			db.users.find({_id: ObjectId(id)}).toArray(function(err, results){
+			UsersModel.findById(id, function(err, results){
 				if(err) {
 					console.dir(err);
 				}
@@ -860,7 +859,7 @@ router.post('/editPassword', ensureLoggedIn('login'),
 		if(errors){
 			console.log('form has errors');
 			req.flash('error', 'New password and confirm password are not same.');
-			db.users.find({_id: ObjectId(id)}).toArray(function(err, results){
+			UsersModel.findById(id, function(err, results){
 				if(err) {
 					console.dir(err);
 				}
@@ -876,13 +875,13 @@ router.post('/editPassword', ensureLoggedIn('login'),
 
 		}
 		else{
-			db.users.findOne({_id: ObjectId(id)}, function(err, user){
+			UsersModel.findOne({_id: ObjectId(id)}, function(err, user){
 				if(err){
 					res.send(err);
 				}
 				if(!user){
 					req.flash('error', 'Database error, your profile is missing!')
-					db.users.find({_id: ObjectId(id)}).toArray(function(err, results){
+					UsersModel.findById(id, function(err, results){
 						if(err) {
 							console.dir(err);
 						}
@@ -904,7 +903,7 @@ router.post('/editPassword', ensureLoggedIn('login'),
 						bcrypt.genSalt(10, function(err, salt){
 							bcrypt.hash(new_password, salt, function(err, hash){
 								new_password = hash;
-								db.users.update({_id:ObjectId(id)}, {$set: {'password':new_password}}, function(err, doc){
+								UsersModel.update({_id:ObjectId(id)}, {$set: {'password':new_password}}, function(err, doc){
 									if(err){
 										res.send(err);
 									}
@@ -921,7 +920,7 @@ router.post('/editPassword', ensureLoggedIn('login'),
 					}
 					else{
 						req.flash('error', 'Origin password is incorrect.');
-						db.users.find({_id: ObjectId(id)}).toArray(function(err, results){
+						UsersModel.findById(id, function(err, results){
 							if(err) {
 								console.dir(err);
 							}

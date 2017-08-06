@@ -48,27 +48,27 @@
     </nav>
 <%- messages() %>
 
-<%  for(var i=0; i<results.length; i++) {%>
+<% var index = 1; results.forEach(function(result) {%>
 
   <div class="container" role="main">
     <div class="well">
-      <h3>Subscription <%=i%></h3>
-      <li><strong>ID:</strong> <%=results[i]._id%></li>      
-      <li><strong>Name:</strong> <%=results[i].name%></li>
-      <li><strong>Type:</strong> <%=results[i].type%></li>
-      <li><strong>Region:</strong> <%=results[i].region%></li>
-      <li><strong>Country:</strong> <%=results[i].country%></li>
-      <li><strong>State:</strong> <%=results[i].state%></li>
-      <li><strong>City:</strong> <%=results[i].city%></li>
-      <li><strong>Organization:</strong> <%=results[i].organization%></li>
-      <li><strong>Date:</strong> <%=results[i].startDate%>~<%=results[i].endDate%></li>
-      <li><strong>Keywords:</strong> <%=results[i].keywords%></li>
-      <a href="/users/editSub?id=<%=results[i]._id%>"><button type="button" class="btn btn-warning" >Edit</button></a>
-      <a href="/users/deleteSub?id=<%=results[i]._id%>"><button type="button" class="btn btn-danger">Delete</button></a>
+      <h3>Subscription <%=index ++%></h3>
+      <li><strong>ID:</strong> <%=result._id%></li>      
+      <li><strong>Name:</strong> <%=result.name%></li>
+      <li><strong>Type:</strong> <%=result.type%></li>
+      <li><strong>Region:</strong> <%=result.region%></li>
+      <li><strong>Country:</strong> <%=result.country%></li>
+      <li><strong>State:</strong> <%=result.state%></li>
+      <li><strong>City:</strong> <%=result.city%></li>
+      <li><strong>Organization:</strong> <%=result.organization%></li>
+      <li><strong>Date:</strong> <%=result.startDate%>~<%=result.endDate%></li>
+      <li><strong>Keywords:</strong> <%=result.keywords%></li>
+      <a href="/users/editSub?id=<%=result._id%>"><button type="button" class="btn btn-warning" >Edit</button></a>
+      <a href="/users/deleteSub?id=<%=result._id%>"><button type="button" class="btn btn-danger">Delete</button></a>
     </div>
   </div>
   <br>
-<% } %>
+<% }) %>
 
 
 

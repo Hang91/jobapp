@@ -56,11 +56,10 @@
         <br>
         <lable>Event Type</lable><br>
         <select class="form-control" name="type" value="<%= (!!locals.type)?type:'' %>">
-            <option value="" selected="selected">-----ALL-----</option>
-            <% for (var i=0; i<results.length; i++){ 
-                    console.log(results.length); %>
-            <option value= <%=results[i].type%> ><%=results[i].type%></option>
-            <% } %>
+            <option value="">-----ALL-----</option>
+            <% types.forEach(function(onetype) { %>
+                <option value="<%=onetype.type%>"><%=onetype.type%></option>                
+            <% }) %>
         </select>
         <br>
         <lable>Region</lable><br>
