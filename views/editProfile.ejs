@@ -49,13 +49,13 @@
     </nav>
     
 <div class="container">
-    <h1>id: <%=results[0]._id%></h1>
+    <h1>id: <%=results._id%></h1>
       <form method="post" action="/users/editProfile" class="form-signin">
         <h2 class="form-signin-heading">Edit Profile</h2>
         <!-- <label>ID</label> -->
-        <input class="hid" type="text" name="id" class="form-control" value="<%= (!!results[0]._id)?results[0]._id:'' %>">
+        <input class="hid" type="text" name="id" class="form-control" value="<%= (!!results._id)?results._id:'' %>">
         <label>Name</label>
-        <input type="text" name="name" class="form-control" value="<%= (!!results[0].name)?results[0].name:'' %>">
+        <input type="text" name="name" class="form-control" value="<%= (!!results.name)?results.name:'' %>">
         <br>
 
 
