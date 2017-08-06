@@ -13,9 +13,38 @@ var ObjectId = require('mongodb').ObjectID;
 var json2csv = require('json2csv');
 var fs = require('fs');
 
-
 //manage subscription page - GET - download using json2csv
 router.get('/users', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
+    var fields = ['userName', 'userEmail', 'name', 'type', 'city', 'state', 'country', 'region', 
+        'organization', 'startDate', 'endDate', 'keywords'];
+    //find all users sorted by priority
+    usersModel.find({}).sort('userName').exec(function(err, results){
+        if(err){
+            res.json(err);
+        }
+        //console.log(results3.length);
+        var csv = json2csv({ data: results, fields: fields });
+
+        var path='UsersSubscription'+Date.now()+'.csv';
+        
+        fs.writeFile(path, csv, function(err) {
+            if (err) {
+                throw err;
+            }
+            console.log('File saved');
+            //res.download(path);
+            req.flash('success', 'Successfully download users\' subscription!');
+            res.location('/');
+            res.redirect('/');
+        });
+        // res.render('index', { title:'Home', 
+        //     user: req.user, 
+        //     results3 : results}); 
+    }); 
+});
+
+//click download button inmanage subscription page - GET - download using json2csv
+router.get('/users/download', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
     var fields = ['userName', 'userEmail', 'name', 'type', 'city', 'state', 'country', 'region', 
         'organization', 'startDate', 'endDate', 'keywords'];
     //find all subscriptions sorted by userName
