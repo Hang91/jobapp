@@ -398,7 +398,7 @@ router.get('/categories/delete', ensureLoggedIn('/users/login'), isAdmin, functi
 
 function isAdmin(req, res, next) {
 
-	 if ((!req.isAuthenticated()) || (req.user.name != 'admin')) {
+	 if ((!req.isAuthenticated()) || (req.user.priority != 2)) {
 	 	req.flash('error', 'Seems like you aren\'t an admin! '+req.user.name);
 		res.redirect('/');
 	 }

@@ -18,7 +18,7 @@
             </ul>
             <% if(user){ %>
             <ul class="nav navbar-nav navbar-right">
-                <% if(user.name == 'admin'){ %>
+                <% if(user.priority == 2){ %>
                   <li class="dropdown"><a href="#">Manage</a>
                       <div class="dropdown-content">
                         <hr><a href="/manage/events">Manage Events</a><br>
@@ -26,7 +26,13 @@
                         <a href="/manage/users">Manage users</a><br>
                       </div>
                   </li>
-                <% } %>
+                <% }else if(user.priority == 1){%>
+                  <li class="dropdown"><a href="#">Manage</a>
+                      <div class="dropdown-content">
+                        <hr><a href="/manage/events">Manage Events</a><br>
+                      </div>
+                  </li>
+                <% } %> 
                   <li class="dropdown"><a href="#">Welcome, <%= user.name%>!</a>
                   <div class="dropdown-content">
                     <hr><a href="/users/myEvent">My Events</a><br>
