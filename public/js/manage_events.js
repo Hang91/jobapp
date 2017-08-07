@@ -5,7 +5,7 @@ function reviseInDetail(){
   if (reviseConfirm()) {
 　　　　　　//删除操作
           var revise = document.getElementById('revise');
-　　　　　　alert("Revised");
+　　　　　　alert("Asked for Revision");
           revise.type="submit";
 　　　　}
 　　　　else {
@@ -15,7 +15,7 @@ function reviseInDetail(){
 }
 
 function reviseConfirm() {
-　　　　if (window.confirm("Confirm to revise this event?")) {
+　　　　if (window.confirm("Confirm to ask for revision about this event?")) {
 　　　　　　return true;//confirm
 　　　　}
 　　　　else {
@@ -27,7 +27,7 @@ function reviseConfirm() {
 //approve
 function approveEventInDetail() {
 　　　　if (approveConfirm()) {
-　　　　　　//删除操作
+　　　　　　//approve操作
           var approve = document.getElementById('approve');
 　　　　　　alert("Approved");
           approve.type="submit";
@@ -41,7 +41,7 @@ function approveEventInDetail() {
 
 function approveEvent(index) {
 　　　　if (approveConfirm()) {
-　　　　　　//删除操作
+　　　　　　//approve操作
           var approve = document.getElementById('approve_'+index);
 　　　　　　alert("Approved");
           var id = document.getElementById('id_'+index).innerHTML;

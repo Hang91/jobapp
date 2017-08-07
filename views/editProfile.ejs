@@ -29,8 +29,8 @@
                   <li class="dropdown"><a href="#">Manage</a>
                       <div class="dropdown-content">
                         <hr><a href="/manage/events">Manage Events</a><br>
-                        <a href="/manage/categories">Manage categories</a><br>
-                        <a href="/manage/users">Manage users</a><br>
+                        <a href="/manage/categories">Manage Categories</a><br>
+                        <a href="/manage/users">Manage Users</a><br>
                       </div>
                   </li>
                 <% }else if(user.priority == 1){%>
@@ -63,12 +63,20 @@
         <label>Name</label>
         <input type="text" name="name" class="form-control" value="<%= (!!results.name)?results.name:'' %>">
         <br>
-
-
-
-        <!-- <p>Have Account? <a href="/users/login">Login</a></p> -->
         <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
       </form>
+      
+      <%if(user.priority == 2){ %>
+      <form method="post" action="/users/editEmailAlert" class="form-signin">
+        <h2 class="form-signin-heading">Edit Email Alert</h2>
+        <label>Email Account</label>
+        <input type="text" name="account" class="form-control" value="">
+        <label>Email Password</label>
+        <input type="text" name="password" class="form-control" value="">
+        <br>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+      </form>
+      <% } %>
 
     </div> <!-- /container -->
 
