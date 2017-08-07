@@ -23,8 +23,8 @@
                   <li class="dropdown"><a href="#">Manage</a>
                       <div class="dropdown-content">
                         <hr><a href="/manage/events">Manage Events</a><br>
-                        <a href="/manage/categories">Manage categories</a><br>
-                        <a href="/manage/users">Manage users</a><br>
+                        <a href="/manage/categories">Manage Categories</a><br>
+                        <a href="/manage/users">Manage Users</a><br>
                       </div>
                   </li>
                 <% }else if(user.priority == 1){%>
@@ -54,10 +54,10 @@
     </nav>
 <%- messages() %>
 
-
+<div class="container">
+  <h2>My Profile</h2>
   <div class="container" role="main">
     <div class="well">
-      <h3>My Profile</h3>
       <li><strong>ID:</strong> <%=results._id%></li>      
       <li><strong>Name:</strong> <%=results.name%></li>
       <li><strong>Email:</strong> <%=results.email%></li>
@@ -66,7 +66,7 @@
     </div>
   </div>
   <br>
-
+</div>
 
 
 

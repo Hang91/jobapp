@@ -22,8 +22,8 @@
                   <li class="dropdown"><a href="#">Manage</a>
                       <div class="dropdown-content">
                         <hr><a href="/manage/events">Manage Events</a><br>
-                        <a href="/manage/categories">Manage categories</a><br>
-                        <a href="/manage/users">Manage users</a><br>
+                        <a href="/manage/categories">Manage Categories</a><br>
+                        <a href="/manage/users">Manage Users</a><br>
                       </div>
                   </li>
                 <% }else if(user.priority == 1){%>
@@ -52,8 +52,8 @@
       </div>
     </nav>
 <%- messages() %>
-
-<h2>Manage Events: </h2>
+<div class="container">
+<h2>Manage Events</h2>
 <p>Click on "Approve" to approve events.</p>
 <p>Click on "Disapprove" to disapprove events.</p>
 <p>Click on "Details" to show more details.</p>
@@ -168,5 +168,5 @@
     </div>
     </div>
 </div>
-      
+</div>    
 <%- include('includes/footer') %>

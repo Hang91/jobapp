@@ -22,8 +22,8 @@
                   <li class="dropdown"><a href="#">Manage</a>
                       <div class="dropdown-content">
                         <hr><a href="/manage/events">Manage Events</a><br>
-                        <a href="/manage/categories">Manage categories</a><br>
-                        <a href="/manage/users">Manage users</a><br>
+                        <a href="/manage/categories">Manage Categories</a><br>
+                        <a href="/manage/users">Manage Users</a><br>
                       </div>
                   </li>
                 <% }else if(user.priority == 1){%>
@@ -55,6 +55,7 @@
 
 <div class="container reg-page">
 <form method = "post" action="/events" class="form-signin">
+  <h2 class="form-signin-heading">Search</h2>
     <lable>Type</lable><br>
     <select class="form-control" name="type">
         <option value="" selected="selected">-----ALL-----</option>
