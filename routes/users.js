@@ -941,15 +941,20 @@ router.post('/editPassword', ensureLoggedIn('login'),
 
 
 router.get('/deleteSub', ensureLoggedIn('login'), function(req, res){
-	var collection = db.collection('subs');
-	db.subs.remove({_id: ObjectId(req.query.id)});
-	collection.find({userEmail: req.user.email}).toArray(function(err, results){
-		if (err) {
-    		console.dir( err );
-    	}
-    	console.log('number of subcriptions: '+results.length);
-		res.render('mySub',{title:'My subcriptions', user: req.user, results:results});
-	}); 	
+	SubsModel.findByIdAndRemove(req.query.id, function(err, event){
+		if(err) {
+			res.send(err);
+		}
+		else {
+			SubsModel.find({userEmail: req.user.email}, function(err, results){
+				if (err) {
+		    		console.dir( err );
+		    	}
+		    	console.log('number of subcriptions: '+results.length);
+				res.render('mySub',{title:'My subcriptions', user: req.user, results:results});
+			}); 
+		}
+	})
 });
 
 router.get('/deleteEvent', ensureLoggedIn('login'), function(req, res){

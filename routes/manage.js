@@ -596,39 +596,31 @@ function alertUser(newEvent) {
   else{
     var endDateStr = {$or: [{'endDate' : {$gte:endDate}}, {'endDate': ""}]};
   }
-  collection.find({$and: [nameStr, typeStr, regionStr, countryStr, stateStr, cityStr, startDateStr, endDateStr, keywordsStr]}).toArray(function(err, results){
+  SubsModel.find({$and: [nameStr, typeStr, regionStr, countryStr, stateStr, cityStr, startDateStr, endDateStr, keywordsStr]}, function(err, results){
     console.log('user number' + results.length);
-    for(var i = 0; i < results.length; i++){
-      console.log('userEmail: ' + results[i].userEmail);
-      var server  = email.server.connect({
-         user:    "jinhang91@hotmail.com", 
-         password:"891110Hotmail", 
-         host:  "smtp-mail.outlook.com", 
-         tls: {ciphers: "SSLv3"}
-      });
+
+    var server  = email.server.connect({
+      user:    "jinhang91@hotmail.com", 
+      password:"891110Hotmail", 
+      host:  "smtp-mail.outlook.com", 
+      tls: {ciphers: "SSLv3"}
+    });
+    results.forEach(function(result){
 
       var message = {
-         text:  "Hello " + results[i].userName + ", \n There is a new event match your subscription. Below is the detailed information. \n" + 
-         "Event name: " + name + "\n" + "Event type: " + type + "\n",
-         from:  "you <jinhang91@hotmail.com>", 
-         to:    "zhuyingcau <" + results[i].userEmail + ">",
-         cc:    "",
-         subject: "testing email js"
-         /*
-         attachment: 
-         [
-            {data:"<html>i <i>hope</i> this works!</html>", alternative:true},
-            {path:"path/to/file.zip", type:"application/zip", name:"renamed.zip"}
-         ]
-         */
+        text:  "Hello " + result.userName + ", \n There is a new event match your subscription. Below is the detailed information. \n" + 
+        "Event name: " + name + "\n" + "Event type: " + type + "\n",
+        from:  "you <jinhang91@hotmail.com>", 
+        to:    "zhuyingcau <" + result.userEmail + ">",
+        cc:    "",
+        subject: "testing email js"
       };
 
       // send the message and get a callback with an error or details of the message that was sent
       server.send(message, function(err, message) { 
           console.log(err || message); 
       });
-    }
-
+    });
   });
 }
 
