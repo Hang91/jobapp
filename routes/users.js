@@ -956,20 +956,16 @@ router.post('/editEmailAlert', ensureLoggedIn('login'),
                    password: password
                }
 		//insert
-		bcrypt.genSalt(10, function(err, salt){
-			bcrypt.hash(newAlert.password, salt, function(err, hash){
-				newAlert.password = hash;
-				AlertModel.create(newAlert, function(err, doc){
-					if(err){
-						res.send(err);
-					}
-					else{
-						console.log("Email Alert Account Set Success!");
-						res.location('/');
-        				res.redirect("/");
-					}
-				});
-			});
+
+		AlertModel.create(newAlert, function(err, doc){
+			if(err){
+				res.send(err);
+			}
+			else{
+				console.log("Email Alert Account Set Success!");
+				res.location('/');
+				res.redirect("/");
+			}
 		});
 });
 

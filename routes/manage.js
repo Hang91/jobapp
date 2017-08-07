@@ -6,6 +6,7 @@ var TypesModel = require('../models/TypeDB');
 var EventsModel = require('../models/EventDB');
 var UsersModel = require('../models/UserDB');
 var SubsModel = require('../models/SubDB');
+var AlertsModel = require('../models/AlertDB');
 var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 var email   = require('emailjs/email');
 
@@ -241,8 +242,6 @@ router.post('/events/details', ensureLoggedIn('/users/login'), isManager, functi
         var keywords = null;
         console.log('keywords is not a string');
     }
-    var userName = req.user.name;
-    var userEmail = req.user.email;
 
     if(req.body.manage_event_detail == "revise"){
         
@@ -265,12 +264,10 @@ router.post('/events/details', ensureLoggedIn('/users/login'), isManager, functi
                    description: description,
                    keywords: keywords,
                    approved: approved,
-                   comments: comments,
-                   userName: userName,
-                   userEmail: userEmail
+                   comments: comments
             }
         //update
-        EventsModel.update({_id:ObjectId(id)}, newEvent, function(err, doc){
+        EventsModel.update({_id:ObjectId(id)}, {$set:newEvent}, function(err, doc){
         if(err){
             res.send(err);
         }
@@ -278,6 +275,7 @@ router.post('/events/details', ensureLoggedIn('/users/login'), isManager, functi
             console.log('ask for revision success!');
             //success msg
             //alertUser(newEvent);
+            informUser(id);
             req.flash('success', 'Successfully ask for revision!');
             res.location('/manage/events');
             res.redirect('/manage/events');
@@ -305,18 +303,17 @@ router.post('/events/details', ensureLoggedIn('/users/login'), isManager, functi
                    keywords: keywords,
                    approved: approved,
                    comments: comments,
-                   userName: userName,
-                   userEmail: userEmail
             }
         //update
-        EventsModel.update({_id:ObjectId(id)}, newEvent, function(err, doc){
+        EventsModel.update({_id:ObjectId(id)}, {$set: newEvent}, function(err, doc){
         if(err){
             res.send(err);
         }
         else{
             console.log('approve success!');
             //success msg
-            alertUser(newEvent);
+            informUser(newEvent);
+            alertUser(id);
             req.flash('success', 'Approve!');
             res.location('/manage/events');
             res.redirect('/manage/events');
@@ -511,160 +508,167 @@ function isManager(req, res, next) {
    }
 };
 
-function informUser(newEvent) {
-
-  var server  = email.server.connect({
-    user:    "jinhang91@hotmail.com", 
-    password:"891110Hotmail", 
-    host:  "smtp-mail.outlook.com", 
-    tls: {ciphers: "SSLv3"}
-  });
-
-  if(newEvent.approve == 3) { //revise
-    var message = {
-      text:  "Hello " + newEvent.userName + ", you hava an event to revise. Please log in your eventapp account " +
-       "to get detail information",
-      from:  "you <jinhang91@hotmail.com>", 
-      to:    "zhuyingcau <" + newEvent.userEmail + ">",
-      cc:    "",
-      subject: "testing email js"
-    };
-
-    server.send(message, function(err, message) { 
-        console.log(err || message); 
+function informUser(id) {
+  console.log("inform user");
+  AlertsModel.findOne(function(err, results){
+    if(err) {
+      console.log(err);
+    }
+    var adminPw = results.password;
+    var adminEmail = results.account;
+    console.log("adminEmail: " + adminEmail);
+    console.log("admintPw: " + adminPw);
+    var server  = email.server.connect({
+      user:  adminEmail, 
+      password: adminPw,
+      host:  "smtp-mail.outlook.com", 
+      tls: {ciphers: "SSLv3"}
     });
-  }
-  else if(newEvent.approve == 1) { //approved
-    var message = {
-      text:  "Hello " + newEvent.userName + ", you hava an event approved. You can log in your eventapp account " +
-       "to get detail information",
-      from:  "you <jinhang91@hotmail.com>", 
-      to:    "zhuyingcau <" + newEvent.userEmail + ">",
-      cc:    "",
-      subject: "testing email js"
-    };
 
-    server.send(message, function(err, message) { 
-        console.log(err || message); 
-    });    
-  }
+    EventsModel.findById(id, function(err, events){
+      if(err) {
+        console.log(err);
+      }
+      if(events.approved == 3) { //revise
+        var message = {
+          text:  "Hello " + events.userName + ", you hava an event to revise. Please log in your eventapp account " +
+           "to get detail information. ",
+          from:  "you <jinhang91@hotmail.com>", 
+          to:    events.userName + "<" + events.userEmail + ">",
+          cc:    "",
+          subject: "testing email js"
+        };
+
+        server.send(message, function(err, message) { 
+            console.log(err || message); 
+        });
+      }
+      else if(events.approved == 1) { //approved
+        var message = {
+          text:  "Hello " + events.userName + ", you hava an event approved. You can log in your eventapp account " +
+           "to get detail information",
+          from:  "you <jinhang91@hotmail.com>", 
+          to:    "zhuyingcau <" + events.userEmail + ">",
+          cc:    "",
+          subject: "testing email js"
+        };
+
+        server.send(message, function(err, message) { 
+            console.log(err || message); 
+        });    
+      }
+    });
+  });
 
   // send the message and get a callback with an error or details of the message that was sent
 
 }
 
 function alertUser(newEvent) {
-  var name = newEvent.name;
-  var type = newEvent.type;
-  var keywords = newEvent.keywords;
-  var region = newEvent.region;
-  var country = newEvent.country;
-  var state = newEvent.state;
-  var city = newEvent.city;
-  var startDate = newEvent.startDate;
-  var endDate = newEvent.endDate;
-  var website = newEvent.website;
-  var deadline = newEvent.deadline;
-  var description = newEvent.description;
-  //delete out-of-date subs
-  // var today = new Date();
-  // var dd = today.getDate();
-  // var mm = today.getMonth()+1; //January is 0!
-  // var yyyy = today.getFullYear();
+  console.log("alert User");
 
-  // if(dd<10) {
-  //     dd = '0'+dd
-  // } 
+  AlertsModel.findOne(function(err, emails){
+    if(err) {
+      console.log(err);
+    }
 
-  // if(mm<10) {
-  //     mm = '0'+mm
-  // } 
+    var adminEmail = emails.account;
+    var adminPw = emails.password;
+    var name = newEvent.name;
+    var type = newEvent.type;
+    var keywords = newEvent.keywords;
+    var region = newEvent.region;
+    var country = newEvent.country;
+    var state = newEvent.state;
+    var city = newEvent.city;
+    var startDate = newEvent.startDate;
+    var endDate = newEvent.endDate;
+    var website = newEvent.website;
+    var deadline = newEvent.deadline;
+    var description = newEvent.description;
 
-  // today =  yyyy + '-' + mm + '-' + dd;
-  // console.log(today);
-  // collection.remove({'startDate': {$lt:today}})
+    if(!name) {
+      var nameStr = {};
+    }
+    else {
+      nameStr = {$or: [{'name': name}, {'name': ""}]};
+    }
+    if(!type){
+      var typeStr = {};
+    }
+    else{
+      var typeStr = {$or: [{'type': type}, {'type': ""}]};
+    }
+    if(keywords.length == 1 && !keywords[0]){
+      var keywordsStr = {};
+    }
+    else{
+      var keywordsStr = {$or: [{'keywords': {$in:keywords}}, {'keywords' : ""} ]};//or
+      //var keywordsStr = {'keywords': {$all:keywords}};//and
+    }
+    if(!region){
+      var regionStr = {};
+    }
+    else{
+      var regionStr = {$or: [{'region' : region}, {'region': ""}, {'region': null}]};
+    }   
+    if(!country){
+      var countryStr = {};
+    }
+    else{
+      var countryStr = {$or: [{'country' : country}, {'country': ""}, {'country': null}]};
+    }
+    if(!state){
+      var stateStr = {};
+    }
+    else{
+      var stateStr = {$or: [{'state' : state}, {'state': ""}, {'state': null}]};
+    }
+    if(!city){
+      var cityStr = {};
+    }
+    else{
+      var cityStr = {$or: [{'city' : city}, {'city': ""}]};
+    }
+    if(!startDate){
+      var startDateStr = {};
+    }
+    else{
+      var startDateStr = {$or: [{'startDate': {$lte:startDate}}, {'startDate': ""}]};
+    }
+    if(!endDate){
+      var endDateStr = {};
+    }
+    else{
+      var endDateStr = {$or: [{'endDate' : {$gte:endDate}}, {'endDate': ""}]};
+    }
+    SubsModel.find({$and: [nameStr, typeStr, regionStr, countryStr, stateStr, cityStr, startDateStr, endDateStr, keywordsStr]}, function(err, results){
+      console.log('user number' + results.length);
 
-  if(!name) {
-    var nameStr = {};
-  }
-  else {
-    nameStr = {$or: [{'name': name}, {'name': ""}]};
-  }
-  if(!type){
-    var typeStr = {};
-  }
-  else{
-    var typeStr = {$or: [{'type': type}, {'type': ""}]};
-  }
-  if(keywords.length == 1 && !keywords[0]){
-    var keywordsStr = {};
-  }
-  else{
-    var keywordsStr = {$or: [{'keywords': {$in:keywords}}, {'keywords' : ""} ]};//or
-    //var keywordsStr = {'keywords': {$all:keywords}};//and
-  }
-  if(!region){
-    var regionStr = {};
-  }
-  else{
-    var regionStr = {$or: [{'region' : region}, {'region': ""}, {'region': null}]};
-  }   
-  if(!country){
-    var countryStr = {};
-  }
-  else{
-    var countryStr = {$or: [{'country' : country}, {'country': ""}, {'country': null}]};
-  }
-  if(!state){
-    var stateStr = {};
-  }
-  else{
-    var stateStr = {$or: [{'state' : state}, {'state': ""}, {'state': null}]};
-  }
-  if(!city){
-    var cityStr = {};
-  }
-  else{
-    var cityStr = {$or: [{'city' : city}, {'city': ""}]};
-  }
-  if(!startDate){
-    var startDateStr = {};
-  }
-  else{
-    var startDateStr = {$or: [{'startDate': {$lte:startDate}}, {'startDate': ""}]};
-  }
-  if(!endDate){
-    var endDateStr = {};
-  }
-  else{
-    var endDateStr = {$or: [{'endDate' : {$gte:endDate}}, {'endDate': ""}]};
-  }
-  SubsModel.find({$and: [nameStr, typeStr, regionStr, countryStr, stateStr, cityStr, startDateStr, endDateStr, keywordsStr]}, function(err, results){
-    console.log('user number' + results.length);
+      var server  = email.server.connect({
+        user:  adminEmail, 
+        password: adminPw,
+        host:  "smtp-mail.outlook.com", 
+        tls: {ciphers: "SSLv3"}
+      });
+      results.forEach(function(result){
 
-    var server  = email.server.connect({
-      user:    "jinhang91@hotmail.com", 
-      password:"891110Hotmail", 
-      host:  "smtp-mail.outlook.com", 
-      tls: {ciphers: "SSLv3"}
-    });
-    results.forEach(function(result){
+        var message = {
+          text:  "Hello " + result.userName + ", \n There is a new event match your subscription. Below is the detailed information. \n" + 
+          "Event name: " + name + "\n" + "Event type: " + type + "\n" + "Region: " + region + "\n" +
+          "Country: " + country + "\n" + "State: " + state + "\n" + "City: " + city + "\n" + "Date: " +
+          startDate + "~" + endDate + "\n" + "Abstract Deadline: " + deadline + "\n" + 
+          "Description: " + description + "\n" + "keywords: " + keywords,
+          from:  "you <jinhang91@hotmail.com>", 
+          to:    "zhuyingcau <" + result.userEmail + ">",
+          cc:    "",
+          subject: "testing email js"
+        };
 
-      var message = {
-        text:  "Hello " + result.userName + ", \n There is a new event match your subscription. Below is the detailed information. \n" + 
-        "Event name: " + name + "\n" + "Event type: " + type + "\n" + "Region: " + region + "\n" +
-        "Country: " + country + "\n" + "State: " + state + "\n" + "City: " + city + "\n" + "Date: " +
-        startDate + "~" + endDate + "\n" + "Abstract Deadline: " + deadline + "\n" + 
-        "Description: " + description + "\n" + "keywords: " + keywords,
-        from:  "you <jinhang91@hotmail.com>", 
-        to:    "zhuyingcau <" + result.userEmail + ">",
-        cc:    "",
-        subject: "testing email js"
-      };
-
-      // send the message and get a callback with an error or details of the message that was sent
-      server.send(message, function(err, message) { 
-          console.log(err || message); 
+        // send the message and get a callback with an error or details of the message that was sent
+        server.send(message, function(err, message) { 
+            console.log(err || message); 
+        });
       });
     });
   });
