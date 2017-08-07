@@ -16,5 +16,5 @@ var alertSchema = new mongoose.Schema({
 	}
 });
 
-module.exports = mongoose.model('alert', alertSchema);
+module.exports = mongoose.model('alerts', alertSchema);
 //yellow 'alert' is the name of the collection

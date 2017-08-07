@@ -23,8 +23,8 @@
                   <li class="dropdown"><a href="#">Manage</a>
                       <div class="dropdown-content">
                         <hr><a href="/manage/events">Manage Events</a><br>
-                        <a href="/manage/categories">Manage categories</a><br>
-                        <a href="/manage/users">Manage users</a><br>
+                        <a href="/manage/categories">Manage Categories</a><br>
+                        <a href="/manage/users">Manage Users</a><br>
                       </div>
                   </li>
                 <% }else if(user.priority == 1){%>
@@ -53,13 +53,13 @@
       </div>
     </nav>
 <%- messages() %>
-
+<div class="container">
+<h2>My Subscriptions</h2>
 <% var index = 1; results.forEach(function(result) {%>
 
   <div class="container" role="main">
     <div class="well">
-      <h3>Subscription <%=index ++%></h3>
-      <li><strong>ID:</strong> <%=result._id%></li>      
+      <h3>Subscription <%=index ++%></h3>     
       <li><strong>Name:</strong> <%=result.name%></li>
       <li><strong>Type:</strong> <%=result.type%></li>
       <li><strong>Region:</strong> <%=result.region%></li>
@@ -75,7 +75,7 @@
   </div>
   <br>
 <% }) %>
-
+</div>
 
 
 <script>

@@ -29,8 +29,8 @@
                   <li class="dropdown"><a href="#">Manage</a>
                       <div class="dropdown-content">
                         <hr><a href="/manage/events">Manage Events</a><br>
-                        <a href="/manage/categories">Manage categories</a><br>
-                        <a href="/manage/users">Manage users</a><br>
+                        <a href="/manage/categories">Manage Categories</a><br>
+                        <a href="/manage/users">Manage Users</a><br>
                       </div>
                   </li>
                 <% }else if(user.priority == 1){%>
@@ -55,7 +55,6 @@
     </nav>
     
 <div class="container">
-    <h1>id: <%=results._id%></h1>
       <form method="post" action="/users/editSub" class="form-signin">
         <h2 class="form-signin-heading">Edit Subscription</h2>
         <!-- <label>ID</label> -->
