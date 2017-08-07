@@ -329,7 +329,7 @@ router.post('/events/details', ensureLoggedIn('/users/login'), isManager, functi
 //approve an event
 router.get('/events/approve', ensureLoggedIn('/users/login'), isManager, function(req, res){
     var id = req.query.id;
-    console.log("in the approve function， id="+id);
+    //console.log("in the approve function， id="+id);
     EventsModel.update({_id:ObjectId(id)}, {$set:{approved:1}}, function(err, event){
         if(err){
             res.send(err);
@@ -367,7 +367,7 @@ router.get('/events/approve', ensureLoggedIn('/users/login'), isManager, functio
 //disapprove an event - delete
 router.get('/events/disapprove', ensureLoggedIn('/users/login'), isManager, function(req, res){
     var id = req.query.id;
-    console.log(id);
+    //console.log(id);
     EventsModel.findByIdAndRemove(ObjectId(id), function(err, event){
         if(err){
             res.send(err);
@@ -439,7 +439,7 @@ router.get('/categories/add', ensureLoggedIn('/users/login'), isAdmin, function(
 //edit type
 router.get('/categories/edit', ensureLoggedIn('/users/login'), isAdmin,function(req, res){
     var id = req.query._id;
-    console.log("edit type:"+id);
+    //console.log("edit type:"+id);
     var type = req.query.type;
     TypesModel.update({_id:ObjectId(id)}, {$set:{type:type}},{}, function(err, next){
         if(err){
@@ -465,7 +465,7 @@ router.get('/categories/edit', ensureLoggedIn('/users/login'), isAdmin,function(
 //delete type according to _id
 router.get('/categories/delete', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
 	var id = req.query._id;
-    console.log("delete type:"+id);
+    //console.log("delete type:"+id);
    //MogoDB use remove function to remove data
     TypesModel.findByIdAndRemove(ObjectId(id), function (err) {
         if (err){ 

@@ -15,6 +15,7 @@ var TypesModel = require('../models/TypeDB');
 var EventsModel = require('../models/EventDB');
 var SubsModel = require('../models/SubDB');
 var UsersModel = require('../models/UserDB');
+var AlertModel = require('../models/AlertDB');
 
 //login page - GET
 router.get('/login', function(req, res){
@@ -674,7 +675,7 @@ router.get('/editProfile', ensureLoggedIn('login'), function(req, res){
 });
 
 router.get('/editPassword', ensureLoggedIn('login'), function(req, res){
-	console.log('in editPassword');
+	//console.log('in editPassword');
 
 	UsersModel.findById(req.query.id, function(err, results){
 		if(err) {
@@ -683,10 +684,13 @@ router.get('/editPassword', ensureLoggedIn('login'), function(req, res){
 	// console.log('find subscription ' + results.length);
 	// console.log('results.name: ' + results[0].name);
 	//console.log('find types '+types.length);
-		console.log(results);
+		//console.log(results);
 		res.render('editPassword', { title:'Edit password', user: req.user, results: results});
 	});	
 });
+
+
+
 
 router.post('/editSub', ensureLoggedIn('login'), function(req, res){
 	//get form values
@@ -938,6 +942,36 @@ router.post('/editPassword', ensureLoggedIn('login'),
 		}
 	}
 );
+
+
+//admin only
+router.post('/editEmailAlert', ensureLoggedIn('login'), 
+	function(req, res){
+		//get form values
+		var account 		= req.body.account;
+		var password 		= req.body.password;
+
+		var newAlert = {
+                   account: account,
+                   password: password
+               }
+		//insert
+		bcrypt.genSalt(10, function(err, salt){
+			bcrypt.hash(newAlert.password, salt, function(err, hash){
+				newAlert.password = hash;
+				AlertModel.create(newAlert, function(err, doc){
+					if(err){
+						res.send(err);
+					}
+					else{
+						console.log("Email Alert Account Set Success!");
+						res.location('/');
+        				res.redirect("/");
+					}
+				});
+			});
+		});
+});
 
 
 router.get('/deleteSub', ensureLoggedIn('login'), function(req, res){
