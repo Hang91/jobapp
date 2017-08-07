@@ -511,8 +511,49 @@ function isManager(req, res, next) {
    }
 };
 
+function informUser(newEvent) {
+
+  var server  = email.server.connect({
+    user:    "jinhang91@hotmail.com", 
+    password:"891110Hotmail", 
+    host:  "smtp-mail.outlook.com", 
+    tls: {ciphers: "SSLv3"}
+  });
+
+  if(newEvent.approve == 3) { //revise
+    var message = {
+      text:  "Hello " + newEvent.userName + ", you hava an event to revise. Please log in your eventapp account " +
+       "to get detail information",
+      from:  "you <jinhang91@hotmail.com>", 
+      to:    "zhuyingcau <" + newEvent.userEmail + ">",
+      cc:    "",
+      subject: "testing email js"
+    };
+
+    server.send(message, function(err, message) { 
+        console.log(err || message); 
+    });
+  }
+  else if(newEvent.approve == 1) { //approved
+    var message = {
+      text:  "Hello " + newEvent.userName + ", you hava an event approved. You can log in your eventapp account " +
+       "to get detail information",
+      from:  "you <jinhang91@hotmail.com>", 
+      to:    "zhuyingcau <" + newEvent.userEmail + ">",
+      cc:    "",
+      subject: "testing email js"
+    };
+
+    server.send(message, function(err, message) { 
+        console.log(err || message); 
+    });    
+  }
+
+  // send the message and get a callback with an error or details of the message that was sent
+
+}
+
 function alertUser(newEvent) {
-  var collection = db.collection('subs');
   var name = newEvent.name;
   var type = newEvent.type;
   var keywords = newEvent.keywords;
@@ -522,7 +563,9 @@ function alertUser(newEvent) {
   var city = newEvent.city;
   var startDate = newEvent.startDate;
   var endDate = newEvent.endDate;
-
+  var website = newEvent.website;
+  var deadline = newEvent.deadline;
+  var description = newEvent.description;
   //delete out-of-date subs
   // var today = new Date();
   // var dd = today.getDate();
@@ -609,7 +652,10 @@ function alertUser(newEvent) {
 
       var message = {
         text:  "Hello " + result.userName + ", \n There is a new event match your subscription. Below is the detailed information. \n" + 
-        "Event name: " + name + "\n" + "Event type: " + type + "\n",
+        "Event name: " + name + "\n" + "Event type: " + type + "\n" + "Region: " + region + "\n" +
+        "Country: " + country + "\n" + "State: " + state + "\n" + "City: " + city + "\n" + "Date: " +
+        startDate + "~" + endDate + "\n" + "Abstract Deadline: " + deadline + "\n" + 
+        "Description: " + description + "\n" + "keywords: " + keywords,
         from:  "you <jinhang91@hotmail.com>", 
         to:    "zhuyingcau <" + result.userEmail + ">",
         cc:    "",
@@ -623,5 +669,7 @@ function alertUser(newEvent) {
     });
   });
 }
+
+
 
 module.exports = router;
