@@ -16,62 +16,65 @@ var ObjectId = require('mongodb').ObjectID;
 var json2csv = require('json2csv');
 var fs = require('fs');
 
-//manage users page - GET
-router.get('/users', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
-    var fields = ['userName', 'userEmail', 'name', 'type', 'city', 'state', 'country', 'region', 
-        'organization', 'startDate', 'endDate', 'keywords'];
-    //find all users sorted by priority
-    UsersModel.find({priority : 0},function(err1, users1){//usrs
-        if(err1){
-            return next(err1);
+function searchUsers(res, user, limit, currentPage)
+{
+    UsersModel.find({priority : 0},function(err, users){//usrs
+        if(err){
+            return next(err);
         }
-        //console.log(results1.length);
-        UsersModel.find({priority : 1},function(err2, users2){//managers
-            if(err2){
-                return next(err2);
-            }
-            //console.log(results2.length);
-            UsersModel.find({priority : 2},function(err3, users3){//only one admin
-                if(err3){
-                return next(err3);
-            }
-                //console.log(results3.length);
-                res.render('manage_users', { title:'Manage | Manage Users', user: req.user, 
-                    users1 : users1, users2 : users2, users3 : users3}); 
+        var totallength = users.length;
+        var totalPage = Math.floor(totallength / limit);
+        
+        if (totallength % limit != 0) {
+            totalPage += 1;
+        }
+        if (totalPage != 0 && currentPage > totalPage) {
+            currentPage = totalPage;
+        }
+        //console.log("currentPage: "+currentPage);
+        UsersModel.find({priority : 0}).skip((currentPage - 1) * limit).limit(limit).sort('name').exec(function(err, users1) { 
+            UsersModel.find({priority : 1},function(err2, users2){//managers
+                if(err2){
+                    return next(err2);
+                }
+                //console.log(results2.length);
+                UsersModel.find({priority : 2},function(err3, users3){//only one admin
+                    if(err3){
+                    return next(err3);
+                }
+                    //console.log(results3.length);
+                    res.render('manage_users', { title:'Manage | Manage Users', user:user, 
+                        users1 : users1, users2 : users2, users3 : users3, totalPage:totalPage, currentPage:currentPage, totallength:totallength}); 
+                }); 
             }); 
-        }); 
-    }); 
+        });
+    });
+}
+//manage users page - GET
+//pagination
+router.get('/users', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
+    var limit = 10;
+    var currentPage = 1;
+    if(req.query.currentPage){
+        currentPage = req.query.currentPage;
+    }
+    if (currentPage < 1) {
+        currentPage = 1;
+    }
+    searchUsers(res, req.user, limit, currentPage);
 });
 
 //promote one user to manager
 router.get('/users/promote', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
     var id = req.query.id;
+    var limit = 10;
+    var currentPage = 1;
     UsersModel.update({_id:ObjectId(id)}, {$set:{priority:1}}, function(err, user){//1 is manager
         if(err){
             res.send(err);
         }
         else {
-            UsersModel.find({priority : 0},function(err, users1){
-                if (err){ 
-                    console.log("edit error!");
-                    res.send({result:-1});
-                }
-                UsersModel.find({priority : 1},function(err, users2){
-                    if (err){ 
-                        console.log("edit error!");
-                        res.send({result:-1});
-                    }
-                    UsersModel.find({priority : 3},function(err, users3){
-                        if (err){ 
-                            console.log("edit error!");
-                            res.send({result:-1});
-                        }
-                        console.log("promote success!");
-                        res.location('/manage/users');
-                        res.redirect('/manage/users'); 
-                    }); 
-                }); 
-            });
+            searchUsers(res, req.user, limit, currentPage);
         }    
     });
 });
@@ -79,32 +82,14 @@ router.get('/users/promote', ensureLoggedIn('/users/login'), isAdmin, function(r
 //demote one manager to user
 router.get('/users/demote', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
     var id = req.query.id;
+    var limit = 10;
+    var currentPage = 1;
     UsersModel.update({_id:ObjectId(id)}, {$set:{priority:0}}, function(err, user){//0 is user
         if(err){
             res.send(err);
         }
         else {
-            UsersModel.find({priority : 0},function(err, users1){
-                if (err){ 
-                    console.log("edit error!");
-                    res.send({result:-1});
-                }
-                UsersModel.find({priority : 1},function(err, users2){
-                    if (err){ 
-                        console.log("edit error!");
-                        res.send({result:-1});
-                    }
-                    UsersModel.find({priority : 2},function(err, users3){
-                        if (err){ 
-                            console.log("edit error!");
-                            res.send({result:-1});
-                        }
-                        console.log("demote success!");
-                        res.location('/manage/users');
-                        res.redirect('/manage/users'); 
-                    }); 
-                }); 
-            });
+            searchUsers(res, req.user, limit, currentPage);
         }    
     });
 });
@@ -134,34 +119,100 @@ router.get('/users/download', ensureLoggedIn('/users/login'), isAdmin, function(
             res.location('/manage/users');
             res.redirect('/manage/users');
         });
-        // res.render('index', { title:'Home', 
-        //     user: req.user, 
-        //     results3 : results}); 
     }); 
 });
 
-//manage events page - GET
-router.get('/events', ensureLoggedIn('/users/login'), isManager, function(req, res){
+//*****************   Events  ********************************
+function searchEvents(res, user, limit, tab, currentPage1,currentPage2,currentPage3)
+{
     EventsModel.find({approved : 0},function(err1, results1){//to be approve
         if(err1){
             return next(err1);
         }
-        //console.log(results1.length);
-        EventsModel.find({approved : 1},function(err2, results2){//approve
-            if(err2){
-                return next(err2);
-            }
-            //console.log(results2.length);
-            EventsModel.find({approved : 3},function(err3, results3){//revise
-                if(err3){
-                return next(err3);
-            }
-                //console.log(results3.length);
-                res.render('manage_events', { title:'Manage | Manage Events', user: req.user, 
-                    results1 : results1, results2 : results2, results3 : results3}); 
+        var totallength1 = results1.length;
+        var totalPage1 = Math.floor(totallength1 / limit);
+        
+        if (totallength1 % limit != 0) {
+            totalPage1 += 1;
+        }
+        if (totalPage1 != 0 && currentPage1 > totalPage1) {
+            currentPage1 = totalPage1;
+        }
+        EventsModel.find({approved : 0}).skip((currentPage1 - 1) * limit).limit(limit).sort('startDate').sort('city').sort('country').exec(function(err11, results11) {
+        //console.log(results11.length);
+                if(err11){
+                    return next(err11);
+                }
+                EventsModel.find({approved : 1},function(err2, results2){//approve
+                if(err2){
+                    return next(err2);
+                }
+                var totallength2 = results2.length;
+                var totalPage2 = Math.floor(totallength2 / limit);
+                
+                if (totallength2 % limit != 0) {
+                    totalPage2 += 1;
+                }
+                if (totalPage2 != 0 && currentPage2 > totalPage2) {
+                    currentPage2 = totalPage2;
+                }
+                //console.log(results2.length);
+                EventsModel.find({approved : 1}).skip((currentPage2 - 1) * limit).limit(limit).sort('startDate').sort('city').sort('country').exec(function(err22, results22) {
+                    if(err22){
+                        return next(err22);
+                    }
+                    EventsModel.find({approved : 3},function(err3, results3){//revise
+                        if(err3){
+                            return next(err3);
+                        }
+                        var totallength3 = results3.length;
+                        var totalPage3 = Math.floor(totallength3 / limit);
+                        
+                        if (totallength3 % limit != 0) {
+                            totalPage3 += 1;
+                        }
+                        if (totalPage3 != 0 && currentPage3 > totalPage3) {
+                            currentPage3 = totalPage3;
+                        }
+                        EventsModel.find({approved : 3}).skip((currentPage3 - 1) * limit).limit(limit).sort('startDate').sort('city').sort('country').exec(function(err33, results33) {
+                            res.render('manage_events', { title:'Manage | Manage Events', user:user, 
+                                results1 : results11, results2 : results22, results3 : results33,
+                                totalPage1:totalPage1, totalPage2:totalPage2, totalPage3:totalPage3,
+                                currentPage1:currentPage1,currentPage2:currentPage2,currentPage3:currentPage3, 
+                                totallength1:totallength1,totallength2:totallength2,totallength3:totallength3});                            
+                        });
+                    }); 
+                });
             }); 
-        }); 
-    }); 
+        });
+    });
+}
+//manage events page - GET
+router.get('/events', ensureLoggedIn('/users/login'), isManager, function(req, res){
+    var limit = 5;
+    var currentPage1 = 1;
+    var currentPage2 = 1;
+    var currentPage3 = 1;
+    var tab = req.query.tab;
+    if(req.query.currentPage1){
+        currentPage1 = req.query.currentPage1;
+    }
+    if(req.query.currentPage2){
+        currentPage2 = req.query.currentPage2;
+    }
+    if(req.query.currentPage3){
+        currentPage3 = req.query.currentPage3;
+    }
+    if (currentPage1 < 1) {
+        currentPage1 = 1;
+    }
+    if (currentPage2 < 1) {
+        currentPage2 = 1;
+    }
+    if (currentPage3 < 1) {
+        currentPage3 = 1;
+    }
+    searchEvents(res, req.user, limit, tab, currentPage1, currentPage2, currentPage3);
 });
 
 
@@ -193,29 +244,10 @@ router.post('/events/details', ensureLoggedIn('/users/login'), isManager, functi
                     }
                     else {
                         console.log("disapprove success!");
-                        EventsModel.find({approved : 0},function(err, results1){//to be approve
-                            if (err){ 
-                                console.log("edit error!");
-                                res.send({result:-1});
-                            }
-                            EventsModel.find({approved : 1},function(err, results2){//approve
-                                if (err){ 
-                                    console.log("edit error!");
-                                    res.send({result:-1});
-                                }
-                                EventsModel.find({approved : 3},function(err, results3){//revise
-                                    if (err){ 
-                                        console.log("edit error!");
-                                        res.send({result:-1});
-                                    }
-                                    //success msg
-                                    //alertUser(newEvent);
-                                    req.flash('success', 'Disapprove!');
-                                    res.location('/manage/events');
-                                    res.redirect('/manage/events');
-                                }); 
-                            }); 
-                        });
+                        req.flash('success', 'Successfully disapproved!');
+                        res.location('/manage/events');
+                        res.redirect('/manage/events');
+                        //searchEvents(res, req.user, limit, currentPage, 0, false);
                     }    
                 });
     }
@@ -312,9 +344,9 @@ router.post('/events/details', ensureLoggedIn('/users/login'), isManager, functi
         else{
             console.log('approve success!');
             //success msg
-            informUser(newEvent);
-            alertUser(id);
-            req.flash('success', 'Approve!');
+            informUser(newEvent);//inform the auther
+            alertUser(id);//inform all subscribers
+            req.flash('success', 'Successfully approved!');
             res.location('/manage/events');
             res.redirect('/manage/events');
         }
@@ -331,31 +363,13 @@ router.get('/events/approve', ensureLoggedIn('/users/login'), isManager, functio
         if(err){
             res.send(err);
         }
-        else {
-            EventsModel.find({approved : 0},function(err, results1){//to be approve
-                if (err){ 
-                    console.log("edit error!");
-                    res.send({result:-1});
-                }
-                EventsModel.find({approved : 1},function(err, results2){//approve
-                    if (err){ 
-                        console.log("edit error!");
-                        res.send({result:-1});
-                    }
-                    EventsModel.find({approved : 3},function(err, results3){//revise
-                        if (err){ 
-                            console.log("edit error!");
-                            res.send({result:-1});
-                        }
-                        //email alert
-                        EventsModel.findById(id, function(err, event){
-                            alertUser(event);
-                            console.log("approve success!");
-                            res.location('/manage/events');
-                            res.redirect('/manage/events');                            
-                        });
-                    }); 
-                }); 
+        else {            
+            //email alert
+            EventsModel.findById(id, function(err, event){
+                alertUser(event);
+                console.log("approve success!");
+                res.location('/manage/events');
+                res.redirect('/manage/events');                            
             });
         }    
     });
@@ -371,31 +385,13 @@ router.get('/events/disapprove', ensureLoggedIn('/users/login'), isManager, func
         }
         else {
             console.log("disapprove success!");
-            EventsModel.find({approved : 0},function(err, results1){//to be approve
-                if (err){ 
-                    console.log("edit error!");
-                    res.send({result:-1});
-                }
-                EventsModel.find({approved : 1},function(err, results2){//approve
-                    if (err){ 
-                        console.log("edit error!");
-                        res.send({result:-1});
-                    }
-                    EventsModel.find({approved : 3},function(err, results3){//revise
-                        if (err){ 
-                            console.log("edit error!");
-                            res.send({result:-1});
-                        }
-                        
-                        res.location('/manage/events');
-                        res.redirect('/manage/events');
-                    }); 
-                }); 
-            });
+            res.location('/manage/events');
+            res.redirect('/manage/events'); 
         }    
     });
 });
 
+//************   categories   **************************
 //manage categories page - GET
 router.get('/categories', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
 	TypesModel.find({}, function(err, results){
@@ -531,7 +527,7 @@ function informUser(id) {
       }
       if(events.approved == 3) { //revise
         var message = {
-          text:  "Hello " + events.userName + ", you hava an event to revise. Please log in your eventapp account " +
+          text:  "Hello " + events.userName + ", you have an event to revise. Please log in your eventapp account " +
            "to get detail information. ",
           from:  "you <jinhang91@hotmail.com>", 
           to:    events.userName + "<" + events.userEmail + ">",

@@ -31,7 +31,7 @@ function promoteUser(index) {
 　　　　if (demoteConfirm()) {
           var demote = document.getElementById('demote_'+index);
           var id = document.getElementById('id_'+index).innerHTML;           
-　　　　　　alert("Disapproved id="+id+", index="+index);
+　　　　　　//alert("Disapproved id="+id+", index="+index);
           alert("Demoted");
           demote.href = "/manage/users/demote?id="+id;
 　　　　}

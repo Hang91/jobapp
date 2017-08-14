@@ -97,6 +97,22 @@
         </tbody>
       </table>
     </div>
+    <ul class="pagination">
+        <li><a href="?tab=1&&currentPage1=1">&laquo;</a></li>
+        <% if(totalPage1 == 0){ %>
+          <li class="active"><a href="?tab=1&&currentPage1=1">1</a></li>
+        <% } %>
+        <% for(var j = 1; j <= totalPage1; j ++){ %>
+          <% if(j == currentPage1){  %>
+              <li class="active">
+          <%  }
+            else{ %>
+              <li>
+          <%  } %>
+              <a href="?tab=1&&currentPage1=<%=j%>"><%=j%></a></li>     
+        <% } %>
+        <li><a href="?tab=1&&currentPage=<%=totalPage1%>">&raquo;</a></li> 
+    </ul>
     </div>
     
     <div id="approved" class="tab-pane fade">
@@ -131,6 +147,22 @@
         </tbody>
       </table>
     </div>
+    <ul class="pagination">
+        <li><a href="?tab=2&&currentPage2=1">&laquo;</a></li>
+        <% if(totalPage2 == 0){ %>
+          <li class="active"><a href="?tab=2&&currentPage2=1">1</a></li>
+        <% } %>
+        <% for(var j = 1; j <= totalPage2; j ++){ %>
+          <% if(j == currentPage2){  %>
+              <li class="active">
+          <%  }
+            else{ %>
+              <li>
+          <%  } %>
+              <a href="?tab=2&&currentPage2=<%=j%>"><%=j%></a></li>     
+        <% } %>
+        <li><a href="?tab=2&&currentPage2=<%=totalPage2%>">&raquo;</a></li> 
+    </ul>
     </div>
     
     <div id="ask_for_revision" class="tab-pane fade">
@@ -166,6 +198,22 @@
         </tbody>
       </table>
     </div>
+    <ul class="pagination">
+        <li><a href="?tab=3&&currentPage3=1">&laquo;</a></li>
+        <% if(totalPage3 == 0){ %>
+          <li class="active"><a href="?tab=3&&currentPage3=1">1</a></li>
+        <% } %>
+        <% for(var j = 1; j <= totalPage3; j ++){ %>
+          <% if(j == currentPage3){  %>
+              <li class="active">
+          <%  }
+            else{ %>
+              <li>
+          <%  } %>
+              <a href="?tab=3&&currentPage3=<%=j%>"><%=j%></a></li>     
+        <% } %>
+        <li><a href="?tab=3&&currentPage3=<%=totalPage3%>">&raquo;</a></li> 
+    </ul>
     </div>
 </div>
 </div>    
