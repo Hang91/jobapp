@@ -344,8 +344,8 @@ router.post('/events/details', ensureLoggedIn('/users/login'), isManager, functi
         else{
             console.log('approve success!');
             //success msg
-            informUser(newEvent);//inform the auther
-            alertUser(id);//inform all subscribers
+            //informUser(newEvent);//inform the auther
+            //alertUser(id);//inform all subscribers
             req.flash('success', 'Successfully approved!');
             res.location('/manage/events');
             res.redirect('/manage/events');
@@ -367,6 +367,7 @@ router.get('/events/approve', ensureLoggedIn('/users/login'), isManager, functio
             //email alert
             EventsModel.findById(id, function(err, event){
                 alertUser(event);
+                informUser(id);//inform the auther
                 console.log("approve success!");
                 res.location('/manage/events');
                 res.redirect('/manage/events');                            

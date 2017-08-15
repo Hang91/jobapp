@@ -583,29 +583,96 @@ router.get('/mySub', ensureLoggedIn('login'),
 	}); 	
 });
 
+
 router.get('/myEvent', ensureLoggedIn('login'), 
  function(req, res){
- 	EventsModel.find({userEmail: req.user.email, approved : 0},function(err, results1){//to be approve
-        //console.log(results1.length);
-        if(err){
-            return next(err);
+ 	var limit = 5;
+    var currentPage1 = 1;
+    var currentPage2 = 1;
+    var currentPage3 = 1;
+    var tab = req.query.tab;
+    if(req.query.currentPage1){
+        currentPage1 = req.query.currentPage1;
+    }
+    if(req.query.currentPage2){
+        currentPage2 = req.query.currentPage2;
+    }
+    if(req.query.currentPage3){
+        currentPage3 = req.query.currentPage3;
+    }
+    if (currentPage1 < 1) {
+        currentPage1 = 1;
+    }
+    if (currentPage2 < 1) {
+        currentPage2 = 1;
+    }
+    if (currentPage3 < 1) {
+        currentPage3 = 1;
+    }
+ 	EventsModel.find({userEmail: req.user.email, approved : 0},function(err1, results1){//to be approve
+        if(err1){
+            return next(err1);
         }
-        EventsModel.find({userEmail: req.user.email, approved : 1},function(err, results2){//approve
-            //console.log(results2.length);
-            if(err){
-	            return next(err);
-	        }
-            EventsModel.find({userEmail: req.user.email, approved : 3},function(err, results3){//revise
-                //console.log(results3.length);
-                if(err){
-		            return next(err);
-		        }
-                res.render('myEvent', { title:'My Events', user: req.user, 
-                    results1 : results1, results2 : results2, results3 : results3}); 
+        var totallength1 = results1.length;
+        var totalPage1 = Math.floor(totallength1 / limit);
+        
+        if (totallength1 % limit != 0) {
+            totalPage1 += 1;
+        }
+        if (totalPage1 != 0 && currentPage1 > totalPage1) {
+            currentPage1 = totalPage1;
+        }
+        EventsModel.find({userEmail: req.user.email, approved : 0}).skip((currentPage1 - 1) * limit).limit(limit).sort('startDate').sort('city').sort('country').exec(function(err11, results11) {
+        //console.log(results11.length);
+                if(err11){
+                    return next(err11);
+                }
+                EventsModel.find({userEmail: req.user.email, approved : 1},function(err2, results2){//approve
+                if(err2){
+                    return next(err2);
+                }
+                var totallength2 = results2.length;
+                var totalPage2 = Math.floor(totallength2 / limit);
+                
+                if (totallength2 % limit != 0) {
+                    totalPage2 += 1;
+                }
+                if (totalPage2 != 0 && currentPage2 > totalPage2) {
+                    currentPage2 = totalPage2;
+                }
+                //console.log(results2.length);
+                EventsModel.find({userEmail: req.user.email, approved : 1}).skip((currentPage2 - 1) * limit).limit(limit).sort('startDate').sort('city').sort('country').exec(function(err22, results22) {
+                    if(err22){
+                        return next(err22);
+                    }
+                    EventsModel.find({userEmail: req.user.email, approved : 3},function(err3, results3){//revise
+                        if(err3){
+                            return next(err3);
+                        }
+                        var totallength3 = results3.length;
+                        var totalPage3 = Math.floor(totallength3 / limit);
+                        
+                        if (totallength3 % limit != 0) {
+                            totalPage3 += 1;
+                        }
+                        if (totalPage3 != 0 && currentPage3 > totalPage3) {
+                            currentPage3 = totalPage3;
+                        }
+                        EventsModel.find({userEmail: req.user.email, approved : 3}).skip((currentPage3 - 1) * limit).limit(limit).sort('startDate').sort('city').sort('country').exec(function(err33, results33) {
+                            res.render('myEvent', { title:'My Events', user:req.user, 
+                                results1 : results11, results2 : results22, results3 : results33,
+                                totalPage1:totalPage1, totalPage2:totalPage2, totalPage3:totalPage3,
+                                currentPage1:currentPage1,currentPage2:currentPage2,currentPage3:currentPage3, 
+                                totallength1:totallength1,totallength2:totallength2,totallength3:totallength3});                            
+                        });
+                    }); 
+                });
             }); 
-        }); 
+        });
     }); 	
 });
+
+
 
 router.get('/myProfile', ensureLoggedIn('login'),
 	function(req, res){
@@ -776,7 +843,6 @@ router.post('/editEvent', ensureLoggedIn('login'), function(req, res){
     var endDate = req.body.endDate;
     var deadline = req.body.deadline;
     var description = req.body.description;
-    var approved = 3;
     if(typeof req.body.keywords == 'string') {
         var keywords    = req.body.keywords.split(",");
     } else {
@@ -801,12 +867,11 @@ router.post('/editEvent', ensureLoggedIn('login'), function(req, res){
                deadline: deadline,
                description: description,
                keywords: keywords,
-               approved: approved,
                userName: userName,
                userEmail: userEmail
         }
     //update
-    EventsModel.update({_id:ObjectId(id)}, newEvent, function(err, doc){
+    EventsModel.update({_id:ObjectId(id)}, {$set: newEvent}, function(err, doc){
     if(err){
         res.send(err);
     }
@@ -995,28 +1060,9 @@ router.get('/deleteEvent', ensureLoggedIn('login'), function(req, res){
             res.send(err);
         }
         else {
-            console.log("delete event success!");
-            EventsModel.find({approved : 0},function(err, results1){//to be approve
-                if (err){ 
-                    console.log("delete event error!");
-                    res.send({result:-1});
-                }
-                EventsModel.find({approved : 1},function(err, results2){//approve
-                    if (err){ 
-                        console.log("delete event error!");
-                        res.send({result:-1});
-                    }
-                    EventsModel.find({approved : 3},function(err, results3){//revise
-                        if (err){ 
-                            console.log("edit error!");
-                            res.send({result:-1});
-                        }
-                        
-                        res.location('/users/myEvent');
-                        res.redirect('/users/myEvent');
-                    }); 
-                }); 
-            });
+            console.log("delete event success!");                       
+            res.location('/users/myEvent');
+            res.redirect('/users/myEvent');
         }    
     }); 	
 });

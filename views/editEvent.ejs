@@ -130,6 +130,9 @@
         <label>Event Keywords</label>
         <input type="text" name="keywords" class="form-control" value="<%= (!!event.keywords)?event.keywords:'' %>">
         <br>
+        <label>Comments</label>
+        <input type="text" name="comments" class="form-control" value="<%= (!!event.comments)?event.comments:'' %>">
+        <br>
 
         <input id="revise" type="button" class="btn btn-lg btn-primary btn-block btn-success" name="revise_event" value="Confirm Revision" onclick="reviseInDetail()">
       </form>

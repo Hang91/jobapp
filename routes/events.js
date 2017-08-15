@@ -39,8 +39,8 @@ router.post('/', function (req, res, next) {
 //Events - GET
 //pagination
 router.get( "/" , function ( req , res , err ) {
-	console.log("events get");
-    var limit = 5;
+	//console.log("events get");
+    var limit = 10;
     var currentPage = 1;
     if(req.query.currentPage){
     	currentPage = req.query.currentPage;
