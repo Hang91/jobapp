@@ -956,16 +956,23 @@ router.post('/editEmailAlert', ensureLoggedIn('login'),
                    password: password
                }
 		//insert
-
-		AlertModel.create(newAlert, function(err, doc){
-			if(err){
-				res.send(err);
+		AlertModel.findOneAndRemove({}, function(err, results){
+			if(err) {
+				console.log(err);
 			}
-			else{
-				console.log("Email Alert Account Set Success!");
-				res.location('/');
-				res.redirect("/");
+			else {
+				console.log("remove old admin email");
 			}
+			AlertModel.create(newAlert, function(err, doc){
+				if(err){
+					res.send(err);
+				}
+				else{
+					console.log("Email Alert Account Set Success!");
+					res.location('/');
+					res.redirect("/");
+				}
+			});			
 		});
 });
 
