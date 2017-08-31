@@ -19,7 +19,7 @@
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
           <li><a href="/search">Search</a></li>
-          <li><a href="/users/addEvent">Add Event</a></li>
+          <li><a href="/users/addJob">Add Job</a></li>
           <li><a href="/users/addSub">Subscribe</a></li>
           </ul>
 
@@ -28,7 +28,7 @@
                 <% if(user.priority == 2){ %>
                   <li class="dropdown"><a href="#">Manage</a>
                       <div class="dropdown-content">
-                        <hr><a href="/manage/events">Manage Events</a><br>
+                        <hr><a href="/manage/jobs">Manage Jobs</a><br>
                         <a href="/manage/categories">Manage Categories</a><br>
                         <a href="/manage/users">Manage Users</a><br>
                       </div>
@@ -36,13 +36,13 @@
                 <% }else if(user.priority == 1){%>
                   <li class="dropdown"><a href="#">Manage</a>
                       <div class="dropdown-content">
-                        <hr><a href="/manage/events">Manage Events</a><br>
+                        <hr><a href="/manage/jobs">Manage Jobs</a><br>
                       </div>
                   </li>
                 <% } %> 
               <li class="dropdown"><a href="#">Welcome, <%= user.name%>!</a>
                   <div class="dropdown-content">
-                    <hr><a href="/users/myEvent">My Events</a><br>
+                    <hr><a href="/users/myJob">My Jobs</a><br>
                     <a href="/users/mySub">My Subscriptions</a><br>
                     <a href="/users/myProfile">My Profile</a><br>
                     <hr><a href="/users/logout">Log out</a><br>

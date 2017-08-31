@@ -13,7 +13,7 @@
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
               <li><a href="/search">Search</a></li>
-              <li><a href="/users/addEvent">Add Event</a></li>
+              <li><a href="/users/addJob">Add Job</a></li>
               <li><a href="/users/addSub">Subscribe</a></li>
             </ul>
             <% if(user){ %>
@@ -21,7 +21,7 @@
                 <% if(user.priority == 2){ %>
                   <li class="dropdown"><a href="#">Manage</a>
                       <div class="dropdown-content">
-                        <hr><a href="/manage/events">Manage Events</a><br>
+                        <hr><a href="/manage/jobs">Manage Jobs</a><br>
                         <a href="/manage/categories">Manage Categories</a><br>
                         <a href="/manage/users">Manage Users</a><br>
                       </div>
@@ -29,13 +29,13 @@
                 <% }else if(user.priority == 1){%>
                   <li class="dropdown"><a href="#">Manage</a>
                       <div class="dropdown-content">
-                        <hr><a href="/manage/events">Manage Events</a><br>
+                        <hr><a href="/manage/jobs">Manage Jobs</a><br>
                       </div>
                   </li>
                 <% } %> 
                   <li class="dropdown"><a href="#">Welcome, <%= user.name%>!</a>
                   <div class="dropdown-content">
-                    <hr><a href="/users/myEvent">My Events</a><br>
+                    <hr><a href="/users/myJob">My Jobs</a><br>
                     <a href="/users/mySub">My Subscriptions</a><br>
                     <a href="/users/myProfile">My Profile</a><br>
                     <hr><a href="/users/logout">Log out</a><br>
@@ -53,9 +53,9 @@
     </nav>
 <%- messages() %>
 <div class="container">
-<h2>Manage Events</h2>
-<p>Click on "Approve" to approve events.</p>
-<p>Click on "Disapprove" to disapprove events.</p>
+<h2>Manage Jobs</h2>
+<p>Click on "Approve" to approve jobs.</p>
+<p>Click on "Disapprove" to disapprove jobs.</p>
 <p>Click on "Details" to show more details.</p>
 <p>----------------------------------------------------------------</p>
 <ul class="nav nav-tabs">
@@ -71,9 +71,9 @@
         <thead>
           <tr>
             <th class="col-xs-1">No.</th>
-            <th class="col-md-1">Type</th>
+            <th class="col-md-1">Employment Type</th>
             <th class="col-md-3">Name</th>
-            <th class="col-md-2">Date</th>
+            <th class="col-md-2">Deadline</th>
             <th class="col-md-2">Location</th>
             <th class="col-md-3">Operations</th>
           </tr>
@@ -83,14 +83,14 @@
           <tr>
             <td class="col-xs-1"><%=index%></td>
             <td id="id_<%=index%>" class="hidID"><%=rs._id%></td>
-            <td class="col-md-1"><%=rs.type%></td>
+            <td class="col-md-1"><%=rs.employmentType%></td>
             <td class="col-md-3"><%=rs.name%></td>
-            <td class="col-md-2"><%=rs.startDate%>~<%=rs.endDate%></td>
+            <td class="col-md-2"><%=rs.deadline%></td>
             <td class="col-md-2"><%=rs.city%>,<%=rs.state%>,<%=rs.country%></td>
             <td class="col-md-3">
-              <a href="/manage/events/details?id=<%=rs._id%>"><button class="btn btn-info">Details</button></a>
-              <a id="approve_<%=index%>"><button class="btn btn-success" onclick="approveEvent(<%=index%>)">Approve</button></a>
-              <a id="disapprove_<%=index%>"><button class="btn btn-danger" onclick="disapproveEvent(<%=index%>)">Disapprove</button></a>
+              <a href="/manage/jobs/details?id=<%=rs._id%>"><button class="btn btn-info">Details</button></a>
+              <a id="approve_<%=index%>"><button class="btn btn-success" onclick="approveJob(<%=index%>)">Approve</button></a>
+              <a id="disapprove_<%=index%>"><button class="btn btn-danger" onclick="disapproveJob(<%=index%>)">Disapprove</button></a>
             </td>
           </tr>
           <% index++;}) %>
@@ -122,9 +122,9 @@
         <thead>
           <tr>
             <th class="col-md-1">No.</th>
-            <th class="col-md-1">Type</th>
+            <th class="col-md-1">Employment Type</th>
             <th class="col-md-3">Name</th>
-            <th class="col-md-2">Date</th>
+            <th class="col-md-2">Deadline</th>
             <th class="col-md-2">Location</th>
             <th class="col-md-3">Operations</th>
           </tr>
@@ -134,13 +134,13 @@
           <tr>
             <td class="col-md-1"><%=index2++%></td>
             <td id="id_<%=index%>" class="hidID"><%=rs._id%></td>
-            <td class="col-md-1"><%=rs.type%></td>
+            <td class="col-md-1"><%=rs.employmentType%></td>
             <td class="col-md-3"><%=rs.name%></td>
-            <td class="col-md-2"><%=rs.startDate%>~<%=rs.endDate%></td>
+            <td class="col-md-2"><%=rs.deadline%></td>
             <td class="col-md-2"><%=rs.city%>,<%=rs.state%>,<%=rs.country%></td>
             <td class="col-md-3">
-              <a href="/manage/events/details?id=<%=rs._id%>"><button class="btn btn-info">Details</button></a>
-              <a id="disapprove_<%=index%>"><button class="btn btn-danger" onclick="disapproveEvent(<%=index%>)">Disapprove</button></a>
+              <a href="/manage/jobs/details?id=<%=rs._id%>"><button class="btn btn-info">Details</button></a>
+              <a id="disapprove_<%=index%>"><button class="btn btn-danger" onclick="disapproveJob(<%=index%>)">Disapprove</button></a>
             </td>
           </tr>
           <% index++;}) %>
@@ -172,9 +172,9 @@
         <thead>
           <tr>
             <th class="col-md-1">No.</th>
-            <th class="col-md-1">Type</th>
+            <th class="col-md-1">Employment Type</th>
             <th class="col-md-3">Name</th>
-            <th class="col-md-2">Date</th>
+            <th class="col-md-2">Deadline</th>
             <th class="col-md-2">Location</th>
             <th class="col-md-3">Operations</th>
           </tr>
@@ -184,14 +184,14 @@
           <tr>
             <td class="col-md-1"><%=index3++%></td>
             <td id="id_<%=index%>" class="hidID"><%=rs._id%></td>
-            <td class="col-md-1"><%=rs.type%></td>
+            <td class="col-md-1"><%=rs.employmentType%></td>
             <td class="col-md-3"><%=rs.name%></td>
-            <td class="col-md-2"><%=rs.startDate%>~<%=rs.endDate%></td>
+            <td class="col-md-2"><%=rs.deadline%></td>
             <td class="col-md-2"><%=rs.city%>,<%=rs.state%>,<%=rs.country%></td>
             <td class="col-md-3">
-              <a href="/manage/events/details?id=<%=rs._id%>"><button class="btn btn-info">Details</button></a>
-              <a id="approve_<%=index%>"><button class="btn btn-success approve" onclick="approveEvent(<%=index%>)">Approve</button></a>
-              <a id="disapprove_<%=index%>"><button class="btn btn-danger" onclick="disapproveEvent(<%=index%>)">Disapprove</button></a>
+              <a href="/manage/jobs/details?id=<%=rs._id%>"><button class="btn btn-info">Details</button></a>
+              <a id="approve_<%=index%>"><button class="btn btn-success approve" onclick="approveJob(<%=index%>)">Approve</button></a>
+              <a id="disapprove_<%=index%>"><button class="btn btn-danger" onclick="disapproveJob(<%=index%>)">Disapprove</button></a>
             </td>
           </tr>
           <% index++;}) %>

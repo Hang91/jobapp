@@ -28,7 +28,7 @@ router.post('/', function (req, res, next) {
 	var endDate = req.body.endDate;
 	var approved = 1;
 	//delete out-of-date events
-	deleteOutDateEvents(startDate);
+	//deleteOutDateEvents(startDate);
 
 	//search
 	searchEvents(res, req.user, limit, currentPage, type, 
