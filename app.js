@@ -102,7 +102,7 @@ app.use('/events', events);
 app.use('/search', search);
 app.use('/manage',manage);
 
-app.listen(3000);
+app.listen(8080);
 console.log('server started on port 3000');
 
 
