@@ -13,7 +13,7 @@
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
               <li class="active"><a href="/search">Search</a></li>
-              <li><a href="/users/addEvent">Add Event</a></li>
+              <li><a href="/users/addJob">Add Job</a></li>
               <li><a href="/users/addSub">Subscribe</a></li>
             </ul>
             <% if(user){ %>
@@ -21,7 +21,7 @@
                 <% if(user.priority == 2){ %>
                   <li class="dropdown"><a href="#">Manage</a>
                       <div class="dropdown-content">
-                        <hr><a href="/manage/events">Manage Events</a><br>
+                        <hr><a href="/manage/jobs">Manage Jobs</a><br>
                         <a href="/manage/categories">Manage Categories</a><br>
                         <a href="/manage/users">Manage Users</a><br>
                       </div>
@@ -29,13 +29,13 @@
                 <% }else if(user.priority == 1){%>
                   <li class="dropdown"><a href="#">Manage</a>
                       <div class="dropdown-content">
-                        <hr><a href="/manage/events">Manage Events</a><br>
+                        <hr><a href="/manage/jobs">Manage Jobs</a><br>
                       </div>
                   </li>
                 <% } %> 
                   <li class="dropdown"><a href="#">Welcome, <%= user.name%>!</a>
                   <div class="dropdown-content">
-                    <hr><a href="/users/myEvent">My Events</a><br>
+                    <hr><a href="/users/myJob">My Jobs</a><br>
                     <a href="/users/mySub">My Subscriptions</a><br>
                     <a href="/users/myProfile">My Profile</a><br>
                     <hr><a href="/users/logout">Log out</a><br>
@@ -60,37 +60,41 @@
 
 <% results.forEach(function(result){ %>
   <p class="adv-toggle-buttons">
-    <span><%=result.startDate%>~<%=result.endDate%>, <%=result.name%>, <%=result.city%>,<%=result.state%>,<%=result.country%>,<%=result.region%>. </span><a href="#">[+] More info</a><a href="#" style="display: none;">[-] Less info</a>
+    <span><%=result.name%>, <%=result.city%>,<%=result.state%>,<%=result.country%>,<%=result.region%>. </span><a href="#">[+] More info</a><a href="#" style="display: none;">[-] Less info</a>
   </p>
   <div class="adv-unit-options" style="display: none;">
     <ul>
         <li><a href=<%=result.website%>><strong>Website:</strong> <%=result.website%></a></li>
-        <li><strong>Type:</strong> <%=result.type%></li>
-        <li><strong>Organization:</strong> <%=result.organization%></li>
+        <li><strong>Position Type:</strong> <%=result.positionType%></li>
+        <li><strong>Employment Type:</strong> <%=result.employmentType%></li>
+        <li><strong>Institution:</strong> <%=result.institution%></li>
         <li><strong>Contact:</strong> <%=result.contact%></li>
         <li><strong>Email:</strong>  <%=result.email%></li>
+        <li><strong>Application Deadline:</strong> <%=result.deadline%></li>
+        <li><strong>Salary:</strong> <%=result.salary%></li>
         <li><strong>Description:</strong> <%=result.description%></li>
-        <li><strong>Abstracts or Proposals Deadline:</strong> <%=result.deadline%></li>
         <li><strong>Keywords:</strong> <%=result.keywords%></li>
     </ul>
   </div>
   <br>
 <% }) %>
   <ul class="pagination">
-  <li><a href="?type=<%=type%>
+  <li><a href="?positionType=<%=positionType%>
+        &&employmentType=<%=employmentType%>
+        &&field=<%=field%>
         &&keywords=<%=keywords%>
         &&country=<%=country%>
         &&state=<%=state%>
-        &&startDate=<%=startDate%>
-        &&endDate=<%=endDate%>
+        &&deadline=<%=deadline%>
         &&currentPage=1">&laquo;</a></li>
   <% if(totalPage == 0){ %>
-    <li class="active"><a href="?type=<%=type%>
+    <li class="active"><a href="?positionType=<%=positionType%>
+        &&employmentType=<%=employmentType%>
+        &&field=<%=field%>
         &&keywords=<%=keywords%>
         &&country=<%=country%>
         &&state=<%=state%>
-        &&startDate=<%=startDate%>
-        &&endDate=<%=endDate%>
+        &&deadline=<%=deadline%>
         &&currentPage=1">1</a></li>
   <% } %>
   <% for(var j = 1; j <= totalPage; j ++){ %>
@@ -100,21 +104,23 @@
       else{ %>
         <li>
     <%  } %>
-        <a href="?type=<%=type%>
+        <a href="?positionType=<%=positionType%>
+        &&employmentType=<%=employmentType%>
+        &&field=<%=field%>
         &&keywords=<%=keywords%>
         &&country=<%=country%>
         &&state=<%=state%>
-        &&startDate=<%=startDate%>
-        &&endDate=<%=endDate%>
-        &&currentPage=<%=j%>"><%=j%></a></li>     
+        &&deadline=<%=deadline%>
+        &&currentPage=1"><%=j%></a></li>     
   <% } %>
-  <li><a href="?type=<%=type%>
+  <li><a href="?positionType=<%=positionType%>
+        &&employmentType=<%=employmentType%>
+        &&field=<%=field%>
         &&keywords=<%=keywords%>
         &&country=<%=country%>
         &&state=<%=state%>
-        &&startDate=<%=startDate%>
-        &&endDate=<%=endDate%>
-        &&currentPage=<%=totalPage%>">&raquo;</a></li> 
+        &&deadline=<%=deadline%>
+        &&currentPage=1">&raquo;</a></li> 
   </ul>
 </div>
 	

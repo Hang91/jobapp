@@ -13,7 +13,7 @@
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
               <li class="active"><a href="/search">Search</a></li>
-              <li><a href="/users/addEvent">Add Event</a></li>
+              <li><a href="/users/addJob">Add Job</a></li>
               <li><a href="/users/addSub">Subscribe</a></li>
             </ul>
             <% if(user){ %>
@@ -21,7 +21,7 @@
                 <% if(user.priority == 2){ %>
                   <li class="dropdown"><a href="#">Manage</a>
                       <div class="dropdown-content">
-                        <hr><a href="/manage/events">Manage Events</a><br>
+                        <hr><a href="/manage/jobs">Manage Jobs</a><br>
                         <a href="/manage/categories">Manage Categories</a><br>
                         <a href="/manage/users">Manage Users</a><br>
                       </div>
@@ -29,13 +29,13 @@
                 <% }else if(user.priority == 1){%>
                   <li class="dropdown"><a href="#">Manage</a>
                       <div class="dropdown-content">
-                        <hr><a href="/manage/events">Manage Events</a><br>
+                        <hr><a href="/manage/jobs">Manage Jobs</a><br>
                       </div>
                   </li>
                 <% } %> 
                   <li class="dropdown"><a href="#">Welcome, <%= user.name%>!</a>
                   <div class="dropdown-content">
-                    <hr><a href="/users/myEvent">My Events</a><br>
+                    <hr><a href="/users/myJob">My Jobs</a><br>
                     <a href="/users/mySub">My Subscriptions</a><br>
                     <a href="/users/myProfile">My Profile</a><br>
                     <hr><a href="/users/logout">Log out</a><br>
@@ -56,11 +56,29 @@
 <div class="container reg-page">
 <form method = "post" action="/events" class="form-signin">
   <h2 class="form-signin-heading">Search</h2>
-    <lable>Type</lable><br>
-    <select class="form-control" name="type">
+    <lable>Position Type</lable><br>
+    <select class="form-control" name="positionType">
         <option value="" selected="selected">-----ALL-----</option>
         <% results.forEach(function(result) { %>
-        <option value="<%=result.type%>"><%=result.type%></option>
+        <option value="<%=result.positionType%>"><%=result.positionType%></option>
+        <% }) %>
+    </select>
+    <br>
+    <br>
+    <lable>Employment Type</lable><br>
+    <select class="form-control" name="employmentType">
+        <option value="" selected="selected">-----ALL-----</option>
+        <% results.forEach(function(result) { %>
+        <option value="<%=result.employmentType%>"><%=result.employmentType%></option>
+        <% }) %>
+    </select>
+    <br>
+    <br>
+    <lable>Field</lable><br>
+    <select class="form-control" name="field">
+        <option value="" selected="selected">-----ALL-----</option>
+        <% fieldResults.forEach(function(fieldResult) { %>
+        <option value="<%=result.field%>"><%=fieldResult.field%></option>
         <% }) %>
     </select>
     <br>
@@ -69,12 +87,8 @@
     <input type="text" name="keywords" class="form-control" value="<%= (!!locals.keywords)?keywords:'' %>">Please use "," to separate keywords without space
     <br>
     <br>
-    <label>Event Start Date</label><br>
-    <input type="date" name="startDate" class="form-control" value="<%= (!!locals.startDate)?startDate:'' %>">
-    <br>
-    <br>
-    <label>Last Day of Event</label><br>
-    <input type="date" name="endDate" class="form-control" value="<%= (!!locals.endDate)?endDate:'' %>">
+    <label>Deadline</label><br>
+    <input type="date" name="deadline" class="form-control" value="<%= (!!locals.deadline)?deadline:'' %>">
     <br>
     <br>
     <lable>Region</lable><br>

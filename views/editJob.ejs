@@ -3,7 +3,7 @@
         <div class="alert alert-danger"><%= error.msg %></div>
     <% }) %>
 <% } %>
-<%= messages()%>
+<%- messages()%>
 <%- include('includes/header') %>
 <nav class="navbar navbar-inverse">
       <div class="container">
@@ -55,18 +55,19 @@
     </nav>
     
 <div class="container">
-      <form method="post" action="/users/editSub" class="form-signin">
-        <h2 class="form-signin-heading">Edit Subscription</h2>
+      <form method="post" action="/users/editJob" class="form-signin">
+        <h2 class="form-signin-heading">Edit Jobs</h2>
         <!-- <label>ID</label> -->
-        <input class="hid" type="text" name="id" class="form-control" value="<%= (!!results._id)?results._id:'' %>">
+        <label class="hid" id="id_1" ><%=job.id%></label>
+        <input class="hid" type="text" name="id" class="form-control" value="<%= (!!job.id)?job.id:'' %>">
         <label>Job Name</label>
-        <input type="text" name="name" class="form-control" value="<%= (!!results.name)?results.name:'' %>">
+        <input type="text" name="name" class="form-control" value="<%= (!!job.name)?job.name:'' %>">
         <br>
         <lable>Position Type</lable><br>
         <select class="form-control" name="positionType">
             <option value="">-----ALL-----</option>
             <% positionTypes.forEach(function(onePositionType) { %>
-              <%  if(results.positionType == onePositionType.positionType){ %>
+              <%  if(job.positionType == onePositionType.positionType){ %>
                       <option value="<%=onePositionType.positionType%>" selected="selected"><%=onePositionType.positionType%></option>
                   <%  }
                     else{ %>
@@ -79,11 +80,11 @@
         <select class="form-control" name="employmentType">
             <option value="">-----ALL-----</option>
             <% employmentTypes.forEach(function(oneEmploymentType) { %>
-              <%  if(results.employmentType == oneEmploymentType.employmentType){ %>
+              <%  if(job.employmentType == oneEmploymentType.employmentType){ %>
                       <option value="<%=oneEmploymentType.employmentType%>" selected="selected"><%=oneEmploymentType.employmentType%></option>
                   <%  }
                     else{ %>
-                      <option value="<%=oneEmploymentType.employmentType%>"><%=oneEmploymentType.employmentType%></option>
+                      <option value="<%=oneEmploymentType.employmentType%>"><%=onePositionType.employmentType%></option>
                   <%  } %>                  
             <% }) %>
         </select>
@@ -91,12 +92,12 @@
         <lable>Field</lable><br>
         <select class="form-control" name="field">
             <option value="">-----ALL-----</option>
-            <% fields.forEach(function(onefield) { %>
-              <%  if(results.field == onefield.field){ %>
-                      <option value="<%=onefield.field%>" selected="selected"><%=onefield.field%></option>
+            <% fields.forEach(function(oneField) { %>
+              <%  if(job.field == oneField.field){ %>
+                      <option value="<%=oneField.field%>" selected="selected"><%=oneField.field%></option>
                   <%  }
                     else{ %>
-                      <option value="<%=onefield.field%>"><%=onefield.field%></option>
+                      <option value="<%=oneField.field%>"><%=onePositionType.field%></option>
                   <%  } %>                  
             <% }) %>
         </select>
@@ -104,7 +105,7 @@
         <lable>Region</lable><br>
         <select class="form-control" onchange="set_country(this,country,state, true)" name="region" >
             <option value="">-----ALL-----</option>
-            <option value="<%=results.region%>" selected="selected"><%=results.region%></option>
+            <option value="<%=job.region%>" selected="selected"><%=job.region%></option>
             <script type="text/javascript">
                 setRegions(this);
             </script>
@@ -114,41 +115,51 @@
         <lable>Country</lable><br>
         <select class="form-control" name="country" onchange="set_city_state(this,state, true)">
             <option value="">-----ALL-----</option>
-            <option value="<%=results.country%>" selected="selected"><%=results.country%></option>
+            <option value="<%=job.country%>" selected="selected"><%=job.country%></option>
         </select>
         <br>
         <br>
         <lable>State/Province</lable><br>
         <select class="form-control" name="state">
             <option value="">-----ALL-----</option>
-            <option value="<%=results.state%>" selected="selected"><%=results.state%></option>
+            <option value="<%=job.state%>" selected="selected"><%=job.state%></option>
         </select>
         <br>
         <br>
         <label>City</label>
-        <input type="text" name="city" class="form-control" value="<%= (!!results.city)?results.city:'' %>">
+        <input type="text" name="city" class="form-control" value="<%= (!!job.city)?job.city:'' %>">
         <br>
         <label>Institution</label>
-        <input type="text" name="institution" class="form-control" value="<%= (!!results.institution)?results.institution:'' %>">
+        <input type="text" name="institution" class="form-control" value="<%= (!!job.institution)?job.institution:'' %>">
+        <br>
+        <label>Contact Person for Job</label>
+        <input type="text" name="contact" class="form-control" value="<%= (!!job.contact)?job.contact:'' %>">
+        <br>
+        <label>Job Enquiries Email Address</label>
+        <input type="text" name="email" class="form-control" value="<%= (!!job.email)?job.email:'' %>">
+        <br>
+        <label>Website Address</label>
+        <input type="text" name="website" class="form-control" value="<%= (!!job.website)?job.website:'' %>">
         <br>
         <label>Deadline</label>
-        <input type="date" name="deadline" class="form-control" value="<%= (!!results.deadline)?results.deadline:'' %>">
+        <input type="date" name="deadline" class="form-control" value="<%= (!!job.deadline)?job.deadline:'' %>">
         <br>
         <label>Salary</label>
-        <input type="text" name="salary" class="form-control" value="<%= (!!results.salary)?results.salary:'' %>">
+        <input type="text" name="salary" class="form-control" value="<%= (!!job.salary)?job.salary:'' %>">
+        <br>
+        <label>Description</label>
+        <input type="text" name="description" class="form-control" value="<%= (!!job.description)?job.description:'' %>">
         <br>
         <label>Keywords</label>
-        <input type="text" name="keywords" class="form-control" value="<%= (!!results.keywords)?results.keywords:'' %>">
-        <p>Please use "," to separate keywords without space</p>
-        <br> 
+        <input type="text" name="keywords" class="form-control" value="<%= (!!job.keywords)?job.keywords:'' %>">
+        <br>
+        <label>Comments</label>
+        <input type="text" name="comments" class="form-control" value="<%= (!!job.comments)?job.comments:'' %>">
+        <br>
 
-
-
-        <!-- <p>Have Account? <a href="/users/login">Login</a></p> -->
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Subscribe</button>
+        <input id="revise" type="button" class="btn btn-lg btn-primary btn-block btn-success" name="revise_job" value="Confirm Revision" onclick="reviseInDetail()">
       </form>
-
-    </div> <!-- /container -->
+</div> <!-- /container -->
 
 
 <%- include('includes/footer') %>

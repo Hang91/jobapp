@@ -14,7 +14,7 @@
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
               <li><a href="/search">Search</a></li>
-              <li><a href="/users/addEvent">Add Event</a></li>
+              <li><a href="/users/addJob">Add Job</a></li>
               <li><a href="/users/addSub">Subscribe</a></li>
             </ul>
             <% if(user){ %>
@@ -22,7 +22,7 @@
                 <% if(user.priority == 2){ %>
                   <li class="dropdown"><a href="#">Manage</a>
                       <div class="dropdown-content">
-                        <hr><a href="/manage/events">Manage Events</a><br>
+                        <hr><a href="/manage/jobs">Manage Jobs</a><br>
                         <a href="/manage/categories">Manage Categories</a><br>
                         <a href="/manage/users">Manage Users</a><br>
                       </div>
@@ -30,13 +30,13 @@
                 <% }else if(user.priority == 1){%>
                   <li class="dropdown"><a href="#">Manage</a>
                       <div class="dropdown-content">
-                        <hr><a href="/manage/events">Manage Events</a><br>
+                        <hr><a href="/manage/jobs">Manage Jobs</a><br>
                       </div>
                   </li>
                 <% } %> 
                   <li class="dropdown"><a href="#">Welcome, <%= user.name%>!</a>
                   <div class="dropdown-content">
-                    <hr><a href="/users/myEvent">My Events</a><br>
+                    <hr><a href="/users/myJob">My Jobs</a><br>
                     <a href="/users/mySub">My Subscriptions</a><br>
                     <a href="/users/myProfile">My Profile</a><br>
                     <hr><a href="/users/logout">Log out</a><br>
@@ -54,10 +54,10 @@
     </nav>
 <%- messages() %>
 <div class="container">
-<h2>My Events</h2>
-<p>"To Be Approved" are your events waiting to be approved by administration.</p>
-<p>"Approved" are your events already approved by administration.</p>
-<p>"Ask for revision" are your events asked for your revision.</p>
+<h2>My Jobs</h2>
+<p>"To Be Approved" are your submitted jobs waiting to be approved by administration.</p>
+<p>"Approved" are your jobs already approved by administration.</p>
+<p>"Ask for revision" are your jobs asked for your revision.</p>
 <p>----------------------------------------------------------------</p>
 <ul class="nav nav-tabs">
   <li class="active"><a data-toggle="tab" href="#to_be_approved">To Be Approved</a></li>
@@ -72,11 +72,11 @@
         <thead>
           <tr>
             <th class="col-xs-1">No.</th>
-            <th class="col-md-1">Type</th>
+            <th class="col-md-1">Employment Type</th>
             <th class="col-md-4">Name</th>
-            <th class="col-md-2">Date</th>
+            <th class="col-md-2">Deadline</th>
             <th class="col-md-2">Location</th>
-            <th class="col-md-2">Operation</th>
+            <th class="col-md-2">Operations</th>
           </tr>
         </thead>
         <tbody>
@@ -84,13 +84,13 @@
           <tr>
             <td class="col-xs-1"><%=index++%></td>
             <td id="id_<%=index%>" class="hidID"><%=rs._id%></td>
-            <td class="col-md-1"><%=rs.type%></td>
+            <td class="col-md-1"><%=rs.employmentType%></td>
             <td class="col-md-4"><%=rs.name%></td>
-            <td class="col-md-2"><%=rs.startDate%>~<%=rs.endDate%></td>
+            <td class="col-md-2"><%=rs.deadline%></td>
             <td class="col-md-2"><%=rs.city%>,<%=rs.state%>,<%=rs.country%></td>
             <td class="col-md-2">
-              <a href="/users/editEvent?id=<%=rs._id%>"><button class="btn btn-info">Revise</button></a>              
-              <a id="delete_<%=index%>"><button class="btn btn-danger" onclick="deleteEvent(<%=index%>)">Delete</button></a>
+              <a href="/users/editJob?id=<%=rs._id%>"><button class="btn btn-info">Revise</button></a>              
+              <a id="delete_<%=index%>"><button class="btn btn-danger" onclick="deleteJob(<%=index%>)">Delete</button></a>
             </td>
           </tr>
           <% }) %>
@@ -122,9 +122,9 @@
         <thead>
           <tr>
             <th class="col-md-1">No.</th>
-            <th class="col-md-1">Type</th>
+            <th class="col-md-1">Employment Type</th>
             <th class="col-md-4">Name</th>
-            <th class="col-md-2">Date</th>
+            <th class="col-md-2">Deadline</th>
             <th class="col-md-2">Location</th>
             <th class="col-md-2">Operation</th>
           </tr>
@@ -134,9 +134,9 @@
           <tr>
             <td class="col-md-1"><%=index2++%></td>
             <td id="id_<%=index%>" class="hidID"><%=rs._id%></td>
-            <td class="col-md-1"><%=rs.type%></td>
+            <td class="col-md-1"><%=rs.employmentType%></td>
             <td class="col-md-4"><%=rs.name%></td>
-            <td class="col-md-2"><%=rs.startDate%>~<%=rs.endDate%></td>
+            <td class="col-md-2"><%=rs.deadline%></td>
             <td class="col-md-2"><%=rs.city%>,<%=rs.state%>,<%=rs.country%></td>
             <td class="col-md-2">
             </td>
@@ -170,9 +170,9 @@
         <thead>
           <tr>
             <th class="col-md-1">No.</th>
-            <th class="col-md-1">Type</th>
+            <th class="col-md-1">Employment Type</th>
             <th class="col-md-4">Name</th>
-            <th class="col-md-2">Date</th>
+            <th class="col-md-2">Deadline</th>
             <th class="col-md-2">Location</th>
             <th class="col-md-2">Operation</th>
           </tr>
@@ -182,13 +182,13 @@
           <tr>
             <td class="col-md-1"><%=index3++%></td>
             <td id="id_<%=index%>" class="hidID"><%=rs._id%></td>
-            <td class="col-md-1"><%=rs.type%></td>
+            <td class="col-md-1"><%=rs.employmentType%></td>
             <td class="col-md-4"><%=rs.name%></td>
-            <td class="col-md-2"><%=rs.startDate%>~<%=rs.endDate%></td>
+            <td class="col-md-2"><%=rs.deadline%></td>
             <td class="col-md-2"><%=rs.city%>,<%=rs.state%>,<%=rs.country%></td>
             <td class="col-md-2">
-              <a href="/users/editEvent?id=<%=rs._id%>"><button class="btn btn-info">Revise</button></a>
-              <a id="delete_<%=index%>"><button class="btn btn-danger" onclick="deleteEvent(<%=index%>)">Delete</button></a>
+              <a href="/users/editJob?id=<%=rs._id%>"><button class="btn btn-info">Revise</button></a>
+              <a id="delete_<%=index%>"><button class="btn btn-danger" onclick="deleteJob(<%=index%>)">Delete</button></a>
             </td>
           </tr>
           <% }) %>
