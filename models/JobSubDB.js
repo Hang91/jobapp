@@ -1,26 +1,26 @@
-/**
- * Created by Ying on 2017/08/03.
- */
 
-//SubDB Model
-
-//creat mongodb connection
 
 var mongoose = require('mongoose');
 
 
 //创建数据文档模板【在SQL数据库中 即一个表（列名字段等） NoSQL数据库中即数据文档（成员变量名）】
-var subsSchema = new mongoose.Schema({
-    name: {
+var jobsubsSchema = new mongoose.Schema({
+	name: {
 		type: String
 	},
-	type: {
+	positionType: {
 		type: String
 	},
-	region : {
+	employmentType: {
 		type: String
 	},
-	city : {
+	field: {
+		type: String
+	},
+	region: {
+		type: String
+	},
+	city: {
 		type: String
 	},
 	state: {
@@ -29,25 +29,25 @@ var subsSchema = new mongoose.Schema({
 	country: {
 		type:String
 	},
-	organization: {
+	institution: {
 		type: String
 	},
-	startDate: {
+	deadline: {
 		type: String
 	},
-	endDate: {
-		type: String
-	},
-	keywords: {
-		type: Array
+	salary: {
+		type: Number
 	},
 	userName: {
 		type: String
 	},
 	userEmail: {
 		type: String
+	},
+	keywords: {
+		type: Array
 	}
 });
 
-module.exports = mongoose.model('subs', subsSchema);
+module.exports = mongoose.model('jobsubs', jobsubsSchema);
 //yellow 'subs' is the name of the collection

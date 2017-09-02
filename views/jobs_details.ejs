@@ -58,17 +58,7 @@
         <input type="text" name="name" class="form-control" value="<%= (!!job.name)?job.name:'' %>">
         <br>
         <lable>Position Type</lable><br>
-        <select class="form-control" name="positionType">
-            <option value="">-----ALL-----</option>
-            <% positionTypes.forEach(function(onePositionType) { %>
-              <%  if(job.positionType == onePositionType.positionType){ %>
-                      <option value="<%=onePositionType.positionType%>" selected="selected"><%=onePositionType.positionType%></option>
-                  <%  }
-                    else{ %>
-                      <option value="<%=onePositionType.positionType%>"><%=onePositionType.positionType%></option>
-                  <%  } %>                  
-            <% }) %>
-        </select>
+        <input type="text" name="positionType" class="form-control" value="<%= (!!job.positionType)?job.positionType:'' %>">
         <br>
         <lable>Employment Type</lable><br>
         <select class="form-control" name="employmentType">
@@ -143,7 +133,7 @@
 
         <input id="revise" type="button" class="btn btn-lg btn-primary btn-block btn-warning" name="manage_job_detail" value="revise" onclick="reviseInDetail()">
         <input id="approve" type="button" class="btn btn-lg btn-primary btn-block btn-success" name="manage_job_detail" value="approve" onclick="approveJobInDetail()">
-        <input id="disapprove" type="button" class="btn btn-lg btn-primary btn-block btn-danger" name="manage_event_detail" value="disapprove" onclick="disapproveJobInDetail()">
+        <input id="disapprove" type="button" class="btn btn-lg btn-primary btn-block btn-danger" name="manage_job_detail" value="disapprove" onclick="disapproveJobInDetail()">
       </form>
 </div> <!-- /container -->
 

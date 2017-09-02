@@ -63,17 +63,7 @@
         <input type="text" name="name" class="form-control" value="<%= (!!results.name)?results.name:'' %>">
         <br>
         <lable>Position Type</lable><br>
-        <select class="form-control" name="positionType">
-            <option value="">-----ALL-----</option>
-            <% positionTypes.forEach(function(onePositionType) { %>
-              <%  if(results.positionType == onePositionType.positionType){ %>
-                      <option value="<%=onePositionType.positionType%>" selected="selected"><%=onePositionType.positionType%></option>
-                  <%  }
-                    else{ %>
-                      <option value="<%=onePositionType.positionType%>"><%=onePositionType.positionType%></option>
-                  <%  } %>                  
-            <% }) %>
-        </select>
+        <input type="text" name="positionType" class="form-control" value="<%= (!!results.positionType)?results.positionType:'' %>">
         <br>
         <lable>Employment Type</lable><br>
         <select class="form-control" name="employmentType">
@@ -89,17 +79,7 @@
         </select>
         <br>
         <lable>Field</lable><br>
-        <select class="form-control" name="field">
-            <option value="">-----ALL-----</option>
-            <% fields.forEach(function(onefield) { %>
-              <%  if(results.field == onefield.field){ %>
-                      <option value="<%=onefield.field%>" selected="selected"><%=onefield.field%></option>
-                  <%  }
-                    else{ %>
-                      <option value="<%=onefield.field%>"><%=onefield.field%></option>
-                  <%  } %>                  
-            <% }) %>
-        </select>
+        <input type="text" name="field" class="form-control" value="<%= (!!results.field)?results.field:'' %>">
         <br>
         <lable>Region</lable><br>
         <select class="form-control" onchange="set_country(this,country,state, true)" name="region" >

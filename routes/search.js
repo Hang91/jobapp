@@ -4,7 +4,7 @@ var router = express.Router();
 var mongojs = require('mongojs');
 
 var db = mongojs('eventapp', ['users','events','types','subs']);//used to store event types, e.g. Art, Agriculture, Computer...
-var TypesModel = require('../models/TypeDB');
+//var TypesModel = require('../models/TypeDB');
 
 //mongoose
 //type

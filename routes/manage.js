@@ -2,11 +2,13 @@ var express = require('express');
 var router = express.Router();
 var mongojs = require('mongojs');
 var db = mongojs('eventapp', ['users','events','types','subs']);
-var TypesModel = require('../models/TypeDB');
-var EventsModel = require('../models/EventDB');
+//var TypesModel = require('../models/TypeDB');
+
+var JobsModel = require('../models/JobDB');
 var UsersModel = require('../models/UserDB');
-var SubsModel = require('../models/SubDB');
+var SubsModel = require('../models/JobSubDB');
 var AlertsModel = require('../models/AlertDB');
+var employmentTypesModel = require('../models/EmploymentTypeDB');
 var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 var email   = require('emailjs/email');
 
@@ -122,10 +124,10 @@ router.get('/users/download', ensureLoggedIn('/users/login'), isAdmin, function(
     }); 
 });
 
-//*****************   Events  ********************************
-function searchEvents(res, user, limit, tab, currentPage1,currentPage2,currentPage3)
+//*****************   Jobs  ********************************
+function searchJobs(res, user, limit, tab, currentPage1,currentPage2,currentPage3)
 {
-    EventsModel.find({approved : 0},function(err1, results1){//to be approve
+    JobsModel.find({approved : 0},function(err1, results1){//to be approve
         if(err1){
             return next(err1);
         }
@@ -138,12 +140,12 @@ function searchEvents(res, user, limit, tab, currentPage1,currentPage2,currentPa
         if (totalPage1 != 0 && currentPage1 > totalPage1) {
             currentPage1 = totalPage1;
         }
-        EventsModel.find({approved : 0}).skip((currentPage1 - 1) * limit).limit(limit).sort('startDate').sort('city').sort('country').exec(function(err11, results11) {
+        JobsModel.find({approved : 0}).skip((currentPage1 - 1) * limit).limit(limit).sort('deadline').sort('city').sort('country').exec(function(err11, results11) {
         //console.log(results11.length);
                 if(err11){
                     return next(err11);
                 }
-                EventsModel.find({approved : 1},function(err2, results2){//approve
+                JobsModel.find({approved : 1},function(err2, results2){//approve
                 if(err2){
                     return next(err2);
                 }
@@ -157,11 +159,11 @@ function searchEvents(res, user, limit, tab, currentPage1,currentPage2,currentPa
                     currentPage2 = totalPage2;
                 }
                 //console.log(results2.length);
-                EventsModel.find({approved : 1}).skip((currentPage2 - 1) * limit).limit(limit).sort('startDate').sort('city').sort('country').exec(function(err22, results22) {
+                JobsModel.find({approved : 1}).skip((currentPage2 - 1) * limit).limit(limit).sort('deadline').sort('city').sort('country').exec(function(err22, results22) {
                     if(err22){
                         return next(err22);
                     }
-                    EventsModel.find({approved : 3},function(err3, results3){//revise
+                    JobsModel.find({approved : 3},function(err3, results3){//revise
                         if(err3){
                             return next(err3);
                         }
@@ -174,8 +176,8 @@ function searchEvents(res, user, limit, tab, currentPage1,currentPage2,currentPa
                         if (totalPage3 != 0 && currentPage3 > totalPage3) {
                             currentPage3 = totalPage3;
                         }
-                        EventsModel.find({approved : 3}).skip((currentPage3 - 1) * limit).limit(limit).sort('startDate').sort('city').sort('country').exec(function(err33, results33) {
-                            res.render('manage_events', { title:'Manage | Manage Events', user:user, 
+                        JobsModel.find({approved : 3}).skip((currentPage3 - 1) * limit).limit(limit).sort('deadline').sort('city').sort('country').exec(function(err33, results33) {
+                            res.render('manage_jobs', { title:'Manage | Manage Jobs', user:user, 
                                 results1 : results11, results2 : results22, results3 : results33,
                                 totalPage1:totalPage1, totalPage2:totalPage2, totalPage3:totalPage3,
                                 currentPage1:currentPage1,currentPage2:currentPage2,currentPage3:currentPage3, 
@@ -187,8 +189,8 @@ function searchEvents(res, user, limit, tab, currentPage1,currentPage2,currentPa
         });
     });
 }
-//manage events page - GET
-router.get('/events', ensureLoggedIn('/users/login'), isManager, function(req, res){
+//manage jobs page - GET
+router.get('/jobs', ensureLoggedIn('/users/login'), isManager, function(req, res){
     var limit = 5;
     var currentPage1 = 1;
     var currentPage2 = 1;
@@ -212,41 +214,41 @@ router.get('/events', ensureLoggedIn('/users/login'), isManager, function(req, r
     if (currentPage3 < 1) {
         currentPage3 = 1;
     }
-    searchEvents(res, req.user, limit, tab, currentPage1, currentPage2, currentPage3);
+    searchJobs(res, req.user, limit, tab, currentPage1, currentPage2, currentPage3);
 });
 
 
-//check detail of an event
-router.get('/events/details', ensureLoggedIn('/users/login'), isManager, function(req, res){
+//check detail of an job
+router.get('/jobs/details', ensureLoggedIn('/users/login'), isManager, function(req, res){
     var id = req.query.id;
     //console.log(id);
-    TypesModel.find({}, function(err, types){
+    employmentTypesModel.find({}, function(err, types){
         if(err){
             return next(err);
         }
-        EventsModel.findById(id, function(err, event){
+        JobsModel.findById(id, function(err, job){
             if(err){
                 res.send(err);
             }
-            res.render('events_details', {title: 'Manage | Event Details', 
-                user: req.user, types:types, event:event});
+            res.render('jobs_details', {title: 'Manage | Job Details', 
+                user: req.user, employmentTypes:types, job:job});
         });
     });
 });
 
 //edit & approve / disapprove / ask for revision
-router.post('/events/details', ensureLoggedIn('/users/login'), isManager, function(req, res){
-    if(req.body.manage_event_detail == "disapprove"){
+router.post('/jobs/details', ensureLoggedIn('/users/login'), isManager, function(req, res){
+    if(req.body.manage_job_detail == "disapprove"){
             var id  = req.body.id;
-            EventsModel.findByIdAndRemove(ObjectId(id), function(err, event){
+            JobsModel.findByIdAndRemove(ObjectId(id), function(err, job){
                     if(err){
                         res.send(err);
                     }
                     else {
                         console.log("disapprove success!");
                         req.flash('success', 'Successfully disapproved!');
-                        res.location('/manage/events');
-                        res.redirect('/manage/events');
+                        res.location('/manage/jobs');
+                        res.redirect('/manage/jobs');
                         //searchEvents(res, req.user, limit, currentPage, 0, false);
                     }    
                 });
@@ -254,18 +256,21 @@ router.post('/events/details', ensureLoggedIn('/users/login'), isManager, functi
     //get form values
     var id        = req.body.id;
     var name        = req.body.name;
-    var type        = req.body.type;
+    var positionType = req.body.positionType;
+    var employmentType = req.body.employmentType;
+    var field = req.body.field;
     var city    = req.body.city;
     var state   = req.body.state;
     var country     = req.body.country;
     var region      = req.body.region;
-    var organization    = req.body.organization;
+    var institution    = req.body.institution;
     var contact     = req.body.contact;
     var email   = req.body.email;
     var website     = req.body.website;
-    var startDate   = req.body.startDate;
-    var endDate = req.body.endDate;
+    // var startDate   = req.body.startDate;
+    // var endDate = req.body.endDate;
     var deadline = req.body.deadline;
+    var salary = req.body.salary;
     var description = req.body.description;
     var comments = req.body.comments;
     if(typeof req.body.keywords == 'string') {
@@ -275,31 +280,34 @@ router.post('/events/details', ensureLoggedIn('/users/login'), isManager, functi
         console.log('keywords is not a string');
     }
 
-    if(req.body.manage_event_detail == "revise"){
+    if(req.body.manage_job_detail == "revise"){
         
         var approved = 3;//0:not check yet; 1:approve; 2:disapprove; 3.ask for revision
 
-        var newEvent = {
+        var newJob = {
                    name: name,
-                   type: type,
+                   positionType: positionType,
+                   employmentType: employmentType,
+                   field: field,
                    region: region,//continent
                    country: country,
                    state: state,
                    city: city,
-                   organization: organization,
+                   institution: institution,
                    contact: contact,
                    email: email,
                    website: website,
-                   startDate: startDate,
-                   endDate: endDate,
+                   // startDate: startDate,
+                   // endDate: endDate,
                    deadline: deadline,
+                   salary: salary,
                    description: description,
                    keywords: keywords,
                    approved: approved,
                    comments: comments
             }
         //update
-        EventsModel.update({_id:ObjectId(id)}, {$set:newEvent}, function(err, doc){
+        JobsModel.update({_id:ObjectId(id)}, {$set:newJob}, function(err, doc){
         if(err){
             res.send(err);
         }
@@ -309,35 +317,38 @@ router.post('/events/details', ensureLoggedIn('/users/login'), isManager, functi
             //alertUser(newEvent);
             informUser(id);
             req.flash('success', 'Successfully ask for revision!');
-            res.location('/manage/events');
-            res.redirect('/manage/events');
+            res.location('/manage/jobs');
+            res.redirect('/manage/jobs');
         }
         });
     }
-    else if(req.body.manage_event_detail == "approve"){
+    else if(req.body.manage_job_detail == "approve"){
         var approved = 1;//0:not check yet; 1:approve; 2:disapprove; 3.ask for revision
 
-        var newEvent = {
+        var newJob = {
                    name: name,
-                   type: type,
+                   positionType: positionType,
+                   employmentType: employmentType,
+                   field: field,
                    region: region,//continent
                    country: country,
                    state: state,
                    city: city,
-                   organization: organization,
+                   institution: institution,
                    contact: contact,
                    email: email,
                    website: website,
-                   startDate: startDate,
-                   endDate: endDate,
+                   // startDate: startDate,
+                   // endDate: endDate,
                    deadline: deadline,
+                   salary: salary,
                    description: description,
                    keywords: keywords,
                    approved: approved,
-                   comments: comments,
+                   comments: comments
             }
         //update
-        EventsModel.update({_id:ObjectId(id)}, {$set: newEvent}, function(err, doc){
+        JobsModel.update({_id:ObjectId(id)}, {$set: newJob}, function(err, doc){
         if(err){
             res.send(err);
         }
@@ -345,50 +356,50 @@ router.post('/events/details', ensureLoggedIn('/users/login'), isManager, functi
             console.log('approve success!');
             //success msg
             informUser(id);//inform the auther
-            alertUser(newEvent);//inform all subscribers
+            alertUser(newJob);//inform all subscribers
             req.flash('success', 'Successfully approved!');
-            res.location('/manage/events');
-            res.redirect('/manage/events');
+            res.location('/manage/jobs');
+            res.redirect('/manage/jobs');
         }
         });
     }
     
 });
 
-//approve an event
-router.get('/events/approve', ensureLoggedIn('/users/login'), isManager, function(req, res){
+//approve an job
+router.get('/jobs/approve', ensureLoggedIn('/users/login'), isManager, function(req, res){
     var id = req.query.id;
     //console.log("in the approve function， id="+id);
-    EventsModel.update({_id:ObjectId(id)}, {$set:{approved:1}}, function(err, event){
+    JobsModel.update({_id:ObjectId(id)}, {$set:{approved:1}}, function(err, job){
         if(err){
             res.send(err);
         }
         else {            
             //email alert
-            EventsModel.findById(id, function(err, event){
+            JobsModel.findById(id, function(err, job){
                 informUser(id);
-                alertUser(event);
+                alertUser(job);
                 informUser(id);//inform the auther
                 console.log("approve success!");
-                res.location('/manage/events');
-                res.redirect('/manage/events');                            
+                res.location('/manage/jobs');
+                res.redirect('/manage/jobs');                            
             });
         }    
     });
 });
 
-//disapprove an event - delete
-router.get('/events/disapprove', ensureLoggedIn('/users/login'), isManager, function(req, res){
+//disapprove an job - delete
+router.get('/jobs/disapprove', ensureLoggedIn('/users/login'), isManager, function(req, res){
     var id = req.query.id;
     //console.log(id);
-    EventsModel.findByIdAndRemove(ObjectId(id), function(err, event){
+    JobsModel.findByIdAndRemove(ObjectId(id), function(err, job){
         if(err){
             res.send(err);
         }
         else {
             console.log("disapprove success!");
-            res.location('/manage/events');
-            res.redirect('/manage/events'); 
+            res.location('/manage/jobs');
+            res.redirect('/manage/jobs'); 
         }    
     });
 });
@@ -396,7 +407,7 @@ router.get('/events/disapprove', ensureLoggedIn('/users/login'), isManager, func
 //************   categories   **************************
 //manage categories page - GET
 router.get('/categories', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
-	TypesModel.find({}, function(err, results){
+	employmentTypesModel.find({}, function(err, results){
 		if(err){
 			return next(err);
 		}
@@ -411,12 +422,12 @@ router.get('/categories', ensureLoggedIn('/users/login'), isAdmin, function(req,
 //add type
 //use ajax post (use get cannot work)
 router.get('/categories/add', ensureLoggedIn('/users/login'), isAdmin, function(req, res){
-	var type = req.query.type;
+	var employmentType = req.query.employmentType;
    //MogoDB中可以用Create方法添加数据
-    TypesModel.create({type:type}, function (err) {
+    employmentTypesModel.create({employmentType:employmentType}, function (err) {
         if (err) res.send({result:-1});
         else {
-            TypesModel.find({}, function (error, results) {
+            employmentTypesModel.find({}, function (error, results) {
                 if (error) res.send({result:-1});
                 else {
                     // res.send({result:1});
@@ -435,13 +446,13 @@ router.get('/categories/add', ensureLoggedIn('/users/login'), isAdmin, function(
 router.get('/categories/edit', ensureLoggedIn('/users/login'), isAdmin,function(req, res){
     var id = req.query._id;
     //console.log("edit type:"+id);
-    var type = req.query.type;
-    TypesModel.update({_id:ObjectId(id)}, {$set:{type:type}},{}, function(err, next){
+    var employmentType = req.query.employmentType;
+    employmentTypesModel.update({_id:ObjectId(id)}, {$set:{employmentType:employmentType}},{}, function(err, next){
         if(err){
             res.send(err);
         }
         else {
-            TypesModel.find({}, function (error, results) {
+            employmentTypesModel.find({}, function (error, results) {
                 if (error){ 
                     console.log("edit error!");
                     res.send({result:-1});
@@ -462,13 +473,13 @@ router.get('/categories/delete', ensureLoggedIn('/users/login'), isAdmin, functi
 	var id = req.query._id;
     //console.log("delete type:"+id);
    //MogoDB use remove function to remove data
-    TypesModel.findByIdAndRemove(ObjectId(id), function (err) {
+    employmentTypesModel.findByIdAndRemove(ObjectId(id), function (err) {
         if (err){ 
             console.log("delete err!");
             res.send({result:-1});
         }
         else {
-            TypesModel.find({}, function (error, results) {
+            employmentTypesModel.find({}, function (error, results) {
                 if (error){ 
                     console.log("delete error!");
                     res.send({result:-1});
@@ -523,16 +534,16 @@ function informUser(id) {
       tls: {ciphers: "SSLv3"}
     });
 
-    EventsModel.findById(id, function(err, events){
+    JobsModel.findById(id, function(err, jobs){
       if(err) {
         console.log(err);
       }
-      if(events.approved == 3) { //revise
+      if(jobs.approved == 3) { //revise
         var message = {
-          text:  "Hello " + events.userName + ", you have an event to revise. Please log in your eventapp account " +
+          text:  "Hello " + jobs.userName + ", you have a job to revise. Please log in your jobapp account " +
            "to get detail information. ",
           from:  "you <jinhang91@hotmail.com>", 
-          to:    events.userName + "<" + events.userEmail + ">",
+          to:    jobs.userName + "<" + jobs.userEmail + ">",
           cc:    "",
           subject: "testing email js"
         };
@@ -541,12 +552,12 @@ function informUser(id) {
             console.log(err || message); 
         });
       }
-      else if(events.approved == 1) { //approved
+      else if(jobs.approved == 1) { //approved
         var message = {
-          text:  "Hello " + events.userName + ", you hava an event approved. You can log in your eventapp account " +
+          text:  "Hello " + jobs.userName + ", you hava a job approved. You can log in your jobapp account " +
            "to get detail information",
           from:  "you <jinhang91@hotmail.com>", 
-          to:    "zhuyingcau <" + events.userEmail + ">",
+          to:    "zhuyingcau <" + jobs.userEmail + ">",
           cc:    "",
           subject: "testing email js"
         };
@@ -562,7 +573,7 @@ function informUser(id) {
 
 }
 
-function alertUser(newEvent) {
+function alertUser(newJob) {
   console.log("alert User");
 
   AlertsModel.findOne(function(err, emails){
@@ -572,18 +583,17 @@ function alertUser(newEvent) {
 
     var adminEmail = emails.account;
     var adminPw = emails.password;
-    var name = newEvent.name;
-    var type = newEvent.type;
-    var keywords = newEvent.keywords;
-    var region = newEvent.region;
-    var country = newEvent.country;
-    var state = newEvent.state;
-    var city = newEvent.city;
-    var startDate = newEvent.startDate;
-    var endDate = newEvent.endDate;
-    var website = newEvent.website;
-    var deadline = newEvent.deadline;
-    var description = newEvent.description;
+    var name = newJob.name;
+    var positionType = newJob.positionType;
+    var employmentType = newJob.employmentType;
+    var field = newJob.field;
+    var region = newJob.region;
+    var country = newJob.country;
+    var state = newJob.state;
+    var city = newJob.city;
+    var deadline = newJob.deadline;
+    var salary = newJob.salary;
+    var keywords = newJob.keywords;
 
     if(!name) {
       var nameStr = {};
@@ -591,11 +601,23 @@ function alertUser(newEvent) {
     else {
       nameStr = {$or: [{'name': name}, {'name': ""}]};
     }
-    if(!type){
-      var typeStr = {};
+    if(!positionType){
+      var positionTypeStr = {};
     }
     else{
-      var typeStr = {$or: [{'type': type}, {'type': ""}]};
+      var positionTypeStr = {$or: [{'positionType': positionType}, {'positionType': ""}]};
+    }    
+    if(!employmentType){
+      var employmentTypeStr = {};
+    }
+    else{
+      var employmentTypeStr = {$or: [{'employmentType': employmentType}, {'employmentType': ""}]};
+    }
+    if(!field){
+        var fieldStr = {};
+    }
+    else{
+        var fieldStr = {$or: [{'field': field}, {'field': ""}]};
     }
     if(keywords.length == 1 && !keywords[0]){
       var keywordsStr = {};
@@ -628,19 +650,19 @@ function alertUser(newEvent) {
     else{
       var cityStr = {$or: [{'city' : city}, {'city': ""}]};
     }
-    if(!startDate){
-      var startDateStr = {};
+    if(!deadline){
+        var deadlineStr = {};
     }
     else{
-      var startDateStr = {$or: [{'startDate': {$lte:startDate}}, {'startDate': ""}]};
+        var deadlineStr = {$or: [{'deadline': {$lte:deadline}}, {'deadline': ""}]};
     }
-    if(!endDate){
-      var endDateStr = {};
+    if(!salary){
+        var salaryStr = {};
     }
     else{
-      var endDateStr = {$or: [{'endDate' : {$gte:endDate}}, {'endDate': ""}]};
+        var salaryStr = {$or: [{'salary': {$gte:salary}}, {'salary': ""}]};
     }
-    SubsModel.find({$and: [nameStr, typeStr, regionStr, countryStr, stateStr, cityStr, startDateStr, endDateStr, keywordsStr]}, function(err, results){
+    SubsModel.find({$and: [nameStr, positionTypeStr, employmentTypeStr, fieldStr, regionStr, countryStr, stateStr, cityStr, deadlineStr, salaryStr, keywordsStr]}, function(err, results){
       console.log('user number' + results.length);
 
       var server  = email.server.connect({
@@ -652,8 +674,8 @@ function alertUser(newEvent) {
       results.forEach(function(result){
 
         var message = {
-          text:  "Hello " + result.userName + ", \n There is a new event match your subscription. Below is the detailed information. \n" + 
-          "Event name: " + name + "\n" + "Event type: " + type + "\n" + "Region: " + region + "\n" +
+          text:  "Hello " + result.userName + ", \n There is a new job match your subscription. Below is the detailed information. \n" + 
+          "Job name: " + name + "\n" + "Job type: " + type + "\n" + "Region: " + region + "\n" +
           "Country: " + country + "\n" + "State: " + state + "\n" + "City: " + city + "\n" + "Date: " +
           startDate + "~" + endDate + "\n" + "Abstract Deadline: " + deadline + "\n" + 
           "Description: " + description + "\n" + "keywords: " + keywords,

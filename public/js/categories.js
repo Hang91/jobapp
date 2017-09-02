@@ -2,7 +2,7 @@
 // categories.js ///////////////////////////////////////////////////////////
 ///////////////////
 var TypesModel = {
-    type: ""
+    employmentType: ""
 };
 
 function resetIndex(){
@@ -41,32 +41,13 @@ $(function (){
             //$(".addsave").removeClass("addsave");
             var addurl = document.getElementById('addurl'); 
             //or grab it by tagname etc
-            addurl.href = "/manage/categories/add?type="+type;
+            addurl.href = "/manage/categories/add?employmentType="+type;
         }
-        //use Ajax to update data
-        // $.ajax({
-        //     type: 'post',
-        //     url: "/manage/categories/add",
-        //     dataType: "json",
-        //     data: TypesModel,
-        //     success: function (resData) {
-        //         if (resData.result == 1) {
-        //             //refresh table
-        //             alert('Add success!');
-
-        //             $(this).html("Edit")
-        //         }
-        //     },
-        //     error: function (error) {
-        //         alert('Add error!');
-        //     }
-        // });
-        //?Manage Categories: <%=results.length%> should +1
   });
 });
 
 function addConfirm() {
-　　　　if (window.confirm("Confirm to add this type?")) {
+　　　　if (window.confirm("Confirm to add this employment type?")) {
 　　　　　　return true;//confirm
 　　　　}
 　　　　else {
@@ -99,14 +80,14 @@ function editType(index) {
               //var type = $(this).parent().parent().parent().children().find("input").val();
                 
               var editurl = document.getElementById('editurl_'+index); 
-              editurl.href = "/manage/categories/edit?_id="+id+"&&type="+type.toString();
+              editurl.href = "/manage/categories/edit?_id="+id+"&&employmentType="+type.toString();
               //alert(editurl.href);
         }
       }
 }
 
 function editConfirm() {
-　　　　if (window.confirm("Confirm to change this type?")) {
+　　　　if (window.confirm("Confirm to change this employment type?")) {
 　　　　　　return true;//confirm
 　　　　}
 　　　　else {
@@ -128,7 +109,7 @@ function deleteType(index) {
 
 
 function deleteConfirm() {
-　　　　if (window.confirm("Confirm to delete this type?")) {
+　　　　if (window.confirm("Confirm to delete this employment type?")) {
 　　　　　　return true;//confirm
 　　　　}
 　　　　else {

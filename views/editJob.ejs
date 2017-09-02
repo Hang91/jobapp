@@ -64,17 +64,7 @@
         <input type="text" name="name" class="form-control" value="<%= (!!job.name)?job.name:'' %>">
         <br>
         <lable>Position Type</lable><br>
-        <select class="form-control" name="positionType">
-            <option value="">-----ALL-----</option>
-            <% positionTypes.forEach(function(onePositionType) { %>
-              <%  if(job.positionType == onePositionType.positionType){ %>
-                      <option value="<%=onePositionType.positionType%>" selected="selected"><%=onePositionType.positionType%></option>
-                  <%  }
-                    else{ %>
-                      <option value="<%=onePositionType.positionType%>"><%=onePositionType.positionType%></option>
-                  <%  } %>                  
-            <% }) %>
-        </select>
+        <input type="text" name="positionType" class="form-control" value="<%= (!!job.positionType)?job.positionType:'' %>">
         <br>
         <lable>Employment Type</lable><br>
         <select class="form-control" name="employmentType">
@@ -84,23 +74,13 @@
                       <option value="<%=oneEmploymentType.employmentType%>" selected="selected"><%=oneEmploymentType.employmentType%></option>
                   <%  }
                     else{ %>
-                      <option value="<%=oneEmploymentType.employmentType%>"><%=onePositionType.employmentType%></option>
+                      <option value="<%=oneEmploymentType.employmentType%>"><%=oneEmploymentType.employmentType%></option>
                   <%  } %>                  
             <% }) %>
         </select>
         <br>
         <lable>Field</lable><br>
-        <select class="form-control" name="field">
-            <option value="">-----ALL-----</option>
-            <% fields.forEach(function(oneField) { %>
-              <%  if(job.field == oneField.field){ %>
-                      <option value="<%=oneField.field%>" selected="selected"><%=oneField.field%></option>
-                  <%  }
-                    else{ %>
-                      <option value="<%=oneField.field%>"><%=onePositionType.field%></option>
-                  <%  } %>                  
-            <% }) %>
-        </select>
+        <input type="text" name="field" class="form-control" value="<%= (!!job.field)?job.field:'' %>">
         <br>
         <lable>Region</lable><br>
         <select class="form-control" onchange="set_country(this,country,state, true)" name="region" >
@@ -157,7 +137,7 @@
         <input type="text" name="comments" class="form-control" value="<%= (!!job.comments)?job.comments:'' %>">
         <br>
 
-        <input id="revise" type="button" class="btn btn-lg btn-primary btn-block btn-success" name="revise_job" value="Confirm Revision" onclick="reviseInDetail()">
+        <input id="revise" type="button" class="btn btn-lg btn-primary btn-block btn-success" name="revise_job" value="Confirm Edit" onclick="reviseInDetail()">
       </form>
 </div> <!-- /container -->
 

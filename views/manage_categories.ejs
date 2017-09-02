@@ -66,22 +66,11 @@
       </tr>
     </thead>
     <tbody>
-    <!-- <%  for(var i=0; i<results.length; i++) {%>
-    <tr>
-      <td><%=i+1%></td>
-      <td id="type"><span><%=results[i].type%></span></td>
-      <td>
-        <button class="add btn btn-success">Add</button>
-        <button class="edit btn btn-warning">Edit</button>
-        <button class="del btn btn-danger">Delete</button>
-      </td>
-    </tr>
-    <% } %> -->
     <% var index = 1; results.forEach(function(rs) {%>
     <tr>      
       <td><%=index++%></td>      
       <td id="id_<%=index%>" class="hidID"><%=rs._id%></td>
-      <td id="type_<%=index%>"><%=rs.type%></td>
+      <td id="type_<%=index%>"><%=rs.employmentType%></td>
       <td>
         <button class="add btn btn-success">Add</button>
         <a id="editurl_<%=index%>"><button class="edit_<%=index%> btn btn-warning" onclick="editType(<%=index%>)">Edit</button></a>
@@ -89,6 +78,15 @@
       </td>
     </tr>
     <% }) %>
+    <% if(results.length == 0){ %>
+    <tr>  
+      <td></td>
+      <td></td>
+      <td>
+        <button class="add btn btn-success">Add</button>
+      </td>
+    </tr>
+    <% } %>
     <tr class="hid">
         <td></td>
         <td><input type="text"/></td>

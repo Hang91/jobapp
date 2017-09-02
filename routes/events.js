@@ -5,13 +5,13 @@ var router = express.Router();
 
 var email 	= require('emailjs/email');
 var mongojs = require('mongojs');
-var db = mongojs('eventapp', ['users','events','types','subs']);
+//var db = mongojs('eventapp', ['users','events','types','subs']);
 //###########mongoose#########
-var EventsModel = require('../models/EventDB');
+var JobModel = require('../models/JobDB');
 //Events - POST
 //pagination
 router.post('/', function (req, res, next) {
-	console.log("events post");
+	console.log("jobs post");
 	var limit = 5;
 	var currentPage = 1;
     if(req.params.currentPage){
@@ -20,19 +20,20 @@ router.post('/', function (req, res, next) {
     if (currentPage < 1) {
         currentPage = 1;
     }
-	var type = req.body.type;
+	var employmentType = req.body.employmentType;
+	var positionType = req.body.positionType;
 	var keywords = req.body.keywords.split(',');
 	var country = req.body.country;
 	var state = req.body.state;
-	var startDate = req.body.startDate;
-	var endDate = req.body.endDate;
+	var deadline = req.body.deadline;
+	var salary = req.body.salary;
 	var approved = 1;
 	//delete out-of-date events
 	//deleteOutDateEvents(startDate);
 
 	//search
-	searchEvents(res, req.user, limit, currentPage, type, 
-		keywords, country, state, startDate, endDate, approved);	
+	searchEvents(res, req.user, limit, currentPage, employmentType, positionType,
+		keywords, country, state, deadline, salary, approved);	
 
 });
 
@@ -49,28 +50,36 @@ router.get( "/" , function ( req , res , err ) {
         currentPage = 1;
     }
 	//use trim() to delete space
-	var type = req.query.type.trim();
-	var keywords = req.query.keywords.trim().split(',');
-	var country = req.query.country.trim();
-	var state = req.query.state.trim();
-	var startDate = req.query.startDate.trim();
-	var endDate = req.query.endDate.trim();
+	var employmentType = req.body.employmentType;
+	var positionType = req.body.positionType;
+	var keywords = req.body.keywords.split(',');
+	var country = req.body.country;
+	var state = req.body.state;
+	var deadline = req.body.deadline;
+	var salary = req.body.salary;
 	var approved = 1;
 	//delete out-of-date events
-	deleteOutDateEvents(startDate);
+	deleteOutDateEvents(deadline);
 	//search
-	searchEvents(res, req.user, limit, currentPage, type, keywords, 
-		country, state, startDate, endDate, approved);	
+	searchEvents(res, req.user, limit, currentPage, employmentType, positionType,
+		keywords, country, state, deadline, salary, approved);		
 });
 
 
-function searchEvents(res, user, limit, currentPage, type, keywords, country, state, startDate, endDate, approved)
+function searchEvents(res, user, limit, currentPage, employmentType, positionType, 
+	keywords, country, state, deadline, salary, approved)
 {//search
-	if(!type){
-		var typeStr = {};
+	if(!employmentType){
+		var employmentTypeStr = {};
 	}
 	else{
-		var typeStr = {'type' : type};
+		var employmentTypeStr = {'employmentType' : employmentType};
+	}
+	if(!positionType){
+		var positionTypeStr = {};
+	}
+	else{
+		var positionTypeStr = {'positionType' : positionType};
 	}
 	if(!keywords || (keywords.length == 1 && !keywords[0])){
 		var keywordsStr = {};
@@ -91,21 +100,21 @@ function searchEvents(res, user, limit, currentPage, type, keywords, country, st
 	else{
 		var stateStr = {'state' : state};
 	}
-	if(!startDate){
-		var startDateStr = {};
+	if(!deadline){
+		var deadlineStr = {};
 	}
 	else{
-		var startDateStr = {'startDate': {$gte:startDate}};
+		var deadlineStr = {'deadline': {$gte:deadline}};
 	}
-	if(!endDate){
-		var endDateStr = {};
+	if(!salary){
+		var salaryStr = {};
 	}
 	else{
-		var endDateStr = {'endDate' : {$lte:endDate}};
+		var salaryStr = {'salary': {$gte:deadline}};
 	}
 	var approvedStr = {'approved' : 1};
 
-    EventsModel.find({$and: [typeStr, keywordsStr, countryStr, stateStr, startDateStr, endDateStr, approvedStr]}, function(err, rs){
+    JobModel.find({$and: [employmentTypeStr, positionTypeStr, keywordsStr, countryStr, stateStr, deadlineStr, salaryStr, approvedStr]}, function(err, rs){
     	if (err) {
             res.send(err);
         } else{
@@ -118,21 +127,22 @@ function searchEvents(res, user, limit, currentPage, type, keywords, country, st
             if (totalPage != 0 && currentPage > totalPage) {
                 currentPage = totalPage;
             }
-            var query = EventsModel.find({$and: [typeStr, keywordsStr, countryStr, stateStr, startDateStr, endDateStr, approvedStr]});
+            var query = JobModel.find({$and: [employmentTypeStr, positionTypeStr, keywordsStr, countryStr, stateStr, deadlineStr, salaryStr, approvedStr]});
             query.skip((currentPage - 1) * limit);
             query.limit(limit);
             query.sort('-startDate').exec(function(err, results) { 
             	res.render('events', {title:'Search Results', 
-            		type:type, keywords:keywords, 
+            		positionType:positionType, employmentType:employmentType,
+            		keywords:keywords, 
             		country:country, state:state, 
-            		startDate:startDate, endDate:endDate, 
+            		deadline:deadline, salary:salary, 
             		totalPage:totalPage, currentPage:currentPage, 
             		results:results, totallength:totallength, user: user});
             });
         } 
 	});
 }
-function deleteOutDateEvents(startDate)
+function deleteOutDateEvents(deadline)
 {
 	//delete out-of-date events
 	var today = new Date();
@@ -150,7 +160,7 @@ function deleteOutDateEvents(startDate)
 
 	today =  yyyy + '-' + mm + '-' + dd;
 	//console.log(today);
-	EventsModel.remove({'startDate': {$lt:today}})
+	JobModel.remove({'deadline': {$lt:today}})
 }
 
 module.exports = router;

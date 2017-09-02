@@ -61,12 +61,7 @@
         <input type="text" name="name" class="form-control" value="<%= (!!locals.name)?name:'' %>">
         <br>
         <lable>Position Type</lable><br>
-        <select class="form-control" name="positionType" value="<%= (!!locals.positionType)?positionType:'' %>">
-            <option value="">-----ALL-----</option>
-            <% positionTypes.forEach(function(onePositionType) { %>
-                <option value="<%=onePositionType.positionType%>"><%=onePositionType.positionType%></option>                
-            <% }) %>
-        </select>
+        <input type="text" name="positionType" class="form-control" value="<%= (!!locals.positionType)?positionType:'' %>">
         <br>
         <lable>Employment Type</lable><br>
         <select class="form-control" name="employmentType" value="<%= (!!locals.employmentType)?employmentType:'' %>">
@@ -77,12 +72,7 @@
         </select>
         <br>
         <lable>Field</lable><br>
-        <select class="form-control" name="field" value="<%= (!!locals.field)?field:'' %>">
-            <option value="">-----ALL-----</option>
-            <% fields.forEach(function(oneField) { %>
-                <option value="<%=oneField.field%>"><%=oneField.field%></option>                
-            <% }) %>
-        </select>
+        <input type="text" name="field" class="form-control" value="<%= (!!locals.field)?field:'' %>">
         <br>
         <lable>Region</lable><br>
         <select class="form-control" onchange="set_country(this,country,state, true)" name="region">
