@@ -68,6 +68,9 @@ var jobsSchema = new mongoose.Schema({
 	},
 	approved: {
 		type: Number
+	},
+	comments: {
+		type: String
 	}
 });
 
