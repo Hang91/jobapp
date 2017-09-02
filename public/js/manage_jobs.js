@@ -1,6 +1,14 @@
 //manage_jobs
 
 //revise: admin / users
+//event already approved
+function confirmJobInDetail(){
+    var confirm = document.getElementById('confirm');
+    confirm.type="submit";
+}
+
+
+
 function reviseInDetail(){
   if (reviseConfirm()) {
 　　　　　　//删除操作

@@ -68,7 +68,7 @@
         <lable>Employment Type</lable><br>
         <select class="form-control" name="employmentType">
             <option value="">-----ALL-----</option>
-            <% employmentTypes.forEach(function(oneEmploymentType) { %>
+            <% employmentTypesResult.forEach(function(oneEmploymentType) { %>
               <%  if(results.employmentType == oneEmploymentType.employmentType){ %>
                       <option value="<%=oneEmploymentType.employmentType%>" selected="selected"><%=oneEmploymentType.employmentType%></option>
                   <%  }
@@ -125,7 +125,7 @@
 
 
         <!-- <p>Have Account? <a href="/users/login">Login</a></p> -->
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Subscribe</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Confirm Subscription</button>
       </form>
 
     </div> <!-- /container -->

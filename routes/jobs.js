@@ -49,14 +49,14 @@ router.get( "/" , function ( req , res , err ) {
         currentPage = 1;
     }
 	//use trim() to delete space
-	var employmentType = req.body.employmentType;
-	var positionType = req.body.positionType;
-	var field = req.body.field;
-	var keywords = req.body.keywords.split(',');
-	var country = req.body.country;
-	var state = req.body.state;
-	var deadline = req.body.deadline;
-	var salary = req.body.salary;
+	var employmentType = req.query.employmentType.trim();
+	var positionType = req.query.positionType.trim();
+	var field = req.query.field.trim();
+	var keywords = req.query.keywords.trim().split(',');
+	var country = req.query.country.trim();
+	var state = req.query.state.trim();
+	var deadline = req.query.deadline.trim();
+	var salary = req.query.salary.trim();
 	var approved = 1;
 	//delete out-of-date events
 	deleteOutDateJobs(deadline);
@@ -116,7 +116,7 @@ function searchJobs(res, user, limit, currentPage, employmentType, positionType,
 		var salaryStr = {};
 	}
 	else{
-		var salaryStr = {'salary': {$gte:deadline}};
+		var salaryStr = {'salary': {$gte:salary}};
 	}
 	var approvedStr = {'approved' : 1};
 

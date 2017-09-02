@@ -55,10 +55,10 @@
         <label class="hid" id="id_1" ><%=job.id%></label>
         <input class="hid" type="text" name="id" class="form-control" value="<%= (!!job.id)?job.id:'' %>">
         <label>Job Name</label>
-        <input type="text" name="name" class="form-control" value="<%= (!!job.name)?job.name:'' %>">
+        <input type="text" name="name" class="form-control" value="<%= (!!job.name)?job.name:'' %>" <%if(job.approved==1){%>readonly<%}%>>
         <br>
         <lable>Position Type</lable><br>
-        <input type="text" name="positionType" class="form-control" value="<%= (!!job.positionType)?job.positionType:'' %>">
+        <input type="text" name="positionType" class="form-control" value="<%= (!!job.positionType)?job.positionType:'' %>" <%if(job.approved==1){%>readonly<%}%>>
         <br>
         <lable>Employment Type</lable><br>
         <select class="form-control" name="employmentType">
@@ -74,7 +74,7 @@
         </select>
         <br>
         <label>Job Field</label>
-        <input type="text" name="field" class="form-control" value="<%= (!!job.field)?job.field:'' %>">
+        <input type="text" name="field" class="form-control" value="<%= (!!job.field)?job.field:'' %>" <%if(job.approved==1){%>readonly<%}%>>
         <br>
         <lable>Region</lable><br>
         <select class="form-control" onchange="set_country(this,country,state, true)" name="region" >
@@ -101,39 +101,42 @@
         <br>
         <br>
         <label>City</label>
-        <input type="text" name="city" class="form-control" value="<%= (!!job.city)?job.city:'' %>">
+        <input type="text" name="city" class="form-control" value="<%= (!!job.city)?job.city:'' %>" <%if(job.approved==1){%>readonly<%}%>>
         <br>
         <label>Institution</label>
-        <input type="text" name="institution" class="form-control" value="<%= (!!job.institution)?job.institution:'' %>">
+        <input type="text" name="institution" class="form-control" value="<%= (!!job.institution)?job.institution:'' %>" <%if(job.approved==1){%>readonly<%}%>>
         <br>
         <label>Contact Person for job</label>
-        <input type="text" name="contact" class="form-control" value="<%= (!!job.contact)?job.contact:'' %>">
+        <input type="text" name="contact" class="form-control" value="<%= (!!job.contact)?job.contact:'' %>" <%if(job.approved==1){%>readonly<%}%>>
         <br>
         <label>Job Enquiries Email Address</label>
-        <input type="text" name="email" class="form-control" value="<%= (!!job.email)?job.email:'' %>">
+        <input type="text" name="email" class="form-control" value="<%= (!!job.email)?job.email:'' %>" <%if(job.approved==1){%>readonly<%}%>>
         <br>
         <label>Website Address</label>
-        <input type="text" name="website" class="form-control" value="<%= (!!job.website)?job.website:'' %>">
+        <input type="text" name="website" class="form-control" value="<%= (!!job.website)?job.website:'' %>" <%if(job.approved==1){%>readonly<%}%>>
         <br>
         <label>Deadline</label>
-        <input type="date" name="deadline" class="form-control" value="<%= (!!job.deadline)?job.deadline:'' %>">
+        <input type="date" name="deadline" class="form-control" value="<%= (!!job.deadline)?job.deadline:'' %>" <%if(job.approved==1){%>readonly<%}%>>
         <br>
         <label>Description</label>
-        <input type="text" name="description" class="form-control" value="<%= (!!job.description)?job.description:'' %>">
+        <input type="text" name="description" class="form-control" value="<%= (!!job.description)?job.description:'' %>" <%if(job.approved==1){%>readonly<%}%>>
         <br>
         <label>Salary</label>
-        <input type="text" name="salary" class="form-control" value="<%= (!!job.salary)?job.salary:'' %>">
+        <input type="text" name="salary" class="form-control" value="<%= (!!job.salary)?job.salary:'' %>" <%if(job.approved==1){%>readonly<%}%>>
         <br>
         <label>Keywords</label>
-        <input type="text" name="keywords" class="form-control" value="<%= (!!job.keywords)?job.keywords:'' %>">
+        <input type="text" name="keywords" class="form-control" value="<%= (!!job.keywords)?job.keywords:'' %>" <%if(job.approved==1){%>readonly<%}%>>
         <br>
         <label>Comments</label>
-        <input type="text" name="comments" class="form-control" value="<%= (!!job.comments)?job.comments:'' %>">
+        <input type="text" name="comments" class="form-control" value="<%= (!!job.comments)?job.comments:'' %>" <%if(job.approved==1){%>readonly<%}%>>
         <br> 
-
-        <input id="revise" type="button" class="btn btn-lg btn-primary btn-block btn-warning" name="manage_job_detail" value="revise" onclick="reviseInDetail()">
-        <input id="approve" type="button" class="btn btn-lg btn-primary btn-block btn-success" name="manage_job_detail" value="approve" onclick="approveJobInDetail()">
-        <input id="disapprove" type="button" class="btn btn-lg btn-primary btn-block btn-danger" name="manage_job_detail" value="disapprove" onclick="disapproveJobInDetail()">
+        <% if(job.approved != 1) { %>
+        <input id="revise" type="button" class="btn btn-lg btn-primary btn-block btn-warning" name="manage_job_detail" value="Revise" onclick="reviseInDetail()">
+        <input id="approve" type="button" class="btn btn-lg btn-primary btn-block btn-success" name="manage_job_detail" value="Approve" onclick="approveJobInDetail()">
+        <% } else {%>
+        <input id="confirm" type="button" class="btn btn-lg btn-primary btn-block btn-success" name="manage_job_detail" value="Confirm" onclick="confirmJobInDetail()">
+        <% } %>
+        <input id="disapprove" type="button" class="btn btn-lg btn-primary btn-block btn-danger" name="manage_job_detail" value="Disapprove" onclick="disapprovejobInDetail()">
       </form>
 </div> <!-- /container -->
 

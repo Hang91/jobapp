@@ -64,7 +64,7 @@
   </p>
   <div class="adv-unit-options" style="display: none;">
     <ul>
-        <li><a href=<%=result.website%>><strong>Website:</strong> <%=result.website%></a></li>
+        <li><strong>Website:</strong> <a href=<%=result.website%>><%=result.website%></a></li>
         <li><strong>Position Type:</strong> <%=result.positionType%></li>
         <li><strong>Employment Type:</strong> <%=result.employmentType%></li>
         <li><strong>Field:</strong> <%=result.field%></li>
@@ -87,6 +87,7 @@
         &&country=<%=country%>
         &&state=<%=state%>
         &&deadline=<%=deadline%>
+        &&salary=<%=salary%>
         &&currentPage=1">&laquo;</a></li>
   <% if(totalPage == 0){ %>
     <li class="active"><a href="?positionType=<%=positionType%>
@@ -96,6 +97,7 @@
         &&country=<%=country%>
         &&state=<%=state%>
         &&deadline=<%=deadline%>
+        &&salary=<%=salary%>
         &&currentPage=1">1</a></li>
   <% } %>
   <% for(var j = 1; j <= totalPage; j ++){ %>
@@ -112,6 +114,7 @@
         &&country=<%=country%>
         &&state=<%=state%>
         &&deadline=<%=deadline%>
+        &&salary=<%=salary%>
         &&currentPage=1"><%=j%></a></li>     
   <% } %>
   <li><a href="?positionType=<%=positionType%>
@@ -121,6 +124,7 @@
         &&country=<%=country%>
         &&state=<%=state%>
         &&deadline=<%=deadline%>
+        &&salary=<%=salary%>
         &&currentPage=1">&raquo;</a></li> 
   </ul>
 </div>

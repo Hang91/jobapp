@@ -111,7 +111,7 @@ router.get('/users/download', ensureLoggedIn('/users/login'), isAdmin, function(
         //console.log(results3.length);
         var csv = json2csv({ data: results, fields: fields });
 
-        var path='UsersSubscription.csv';
+        var path='UsersJobsSubscription.csv';
         
         fs.writeFile(path, csv, function(err) {
             if (err) {
@@ -119,10 +119,6 @@ router.get('/users/download', ensureLoggedIn('/users/login'), isAdmin, function(
             }
             console.log('File saved');
             res.download('./'+path);
-            //res.download(path);
-            req.flash('success', 'Successfully download users\' subscription!');
-            res.location('/manage/users');
-            res.redirect('/manage/users');
         });
     }); 
 });
@@ -200,6 +196,9 @@ router.get('/jobs', ensureLoggedIn('/users/login'), isManager, function(req, res
     var currentPage1 = 1;
     var currentPage2 = 1;
     var currentPage3 = 1;
+    var index1 = 1;
+    var index2 = 1;
+    var index3 = 1;
     var tab = req.query.tab;
     if(req.query.currentPage1){
         currentPage1 = req.query.currentPage1;
@@ -243,7 +242,7 @@ router.get('/jobs/details', ensureLoggedIn('/users/login'), isManager, function(
 
 //edit & approve / disapprove / ask for revision
 router.post('/jobs/details', ensureLoggedIn('/users/login'), isManager, function(req, res){
-    if(req.body.manage_job_detail == "disapprove"){
+    if(req.body.manage_job_detail == "Disapprove"){
             var id  = req.body.id;
             JobsModel.findByIdAndRemove(ObjectId(id), function(err, job){
                     if(err){
@@ -282,7 +281,7 @@ router.post('/jobs/details', ensureLoggedIn('/users/login'), isManager, function
         console.log('keywords is not a string');
     }
 
-    if(req.body.manage_job_detail == "revise"){
+    if(req.body.manage_job_detail == "Revise"){
         
         var approved = 3;//0:not check yet; 1:approve; 2:disapprove; 3.ask for revision
 
@@ -319,7 +318,7 @@ router.post('/jobs/details', ensureLoggedIn('/users/login'), isManager, function
         }
         });
     }
-    else if(req.body.manage_job_detail == "approve"){
+    else if(req.body.manage_job_detail == "Approve"){
         var approved = 1;//0:not check yet; 1:approve; 2:disapprove; 3.ask for revision
 
         var newJob = {
@@ -355,7 +354,11 @@ router.post('/jobs/details', ensureLoggedIn('/users/login'), isManager, function
             }
         });
     }
-    
+    else if(req.body.manage_job_detail == "Confirm"){
+        req.flash('success', 'Successfully confirm!');
+        res.location('/manage/jobs');
+        res.redirect('/manage/jobs');
+    }
 });
 
 //approve an job
@@ -695,7 +698,8 @@ function alertUser(newJob) {
 
             var message = {
               text:  "Hello " + result.userName + ", \n There is a new job match your subscription. Below is the detailed information. \n" + 
-              "Job name: " + name + "\n" + "Job type: " + type + "\n" + "Region: " + region + "\n" +
+              "Job name: " + name + "\n" + "Job employment type: " + employmentType + "\n" + "Job position type: " + positionType + "\n" 
+              + "Region: " + region + "\n" +
               "Country: " + country + "\n" + "State: " + state + "\n" + "City: " + city + "\n" + "Deadline: " +
               deadline + "\n" +  
               "Description: " + description + "\n" + "keywords: " + keywords,
