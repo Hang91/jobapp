@@ -528,7 +528,8 @@ function informUser(req, res, id) {
         var server  = email.server.connect({
           user:  adminEmail, 
           password: adminPw,
-          host:  "smtp-mail.outlook.com", 
+          //host:  "smtp-mail.outlook.com", 
+          host:  "academiacentral.org",
           tls: {ciphers: "SSLv3"}
         });
 
@@ -691,7 +692,8 @@ function alertUser(newJob) {
           var server  = email.server.connect({
             user:  adminEmail, 
             password: adminPw,
-            host:  "smtp-mail.outlook.com", 
+            //host:  "smtp-mail.outlook.com", 
+            host:  "academiacentral.org",
             tls: {ciphers: "SSLv3"}
           });
           results.forEach(function(result){
