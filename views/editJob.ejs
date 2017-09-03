@@ -134,7 +134,7 @@
         <input type="text" name="keywords" class="form-control" value="<%= (!!job.keywords)?job.keywords:'' %>">
         <br>
         <label>Comments</label>
-        <input type="text" name="comments" class="form-control" value="<%= (!!job.comments)?job.comments:'' %>">
+        <input type="text" name="comments" class="form-control" value="<%= (!!job.comments)?job.comments:'' %>" readonly>
         <br>
 
         <input id="revise" type="button" class="btn btn-lg btn-primary btn-block btn-success" name="revise_job" value="Confirm Edit" onclick="reviseInDetail()">

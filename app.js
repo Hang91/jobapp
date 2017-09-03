@@ -34,7 +34,7 @@ MongoClient.connect(URL,function(err,database){
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
-var events = require('./routes/events');
+var jobs = require('./routes/jobs');
 var search = require('./routes/search');
 var manage = require('./routes/manage');
 
@@ -98,7 +98,7 @@ app.get('*', function(req, res, next){
 //define routes
 app.use('/', routes);
 app.use('/users', users);
-app.use('/events', events);
+app.use('/jobs', jobs);
 app.use('/search', search);
 app.use('/manage',manage);
 
