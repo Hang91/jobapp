@@ -9,7 +9,6 @@ var SubsModel = require('../models/JobSubDB');
 var AlertsModel = require('../models/AlertDB');
 var employmentTypesModel = require('../models/EmploymentTypeDB');
 var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
-#var email   = require('emailjs');
 var email   = require('emailjs/email');
 var ObjectId = require('mongodb').ObjectID;
 
