@@ -9,8 +9,8 @@ var SubsModel = require('../models/JobSubDB');
 var AlertsModel = require('../models/AlertDB');
 var employmentTypesModel = require('../models/EmploymentTypeDB');
 var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
+#var email   = require('emailjs');
 var email   = require('emailjs/email');
-
 var ObjectId = require('mongodb').ObjectID;
 
 
@@ -692,7 +692,9 @@ function alertUser(newJob) {
             user:  adminEmail, 
             password: adminPw,
             host:  "smtp-mail.outlook.com", 
-            tls: {ciphers: "SSLv3"}
+            #host: "academiacentral.org",
+	    #ssl: true   
+	    tls: {ciphers: "SSLv3"}
           });
           results.forEach(function(result){
 
