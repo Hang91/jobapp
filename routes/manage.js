@@ -540,11 +540,12 @@ function informUser(req, res, id) {
           if(jobs.approved == 3) { //revise
             var message = {
               text:  "Hello " + jobs.userName + ", you have a job to revise. Please log in your jobapp account " +
-               "to get detail information. ",
-              from:  "you <" + adminEmail + ">", 
+               "to get detail information. "
+               + "\n\n\n" + "Regards," + "\n" + "job.academiacentral.org",
+              from:  "job.academiacentral.org <" + adminEmail + ">", 
               to:    jobs.userName + "<" + jobs.userEmail + ">",
               cc:    "",
-              subject: "testing email js"
+              subject: "Revision Request"
             };
 
             server.send(message, function(err, message) {
@@ -562,11 +563,12 @@ function informUser(req, res, id) {
           else if(jobs.approved == 1) { //approved
             var message = {
               text:  "Hello " + jobs.userName + ", you hava a job approved. You can log in your jobapp account " +
-               "to get detail information. URL: job.academiacentral.org",
-              from:  "you <" + adminEmail + ">", 
+               "to get more information at job.academiacentral.org."
+               + "\n\n\n" + "Regards," + "\n" + "job.academiacentral.org",
+              from:  "job.academiacentral.org <" + adminEmail + ">", 
                 to:    jobs.userName + "<" + jobs.userEmail + ">",
                 cc:    "",
-              subject: "testing email js"
+              subject: "Job Approved"
             };
 
             server.send(message, function(err, message) {
@@ -699,16 +701,17 @@ function alertUser(newJob) {
           results.forEach(function(result){
 
             var message = {
-              text:  "Hello " + result.userName + ", \n There is a new job match your subscription. Below is the detailed information. \n" + 
+              text:  "Hello " + result.userName + ", \n There is a new job matching your subscription. Below is the detailed information. \n" + 
               "Job name: " + name + "\n" + "Job employment type: " + employmentType + "\n" + "Job position type: " + positionType + "\n" 
               + "Region: " + region + "\n" +
               "Country: " + country + "\n" + "State: " + state + "\n" + "City: " + city + "\n" + "Deadline: " +
               deadline + "\n" +  
-              "Description: " + description + "\n" + "keywords: " + keywords,
-              from:  "you <" + adminEmail + ">", 
+              "Description: " + description + "\n" + "keywords: " + keywords
+              + "\n\n\n" + "Regards," + "\n" + "job.academiacentral.org",
+              from:  "job.academiacentral.org <" + adminEmail + ">", 
               to:    result.userName + " <" + result.userEmail + ">",
               cc:    "",
-              subject: "testing email js"
+              subject: "Job Subscription Alert"
             };
 
             // send the message and get a callback with an error or details of the message that was sent
