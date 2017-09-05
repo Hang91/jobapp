@@ -22,6 +22,7 @@ router.post('/', function (req, res, next) {
 	var positionType = req.body.positionType;
 	var field = req.body.field;
 	var keywords = req.body.keywords.split(',');
+	var region = req.body.region;
 	var country = req.body.country;
 	var state = req.body.state;
 	var deadline = req.body.deadline;
@@ -32,7 +33,7 @@ router.post('/', function (req, res, next) {
 
 	//search
 	searchJobs(res, req.user, limit, currentPage, employmentType, positionType,
-		field, keywords, country, state, deadline, salary, approved);	
+		field, keywords, region, country, state, deadline, salary, approved);	
 
 });
 
@@ -53,6 +54,7 @@ router.get( "/" , function ( req , res , err ) {
 	var positionType = req.query.positionType.trim();
 	var field = req.query.field.trim();
 	var keywords = req.query.keywords.trim().split(',');
+	var region = req.query.region.trim();
 	var country = req.query.country.trim();
 	var state = req.query.state.trim();
 	var deadline = req.query.deadline.trim();
@@ -62,12 +64,12 @@ router.get( "/" , function ( req , res , err ) {
 	deleteOutDateJobs(deadline);
 	//search
 	searchJobs(res, req.user, limit, currentPage, employmentType, positionType,
-		field, keywords, country, state, deadline, salary, approved);		
+		field, keywords, region, country, state, deadline, salary, approved);		
 });
 
 
 function searchJobs(res, user, limit, currentPage, employmentType, positionType, 
-	field, keywords, country, state, deadline, salary, approved)
+	field, keywords, region, country, state, deadline, salary, approved)
 {//search
 	if(!employmentType){
 		var employmentTypeStr = {};
@@ -93,6 +95,12 @@ function searchJobs(res, user, limit, currentPage, employmentType, positionType,
 	else{
 		//var keywordsStr = {'keywords': {$in:keywords}};//or
 		var keywordsStr = {'keywords': {$all:keywords}};//and
+	}
+	if(!region){
+		var regionStr = {};
+	}
+	else{
+		var regionStr = {'region' : region};
 	}
 	if(!country){
 		var countryStr = {};
@@ -120,7 +128,7 @@ function searchJobs(res, user, limit, currentPage, employmentType, positionType,
 	}
 	var approvedStr = {'approved' : 1};
 
-    JobModel.find({$and: [employmentTypeStr, positionTypeStr, fieldStr, keywordsStr, countryStr, stateStr, deadlineStr, salaryStr, approvedStr]}, function(err, rs){
+    JobModel.find({$and: [employmentTypeStr, positionTypeStr, fieldStr, keywordsStr, regionStr, countryStr, stateStr, deadlineStr, salaryStr, approvedStr]}, function(err, rs){
     	if (err) {
             res.send(err);
         } else{
@@ -133,14 +141,14 @@ function searchJobs(res, user, limit, currentPage, employmentType, positionType,
             if (totalPage != 0 && currentPage > totalPage) {
                 currentPage = totalPage;
             }
-            var query = JobModel.find({$and: [employmentTypeStr, positionTypeStr, fieldStr, keywordsStr, countryStr, stateStr, deadlineStr, salaryStr, approvedStr]});
+            var query = JobModel.find({$and: [employmentTypeStr, positionTypeStr, fieldStr, keywordsStr, regionStr, countryStr, stateStr, deadlineStr, salaryStr, approvedStr]});
             query.skip((currentPage - 1) * limit);
             query.limit(limit);
             query.sort('-deadline').exec(function(err, results) { 
             	res.render('jobs', {title:'Search Results', 
             		positionType:positionType, employmentType:employmentType,
             		field:field, keywords:keywords, 
-            		country:country, state:state, 
+            		region:region, country:country, state:state, 
             		deadline:deadline, salary:salary, 
             		totalPage:totalPage, currentPage:currentPage, 
             		results:results, totallength:totallength, user: user});
