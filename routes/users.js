@@ -629,6 +629,7 @@ router.post('/editSub', ensureLoggedIn('login'), function(req, res){
 	var region 	= req.body.region;
 	var institution 	= req.body.institution;
 	var deadline = req.body.deadline;
+	var salary = req.body.salary;
 	if(typeof req.body.keywords == 'string') {
 		var keywords	= req.body.keywords.split(",");
 	} else {
@@ -649,6 +650,7 @@ router.post('/editSub', ensureLoggedIn('login'), function(req, res){
 		   region: region,
 		   institution: institution,
 		   deadline: deadline,
+		   salary: salary,
 		   keywords: keywords,
 		   userName: userName,
 		   userEmail: userEmail
