@@ -10,25 +10,48 @@ var json2csv = require('json2csv');
 
 var flash = require('connect-flash');
 /*using mongoose*/
-// var mongoose = require('mongoose');
-// mongoose.connect('mongodb://localhost/eventapp');
+var mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
+// mongoose.connect('mongodb://localhost/eventapp',{
+//   socketTimeoutMS: 0,
+//   keepAlive: true,
+//   reconnectTries: 30,
+//   reconnectInterval: 5000
+// });
 // var db = mongoose.connection;
 // db.on('error',console.error.bind(console,'connection error:'));
 // db.once('open',function(){
 //   console.log('MongoDB connected');
 // });
 
-var mongodb= require('mongodb');
-var MongoClient= mongodb.MongoClient;
-var URL = 'mongodb://localhost/eventapp';
 
-MongoClient.connect(URL,function(err,database){
-  if(!err){
-    db=database;
-  }
-  else{
-    //do something
-  }
+
+mongoose.connect('mongodb://localhost/eventapp');
+var db = mongoose.connection;
+db.on('error', function (err) {
+    // If first connect fails because mongod is down, try again later.
+    // This is only needed for first connect, not for runtime reconnects.
+    // See: https://github.com/Automattic/mongoose/issues/5169
+    if (err.message && err.message.match(/failed to connect to server .* on first connect/)) {
+        console.log(new Date(), String(err));
+
+        // Wait for a bit, then try to connect again
+        setTimeout(function () {
+            console.log("Retrying first connect...");
+            db.open('mongodb://localhost/eventapp').catch(() => {});
+            // Why the empty catch?
+            // Well, errors thrown by db.open() will also be passed to .on('error'),
+            // so we can handle them there, no need to log anything in the catch here.
+            // But we still need this empty catch to avoid unhandled rejections.
+        }, 20 * 1000);
+    } else {
+        // Some other error occurred.  Log it.
+        console.error(new Date(), String(err));
+    }
+});
+
+db.once('open', function () {
+    console.log("Connection to db established.");
 });
 
 
