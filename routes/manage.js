@@ -315,6 +315,8 @@ router.post('/jobs/details', ensureLoggedIn('/users/login'), isManager, function
             //success msg
             //alertUser(newEvent);
             informUser(req, res, id);
+            res.location('/manage/jobs');
+            res.redirect('/manage/jobs');            
         }
         });
     }
@@ -365,6 +367,8 @@ router.post('/jobs/details', ensureLoggedIn('/users/login'), isManager, function
                 //success msg
                 informUser(req, res, id);//inform the auther
                 alertUser(newJob);//inform all subscribers
+                res.location('/manage/jobs');
+                res.redirect('/manage/jobs');                
             }
         });
     }
@@ -406,7 +410,9 @@ router.get('/jobs/approve', ensureLoggedIn('/users/login'), isManager, function(
             JobsModel.findById(id, function(err, job){
                 alertUser(job);
                 informUser(req, res, id);//inform the auther
-                console.log("approve success!");                            
+                console.log("approve success!");      
+                res.location('/manage/jobs');
+                res.redirect('/manage/jobs');                 
             });
         }    
     });
@@ -549,9 +555,7 @@ function informUser(req, res, id) {
       console.log(err);
     }
     if (results == null) {
-      req.flash('error', 'Admin did not add an inform email sender! This operation will not inform any user.');
-      res.location('/manage/jobs');
-      res.redirect('/manage/jobs');      
+      req.flash('error', 'Admin did not add an inform email sender! This operation will not inform any user.');    
     } else {
         var adminPw = results.password;
         var adminEmail = results.account;
@@ -587,8 +591,6 @@ function informUser(req, res, id) {
                 else {
                   console.log(message);
                   req.flash('success', 'Successfully revised!');
-                  res.location('/manage/jobs');
-                  res.redirect('/manage/jobs');
                 }
               });
           }
@@ -610,8 +612,6 @@ function informUser(req, res, id) {
                 else {
                   console.log(message);
                   req.flash('success', 'Successfully approve a job!');
-                  res.location('/manage/jobs');
-                  res.redirect('/manage/jobs');
                 }
               });     
           }
@@ -759,6 +759,7 @@ function alertUser(newJob) {
     }//end of else
   });
 }
+
 function deleteOutDateJobs()
 {
     //delete out-of-date jobs
