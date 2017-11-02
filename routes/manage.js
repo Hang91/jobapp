@@ -191,6 +191,7 @@ function searchJobs(res, user, limit, tab, currentPage1,currentPage2,currentPage
 }
 //manage jobs page - GET
 router.get('/jobs', ensureLoggedIn('/users/login'), isManager, function(req, res){
+    deleteOutDateJobs();
     var limit = 10;
     var currentPage1 = 1;
     var currentPage2 = 1;
@@ -319,7 +320,20 @@ router.post('/jobs/details', ensureLoggedIn('/users/login'), isManager, function
     }
     else if(req.body.manage_job_detail == "Approve"){
         var approved = 1;//0:not check yet; 1:approve; 2:disapprove; 3.ask for revision
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+        var yyyy = today.getFullYear();
 
+        if(dd<10) {
+            dd = '0'+dd
+        } 
+
+        if(mm<10) {
+            mm = '0'+mm
+        } 
+
+        today = yyyy + '-' + mm + '-' + dd;
         var newJob = {
                    name: name,
                    positionType: positionType,
@@ -338,6 +352,7 @@ router.post('/jobs/details', ensureLoggedIn('/users/login'), isManager, function
                    description: description,
                    keywords: keywords,
                    approved: approved,
+                   postDate: today,
                    comments: comments
             }
         //update
@@ -363,8 +378,26 @@ router.post('/jobs/details', ensureLoggedIn('/users/login'), isManager, function
 //approve an job
 router.get('/jobs/approve', ensureLoggedIn('/users/login'), isManager, function(req, res){
     var id = req.query.id;
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    if(dd<10) {
+        dd = '0'+dd
+    } 
+
+    if(mm<10) {
+        mm = '0'+mm
+    } 
+
+    today = yyyy + '-' + mm + '-' + dd;
+    var newEvent = {
+           approved: 1,
+           postDate: today
+    }
     //console.log("in the approve function， id="+id);
-    JobsModel.update({_id:ObjectId(id)}, {$set:{approved:1}}, function(err, job){
+    JobsModel.update({_id:ObjectId(id)}, {$set: newEvent}, function(err, job){
         if(err){
             res.send(err);
         }
@@ -726,7 +759,37 @@ function alertUser(newJob) {
     }//end of else
   });
 }
+function deleteOutDateJobs()
+{
+    //delete out-of-date jobs
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
 
+    if(dd<10) {
+        dd = '0'+dd
+    } 
+
+    if(mm<10) {
+        mm = '0'+mm
+    } 
+
+    today =  yyyy + '-' + mm + '-' + dd;
+    //console.log(today);
+    JobsModel.find({$and:[{'deadline': {$lt:today}},{'approved':{$ne:5}}]}, function(err, results){
+        if(results.length > 0){
+            JobsModel.update({$and:[{'deadline': {$lt:today}},{'approved':{$ne:5}}]}, {$set: {'approved':5}}, function(err, doc){
+            if(err){
+                res.send(err);
+            }
+            else{
+                console.log('out-of-date event!');
+            }
+        });
+        }
+    });
+}
 
 
 module.exports = router;

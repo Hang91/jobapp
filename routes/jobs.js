@@ -3,9 +3,10 @@ var router = express.Router();
 
 var email 	= require('emailjs/email');
 var mongojs = require('mongojs');
-//var db = mongojs('eventapp', ['users','events','types','subs']);
 //###########mongoose#########
 var JobModel = require('../models/JobDB');
+var EmploymentTypeModel = require('../models/EmploymentTypeDB');
+
 //Events - POST
 //pagination
 router.post('/', function (req, res, next) {
@@ -28,12 +29,10 @@ router.post('/', function (req, res, next) {
 	var deadline = req.body.deadline;
 	var salary = req.body.salary;
 	var approved = 1;
-	//delete out-of-date events
-	//deleteOutDateEvents(startDate);
-
+	var datePosted = "";
 	//search
 	searchJobs(res, req.user, limit, currentPage, employmentType, positionType,
-		field, keywords, region, country, state, deadline, salary, approved);	
+		field, keywords, region, country, state, deadline, salary, datePosted, approved);	
 
 });
 
@@ -50,7 +49,12 @@ router.get( "/" , function ( req , res , err ) {
         currentPage = 1;
     }
 	//use trim() to delete space
-	var employmentType = req.query.employmentType.trim();
+	if(req.query.employmentType != null){
+		var employmentType = req.query.employmentType.trim();
+	}
+	else{
+		var employmentType = "";
+	}
 	var positionType = req.query.positionType.trim();
 	var field = req.query.field.trim();
 	var keywords = req.query.keywords.trim().split(',');
@@ -60,16 +64,22 @@ router.get( "/" , function ( req , res , err ) {
 	var deadline = req.query.deadline.trim();
 	var salary = req.query.salary.trim();
 	var approved = 1;
+	if(req.query.datePosted != null){
+		var datePosted = req.query.datePosted.trim();
+	}
+	else{
+		var datePosted = "";
+	}
 	//delete out-of-date events
-	deleteOutDateJobs(deadline);
+	//deleteOutDateJobs(deadline);
 	//search
 	searchJobs(res, req.user, limit, currentPage, employmentType, positionType,
-		field, keywords, region, country, state, deadline, salary, approved);		
+		field, keywords, region, country, state, deadline, salary, datePosted, datePosted, approved);		
 });
 
 
 function searchJobs(res, user, limit, currentPage, employmentType, positionType, 
-	field, keywords, region, country, state, deadline, salary, approved)
+	field, keywords, region, country, state, deadline, salary, datePosted, approved)
 {//search
 	if(!employmentType){
 		var employmentTypeStr = {};
@@ -126,9 +136,30 @@ function searchJobs(res, user, limit, currentPage, employmentType, positionType,
 	else{
 		var salaryStr = {'salary': {$gte:salary}};
 	}
+	if(!datePosted){
+		var postDateStr = {};
+	}
+	else{
+		var currentDate = new Date();
+		currentDate.setDate(currentDate.getDate()-datePosted-1);
+		var dd = currentDate.getDate();
+		var mm = currentDate.getMonth()+1; //January is 0!
+		var yyyy = currentDate.getFullYear();
+
+		if(dd<10) {
+		    dd = '0'+dd
+		} 
+
+		if(mm<10) {
+		    mm = '0'+mm
+		} 
+
+		currentDate = yyyy + '-' + mm + '-' + dd;
+		var postDateStr = {'postDate' : {$gte:currentDate}};
+	}
 	var approvedStr = {'approved' : 1};
 
-    JobModel.find({$and: [employmentTypeStr, positionTypeStr, fieldStr, keywordsStr, regionStr, countryStr, stateStr, deadlineStr, salaryStr, approvedStr]}, function(err, rs){
+    JobModel.find({$and: [employmentTypeStr, positionTypeStr, fieldStr, keywordsStr, regionStr, countryStr, stateStr, deadlineStr, salaryStr, postDateStr, approvedStr]}, function(err, rs){
     	if (err) {
             res.send(err);
         } else{
@@ -141,40 +172,28 @@ function searchJobs(res, user, limit, currentPage, employmentType, positionType,
             if (totalPage != 0 && currentPage > totalPage) {
                 currentPage = totalPage;
             }
-            var query = JobModel.find({$and: [employmentTypeStr, positionTypeStr, fieldStr, keywordsStr, regionStr, countryStr, stateStr, deadlineStr, salaryStr, approvedStr]});
+            var query = JobModel.find({$and: [employmentTypeStr, positionTypeStr, fieldStr, keywordsStr, regionStr, countryStr, stateStr, deadlineStr, salaryStr, postDateStr, approvedStr]});
             query.skip((currentPage - 1) * limit);
             query.limit(limit);
             query.sort('-deadline').exec(function(err, results) { 
-            	res.render('jobs', {title:'Search Results', 
+            	EmploymentTypeModel.find({}, function(err, employmentTypeResults){
+					if (err) {
+			    		console.dir( err );
+			    	}
+					res.render('jobs', {title:'Search Results', 
             		positionType:positionType, employmentType:employmentType,
             		field:field, keywords:keywords, 
             		region:region, country:country, state:state, 
-            		deadline:deadline, salary:salary, 
+            		deadline:deadline, salary:salary, datePosted:datePosted,
             		totalPage:totalPage, currentPage:currentPage, 
-            		results:results, totallength:totallength, user: user});
+            		employmentTypeResults:employmentTypeResults,
+            		results:results, totallength:totallength, user: user
+            		});
+				});
             });
         } 
 	});
 }
-function deleteOutDateJobs(deadline)
-{
-	//delete out-of-date jobs
-	var today = new Date();
-	var dd = today.getDate();
-	var mm = today.getMonth()+1; //January is 0!
-	var yyyy = today.getFullYear();
 
-	if(dd<10) {
-	    dd = '0'+dd
-	} 
-
-	if(mm<10) {
-	    mm = '0'+mm
-	} 
-
-	today =  yyyy + '-' + mm + '-' + dd;
-	//console.log(today);
-	JobModel.remove({'deadline': {$lt:today}})
-}
 
 module.exports = router;

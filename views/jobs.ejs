@@ -57,10 +57,109 @@
 <p>Click on "[+] More info" to show more details.</p>
 <p>Click on "[-] Less info" to show less details.</p>
 <p>----------------------------------------------------------------</p>
+<li>
+  <strong>EMPLOYMENT TYPE:</strong>
+  <%if(employmentType != ""){%>
+      <%=employmentType%><a href="?positionType=<%=positionType%>
+          &&field=<%=field%>
+          &&keywords=<%=keywords%>
+          &&region=<%=region%>
+          &&country=<%=country%>
+          &&state=<%=state%>
+          &&deadline=<%=deadline%>
+          &&datePosted=<%=datePosted%>
+          &&salary=<%=salary%>
+          &&currentPage=1">  X</a>
+  <%}else{%>
+    <%employmentTypeResults.forEach(function(employmentTypeResult){%>
+        <a href="?positionType=<%=positionType%>
+          &&employmentType=<%=employmentTypeResult.employmentType%>
+          &&field=<%=field%>
+          &&keywords=<%=keywords%>
+          &&region=<%=region%>
+          &&country=<%=country%>
+          &&state=<%=state%>
+          &&deadline=<%=deadline%>
+          &&datePosted=<%=datePosted%>
+          &&salary=<%=salary%>
+          &&currentPage=1"><%=employmentTypeResult.employmentType%>  |  </a>
+    <%})%>
+  <%}%>
 
+</li>
+<li>
+  <strong>DATE POSTED:</strong>
+    <%if(datePosted != ""){%>
+        <%if(datePosted == 0){%>
+          Today
+        <%}else if(datePosted == 7){%>
+          Last 7 days
+        <%}else if(datePosted == 14){%>
+          Last 14 days
+        <%}else{%>
+          Last 30 days
+        <%}%>
+        <a href="?positionType=<%=positionType%>
+          &&employmentType=<%=employmentType%>
+          &&field=<%=field%>
+          &&keywords=<%=keywords%>
+          &&region=<%=region%>
+          &&country=<%=country%>
+          &&state=<%=state%>
+          &&deadline=<%=deadline%>
+          &&salary=<%=salary%>
+          &&currentPage=1">  X</a>
+    <%}else{%>
+      <a href="?positionType=<%=positionType%>
+          &&employmentType=<%=employmentType%>
+          &&field=<%=field%>
+          &&keywords=<%=keywords%>
+          &&region=<%=region%>
+          &&country=<%=country%>
+          &&state=<%=state%>
+          &&deadline=<%=deadline%>
+          &&datePosted=0
+          &&salary=<%=salary%>
+          &&currentPage=1">Today |</a>
+          <a href="?positionType=<%=positionType%>
+          &&employmentType=<%=employmentType%>
+          &&field=<%=field%>
+          &&keywords=<%=keywords%>
+          &&region=<%=region%>
+          &&country=<%=country%>
+          &&state=<%=state%>
+          &&deadline=<%=deadline%>
+          &&datePosted=7
+          &&salary=<%=salary%>
+          &&currentPage=1">Last 7 days |</a>
+          <a href="?positionType=<%=positionType%>
+          &&employmentType=<%=employmentType%>
+          &&field=<%=field%>
+          &&keywords=<%=keywords%>
+          &&region=<%=region%>
+          &&country=<%=country%>
+          &&state=<%=state%>
+          &&deadline=<%=deadline%>
+          &&datePosted=14
+          &&salary=<%=salary%>
+          &&currentPage=1">Last 14 days |</a>
+          <a href="?positionType=<%=positionType%>
+          &&employmentType=<%=employmentType%>
+          &&field=<%=field%>
+          &&keywords=<%=keywords%>
+          &&region=<%=region%>
+          &&country=<%=country%>
+          &&state=<%=state%>
+          &&deadline=<%=deadline%>
+          &&datePosted=30
+          &&salary=<%=salary%>
+          &&currentPage=1">Last 30 days  |</a>
+    <%}%>
+</li>
+<p>----------------------------------------------------------------</p>
 <% results.forEach(function(result){ %>
   <p class="adv-toggle-buttons">
-    <span><%=result.name%>, <%=result.city%>,<%=result.state%>,<%=result.country%>,<%=result.region%>. </span><a href="#">[+] More info</a><a href="#" style="display: none;">[-] Less info</a>
+    <span><%=result.name%>, <%=result.city%>,<%=result.state%>,<%=result.country%>,<%=result.region%>.  (Posted <%=result.postDate%>)</span><a href="#">[+] More info</a><a href="#" style="display: none;">[-] Less info</a>
   </p>
   <div class="adv-unit-options" style="display: none;">
     <ul>
@@ -88,6 +187,7 @@
         &&country=<%=country%>
         &&state=<%=state%>
         &&deadline=<%=deadline%>
+        &&datePosted=<%=datePosted%>
         &&salary=<%=salary%>
         &&currentPage=1">&laquo;</a></li>
   <% if(totalPage == 0){ %>
@@ -99,6 +199,7 @@
         &&country=<%=country%>
         &&state=<%=state%>
         &&deadline=<%=deadline%>
+        &&datePosted=<%=datePosted%>
         &&salary=<%=salary%>
         &&currentPage=1">1</a></li>
   <% } %>
@@ -117,6 +218,7 @@
         &&country=<%=country%>
         &&state=<%=state%>
         &&deadline=<%=deadline%>
+        &&datePosted=<%=datePosted%>
         &&salary=<%=salary%>
         &&currentPage=1"><%=j%></a></li>     
   <% } %>
@@ -128,6 +230,7 @@
         &&country=<%=country%>
         &&state=<%=state%>
         &&deadline=<%=deadline%>
+        &&datePosted=<%=datePosted%>
         &&salary=<%=salary%>
         &&currentPage=1">&raquo;</a></li> 
   </ul>

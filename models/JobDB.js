@@ -66,6 +66,12 @@ var jobsSchema = new mongoose.Schema({
 	keywords: {
 		type: Array
 	},
+	inputDate: {
+		type: String
+	},
+	postDate: {
+		type: String
+	},
 	approved: {
 		type: Number
 	},

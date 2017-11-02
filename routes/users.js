@@ -152,7 +152,8 @@ router.post('/addJob', function(req, res){
 	var approved = 0;//0:not check yet; 1:approve; 2:disapprove\
 	var userName = req.user.name;
 	var userEmail = req.user.email;
-
+	var today = new Date();
+	today.setDate(today.getDate());
 
 
 	//validation
@@ -196,7 +197,8 @@ router.post('/addJob', function(req, res){
 		   keywords: keywords,
 		   approved: approved,
 		   userName: userName,
-		   userEmail: userEmail
+		   userEmail: userEmail,
+		   inputDate: today
 	}
 
 		// bcrypt.genSalt(10, function(err, salt){
