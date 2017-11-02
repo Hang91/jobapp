@@ -51,6 +51,7 @@
 <div class="container">
       <form method="post" action="/manage/jobs/details" class="form-signin">
         <h2 class="form-signin-heading">Edit Jobs</h2>
+        Created on <%=job.inputDate%> by <%=job.userName%><br>
         <!-- <label>ID</label> -->
         <label class="hid" id="id_1" ><%=job.id%></label>
         <input class="hid" type="text" name="id" class="form-control" value="<%= (!!job.id)?job.id:'' %>">
